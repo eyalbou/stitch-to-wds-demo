@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Indoor Plant Care Dashboard</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  .material-icons-outlined {
+    font-family: 'Material Icons Outlined' !important;
+    font-weight: normal; font-style: normal; font-size: 24px; display: inline-block;
+    line-height: 1; text-transform: none; letter-spacing: normal; word-wrap: normal;
+    white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility; -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "liga";
+  }
+
+  /* ─── Tab bar ─── */
+  .top-tabs { display: flex; border-bottom: 1px solid #dfe5eb; background: #fff; }
+  .top-tab {
+    padding: 14px 28px; font-size: 14px; font-weight: 500; cursor: pointer;
+    border-bottom: 2px solid transparent; color: #576475; transition: all .2s;
+    font-family: "DM Sans", sans-serif; letter-spacing: -0.02em;
+  }
+  .top-tab:hover { color: #3b6ef0; }
+  .top-tab.active { color: #3b6ef0; border-bottom-color: #3b6ef0; font-weight: 700; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ─── WDS Theme ─── */
+  .wds *:not(.material-icons-outlined) { font-family: "DM Sans", "Helvetica Neue", sans-serif; }
+  .wds-page { background: #f0f4f7; min-height: 100vh; }
+  .wds-page-header {
+    background: #fff; padding: 20px 48px; border-bottom: 1px solid #dfe5eb;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .wds-page-header h1 { font-size: 24px; font-weight: 700; color: #162d3d; letter-spacing: -0.03em; }
+  .wds-card {
+    background: #fff; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,.06);
+    border: 1px solid #dfe5eb; overflow: hidden;
+  }
+  .wds-card-header {
+    padding: 20px 24px 16px; display: flex; align-items: center;
+    justify-content: space-between; border-bottom: 1px solid #dfe5eb;
+  }
+  .wds-card-header h3 { font-size: 16px; font-weight: 700; color: #162d3d; }
+  .wds-card-content { padding: 0; }
+  .wds-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 0 20px; height: 36px; border-radius: 18px; font-size: 14px;
+    font-weight: 500; cursor: pointer; border: none; transition: all .15s;
+  }
+  .wds-btn-primary { background: #3b6ef0; color: #fff; }
+  .wds-btn-primary:hover { background: #2b5bd6; }
+  .wds-btn-secondary { background: transparent; color: #3b6ef0; border: 1px solid #3b6ef0; }
+  .wds-btn-secondary:hover { background: #eaf0ff; }
+  .wds-search {
+    display: flex; align-items: center; background: #fff; border: 1px solid #c1c9d1;
+    border-radius: 18px; padding: 0 12px; height: 36px; width: 240px; transition: border .2s;
+  }
+  .wds-search:focus-within { border-color: #3b6ef0; box-shadow: 0 0 0 1px #3b6ef0; }
+  .wds-search input {
+    border: none; outline: none; background: none; flex: 1;
+    font-size: 14px; color: #162d3d; font-family: "DM Sans", sans-serif;
+  }
+  .wds-search input::placeholder { color: #7a92a5; }
+  .wds-search .material-icons-outlined { font-size: 18px; color: #7a92a5; margin-right: 8px; }
+
+  /* WDS Table */
+  .wds-table { width: 100%; border-collapse: collapse; }
+  .wds-table thead { background: #f0f4f7; }
+  .wds-table th {
+    text-align: left; padding: 12px 24px; font-size: 12px; font-weight: 500;
+    color: #576475; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .wds-table td { padding: 15px 24px; font-size: 14px; color: #162d3d; border-bottom: 1px solid #dfe5eb; }
+  .wds-table tbody tr:last-child td { border-bottom: none; }
+  .wds-table tbody tr:hover { background: #f6f8fa; }
+
+  /* WDS Gallery Items */
+  .wds-gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  @media (max-width: 1024px) { .wds-gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px) { .wds-gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .wds-gallery-grid { grid-template-columns: 1fr; } }
+  .wds-gallery-item {
+    background: #fff; border-radius: 8px; overflow: hidden;
+    box-shadow: 0 1px 6px rgba(0,0,0,.06); border: 1px solid #dfe5eb;
+    transition: box-shadow .2s; cursor: pointer;
+  }
+  .wds-gallery-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,.12); }
+  .wds-gallery-item .img { height: 180px; background-size: cover; background-position: center; position: relative; }
+  .wds-gallery-item .img .overlay {
+    position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,.25) 100%);
+    opacity: 0; transition: opacity .2s; display: flex; align-items: center; justify-content: center;
+  }
+  .wds-gallery-item:hover .img .overlay { opacity: 1; }
+  .wds-gallery-item .footer { padding: 16px; }
+  .wds-gallery-item .footer h4 { font-size: 14px; font-weight: 700; color: #162d3d; margin-bottom: 4px; }
+  .wds-gallery-item .footer p { font-size: 12px; color: #576475; display: flex; align-items: center; gap: 4px; }
+
+  /* WDS Badge */
+  .wds-badge {
+    display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 2px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .wds-badge-info { background: #eaf0ff; color: #3b6ef0; }
+  .wds-badge-success { background: #e5f7ee; color: #0b7638; }
+
+  /* WDS Section Header */
+  .wds-section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 0 16px;
+  }
+  .wds-section-header h3 { font-size: 16px; font-weight: 700; color: #162d3d; }
+
+  /* WDS Inner Tabs */
+  .wds-inner-tabs { display: flex; gap: 0; border-bottom: 1px solid #dfe5eb; padding: 0 24px; }
+  .wds-inner-tab {
+    padding: 12px 16px; font-size: 14px; font-weight: 500; color: #576475;
+    cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s;
+    font-family: "DM Sans", sans-serif;
+  }
+  .wds-inner-tab:hover { color: #162d3d; }
+  .wds-inner-tab.active { color: #3b6ef0; border-bottom-color: #3b6ef0; font-weight: 700; }
+  .wds-tab-panel { display: none; }
+  .wds-tab-panel.active { display: block; }
+
+  /* WDS Text helpers */
+  .wds-text-secondary { color: #576475; font-size: 12px; }
+  .wds-text-emphasis { font-weight: 700; color: #162d3d; }
+
+  /* Avatar */
+  .wds-avatar {
+    width: 36px; height: 36px; border-radius: 50%; background-size: cover;
+    background-position: center; border: 2px solid #c1e4fe;
+  }
+
+  /* Notification dot */
+  .notif-dot {
+    position: absolute; top: 4px; right: 4px; width: 8px; height: 8px;
+    background: #ee5951; border-radius: 50%; border: 2px solid #fff;
+  }
+
+</style>
+</head>
+<body style="margin:0; padding:0; background:#f0f4f7;">
+
+<!-- ═══ Top-level Tab Bar ═══ -->
+<div class="top-tabs" id="topTabs">
+  <div class="top-tab active" data-tab="original" onclick="switchTopTab('original')">Original (Tailwind)</div>
+  <div class="top-tab" data-tab="wds-adjusted" onclick="switchTopTab('wds-adjusted')">WDS-Adjusted</div>
+  <div class="top-tab" data-tab="wds" onclick="switchTopTab('wds')">WDS Conversion</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TAB 1: ORIGINAL TAILWIND DESIGN            -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-original">
+<div style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+<div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden bg-stone-50 text-stone-900">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-stone-200 px-6 md:px-10 py-4 bg-white shadow-sm">
+<div class="flex items-center gap-3 text-stone-800">
+<span class="material-icons-outlined text-green-500" style="font-size: 28px">local_florist</span>
+<h1 class="text-stone-800 text-xl font-bold tracking-tight">Plant Care</h1>
+</div>
+<div class="flex flex-1 justify-end items-center gap-4 md:gap-6">
+<div class="relative hidden md:block max-w-xs w-full">
+<span class="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-500" style="font-size: 20px">search</span>
+<input class="form-input w-full rounded-lg border-stone-300 bg-stone-50 py-2 pl-10 pr-4 text-sm text-stone-800 placeholder-stone-500 focus:border-green-500 focus:ring-1 focus:ring-green-500" placeholder="Search plants..." type="search"/>
+</div>
+<button class="relative p-2 rounded-full hover:bg-stone-100 text-stone-600 hover:text-green-600">
+<span class="material-icons-outlined" style="font-size: 24px">notifications</span>
+<span class="absolute top-1 right-1 flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-green-200 shadow-sm" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCW0TxJXX40FmN5mvFvQpkJDfZ42nh7JUcotfKEPJndBzxJe5qT9y_dFwgvq7X9rtZkZcpa0fjRR9pWvkvtGkKzYz1l93gTQTFXC-ZFHHQK-v8fgB9wgw4CI11_VIgwgcyha2X9VRhGc4UCVd6Bu_u_Rcy8QLCl2d8twJGagUnDiprXcJFQwQd7bdrXMZ1agPd-N0qYUo6j2jdVfmkBwmkFl2k7xEJxXF2TCoVpD5Zbk_LJ_0t78uVXlbeAH6x0CYFRcz7S_ZpgtMa9");'></div>
+</div>
+</header>
+<main class="flex-1 px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-5xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+<h2 class="text-3xl font-bold text-stone-800 tracking-tight">My Plants</h2>
+<div class="flex items-center gap-4 w-full md:w-auto">
+<button class="flex items-center justify-center gap-2 whitespace-nowrap rounded-lg h-10 px-4 bg-green-500 text-white text-sm font-semibold shadow-md hover:bg-green-600 transition-colors">
+<span class="material-icons-outlined" style="font-size: 20px">add_circle_outline</span>
+<span>Add New Plant</span>
+</button>
+</div>
+</div>
+<section class="mb-10">
+<h3 class="text-xl font-semibold text-stone-700 mb-4 flex items-center gap-2">
+<span class="material-icons-outlined text-green-500">calendar_today</span> Upcoming Tasks
+</h3>
+<div class="overflow-x-auto bg-white rounded-lg shadow-lg border border-stone-200">
+<table class="w-full min-w-[600px]">
+<thead class="bg-stone-100">
+<tr>
+<th class="px-6 py-3 text-left text-xs font-medium text-stone-600 uppercase tracking-wider">Plant</th>
+<th class="px-6 py-3 text-left text-xs font-medium text-stone-600 uppercase tracking-wider">Watering</th>
+<th class="px-6 py-3 text-left text-xs font-medium text-stone-600 uppercase tracking-wider">Sunlight</th>
+<th class="px-6 py-3 text-left text-xs font-medium text-stone-600 uppercase tracking-wider">Fertilization</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-stone-200">
+<tr><td class="px-6 py-4 text-sm font-medium text-stone-800">Fiddle Leaf Fig</td><td class="px-6 py-4 text-sm text-stone-600">In 2 days</td><td class="px-6 py-4 text-sm text-stone-600">Bright, indirect</td><td class="px-6 py-4 text-sm text-stone-600">In 3 weeks</td></tr>
+<tr><td class="px-6 py-4 text-sm font-medium text-stone-800">Snake Plant</td><td class="px-6 py-4 text-sm text-stone-600">In 5 days</td><td class="px-6 py-4 text-sm text-stone-600">Low to bright, indirect</td><td class="px-6 py-4 text-sm text-stone-600">In 6 weeks</td></tr>
+<tr><td class="px-6 py-4 text-sm font-medium text-stone-800">Monstera</td><td class="px-6 py-4 text-sm text-stone-600">In 3 days</td><td class="px-6 py-4 text-sm text-stone-600">Bright, indirect</td><td class="px-6 py-4 text-sm text-stone-600">In 4 weeks</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section>
+<h3 class="text-xl font-semibold text-stone-700 mb-4 flex items-center gap-2">
+<span class="material-icons-outlined text-green-500">eco</span> All Plants
+</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl border border-stone-200 group">
+<div class="w-full h-48 bg-center bg-no-repeat bg-cover" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAVu_dVZcy2_o8A3wQGnYtWggbBaotN8aQlknpxuR_anhV6TBh9nlt63JVvFyOzhDJyMbyw_RZqZcryfDwt6EiHYm1mM6V4KJN6UJcDstc238JVJAAbhvk_G7IzbLQlOhgglSxBIbKGXRREBN1pPmOTHjrNIl_ZI50E_NttvKkdY3trTt6l6hhTU2qc9WLd109rePwVt3Vu2dMLi8CsNzgbjtnAgnv9uJjdT-atZmcEQ4qvkCWkOdSJQlJOprvUDDDcTMsqrpYEgzHD");'></div>
+<div class="p-4">
+<h4 class="text-lg font-semibold text-stone-800 mb-1 group-hover:text-green-600">Fiddle Leaf Fig</h4>
+<p class="text-sm text-stone-600 flex items-center"><span class="material-icons-outlined text-blue-500 mr-1.5" style="font-size:16px">water_drop</span> Water in 2 days</p>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl border border-stone-200 group">
+<div class="w-full h-48 bg-center bg-no-repeat bg-cover" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCeS-pfTOMRm2Wd0Tmkzg75-lX5inHOOcwZ79mWgj7biQR-Mk661RjzL0O6RJ4WBROiNhvgDPWIWFRUAIrSQSaKjffuNIzip694TU1TI5XvMyehEMjRpnkrlfIDubNM2uyf9Bff6D7Lgj8u4Ov6-rBmc1xmKxFLaSHb5p_Q_AsuYoe5ZtAKpmHIy5lE7Szv2e4H4pn4Y31VxfP0ed_sOusECZtl7V4l3u9TWsB91oLy9Z9CkQIQX3a-c-66oJkEZh7k197uLhFamL6x");'></div>
+<div class="p-4">
+<h4 class="text-lg font-semibold text-stone-800 mb-1 group-hover:text-green-600">Snake Plant</h4>
+<p class="text-sm text-stone-600 flex items-center"><span class="material-icons-outlined text-blue-500 mr-1.5" style="font-size:16px">water_drop</span> Water in 5 days</p>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl border border-stone-200 group">
+<div class="w-full h-48 bg-center bg-no-repeat bg-cover" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDGGCfYYHn_Hobkws70trtQySERJwQ4hl8L08Royu8mTg6CZBDRNVYoR9zucaeLrnbAu1-7cB4tb_1r8PHgl2fI43pkyt5gC2uD926D0hGs17nSU0iuMzA9HMyaQM1qv2MsucNdQycKrZ0FJrhrVXWWnm5iC6-SUDnIHf0LD8v5Ee_WDfC196behm3-VmaVrpWbVcSINiTqQTTdUPTZ3m69RfovZLc9gnbhEuTY5HWubJaQPq2AZTMag8I2eKV0CzTwTHyboUCrm9YA");'></div>
+<div class="p-4">
+<h4 class="text-lg font-semibold text-stone-800 mb-1 group-hover:text-green-600">Monstera</h4>
+<p class="text-sm text-stone-600 flex items-center"><span class="material-icons-outlined text-blue-500 mr-1.5" style="font-size:16px">water_drop</span> Water in 3 days</p>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl border border-stone-200 group">
+<div class="w-full h-48 bg-stone-200 flex items-center justify-center">
+<span class="material-icons-outlined text-stone-400" style="font-size: 48px;">add_photo_alternate</span>
+</div>
+<div class="p-4">
+<h4 class="text-lg font-semibold text-stone-800 mb-1 group-hover:text-green-600">Pothos</h4>
+<p class="text-sm text-stone-600 flex items-center"><span class="material-icons-outlined text-blue-500 mr-1.5" style="font-size:16px">water_drop</span> Water in 4 days</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TAB 2: WDS-ADJUSTED (same layout, WDS style)-->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tab-content" id="tab-wds-adjusted">
+<div class="wds" style="min-height:100vh; background:#f0f4f7;">
+
+  <!-- Header -->
+  <header style="display:flex; align-items:center; justify-content:space-between; padding:16px 48px; background:#fff; border-bottom:1px solid #dfe5eb;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="material-icons-outlined" style="font-size:26px; color:#116dff;">local_florist</span>
+      <span style="font-size:20px; font-weight:700; color:#162d3d; letter-spacing:-0.02em;">Plant Care</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <div class="wds-search">
+        <span class="material-icons-outlined">search</span>
+        <input placeholder="Search plants..." type="search"/>
+      </div>
+      <div style="position:relative; cursor:pointer; padding:6px;">
+        <span class="material-icons-outlined" style="color:#576475; font-size:22px;">notifications</span>
+        <div class="notif-dot"></div>
+      </div>
+      <div class="wds-avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCW0TxJXX40FmN5mvFvQpkJDfZ42nh7JUcotfKEPJndBzxJe5qT9y_dFwgvq7X9rtZkZcpa0fjRR9pWvkvtGkKzYz1l93gTQTFXC-ZFHHQK-v8fgB9wgw4CI11_VIgwgcyha2X9VRhGc4UCVd6Bu_u_Rcy8QLCl2d8twJGagUnDiprXcJFQwQd7bdrXMZ1agPd-N0qYUo6j2jdVfmkBwmkFl2k7xEJxXF2TCoVpD5Zbk_LJ_0t78uVXlbeAH6x0CYFRcz7S_ZpgtMa9");'></div>
+    </div>
+  </header>
+
+  <!-- Content area -->
+  <div style="max-width:1100px; margin:0 auto; padding:32px 48px;">
+
+    <!-- Title row -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
+      <h2 style="font-size:28px; font-weight:700; color:#162d3d; letter-spacing:-0.03em; margin:0;">My Plants</h2>
+      <button class="wds-btn wds-btn-primary">
+        <span class="material-icons-outlined" style="font-size:18px;">add</span>
+        Add New Plant
+      </button>
+    </div>
+
+    <!-- Upcoming Tasks section -->
+    <div style="margin-bottom:40px;">
+      <h3 style="font-size:18px; font-weight:700; color:#162d3d; margin:0 0 16px; display:flex; align-items:center; gap:8px;">
+        <span class="material-icons-outlined" style="font-size:20px; color:#116dff;">calendar_today</span>
+        Upcoming Tasks
+      </h3>
+      <div class="wds-card">
+        <table class="wds-table">
+          <thead>
+            <tr>
+              <th>Plant</th>
+              <th>Watering</th>
+              <th>Sunlight</th>
+              <th>Fertilization</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:700;">Fiddle Leaf Fig</td>
+              <td>In 2 days</td>
+              <td>Bright, indirect</td>
+              <td>In 3 weeks</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;">Snake Plant</td>
+              <td>In 5 days</td>
+              <td>Low to bright, indirect</td>
+              <td>In 6 weeks</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;">Monstera</td>
+              <td>In 3 days</td>
+              <td>Bright, indirect</td>
+              <td>In 4 weeks</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- All Plants section -->
+    <div>
+      <h3 style="font-size:18px; font-weight:700; color:#162d3d; margin:0 0 16px; display:flex; align-items:center; gap:8px;">
+        <span class="material-icons-outlined" style="font-size:20px; color:#116dff;">eco</span>
+        All Plants
+      </h3>
+      <div class="wds-gallery-grid">
+        <div class="wds-gallery-item">
+          <div class="img" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAVu_dVZcy2_o8A3wQGnYtWggbBaotN8aQlknpxuR_anhV6TBh9nlt63JVvFyOzhDJyMbyw_RZqZcryfDwt6EiHYm1mM6V4KJN6UJcDstc238JVJAAbhvk_G7IzbLQlOhgglSxBIbKGXRREBN1pPmOTHjrNIl_ZI50E_NttvKkdY3trTt6l6hhTU2qc9WLd109rePwVt3Vu2dMLi8CsNzgbjtnAgnv9uJjdT-atZmcEQ4qvkCWkOdSJQlJOprvUDDDcTMsqrpYEgzHD");'>
+            <div class="overlay">
+              <button class="wds-btn wds-btn-primary" style="border-radius:18px;">View Details</button>
+            </div>
+          </div>
+          <div class="footer">
+            <h4>Fiddle Leaf Fig</h4>
+            <p><span class="material-icons-outlined" style="font-size:14px; color:#116dff;">water_drop</span> Water in 2 days</p>
+          </div>
+        </div>
+
+        <div class="wds-gallery-item">
+          <div class="img" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCeS-pfTOMRm2Wd0Tmkzg75-lX5inHOOcwZ79mWgj7biQR-Mk661RjzL0O6RJ4WBROiNhvgDPWIWFRUAIrSQSaKjffuNIzip694TU1TI5XvMyehEMjRpnkrlfIDubNM2uyf9Bff6D7Lgj8u4Ov6-rBmc1xmKxFLaSHb5p_Q_AsuYoe5ZtAKpmHIy5lE7Szv2e4H4pn4Y31VxfP0ed_sOusECZtl7V4l3u9TWsB91oLy9Z9CkQIQX3a-c-66oJkEZh7k197uLhFamL6x");'>
+            <div class="overlay">
+              <button class="wds-btn wds-btn-primary" style="border-radius:18px;">View Details</button>
+            </div>
+          </div>
+          <div class="footer">
+            <h4>Snake Plant</h4>
+            <p><span class="material-icons-outlined" style="font-size:14px; color:#116dff;">water_drop</span> Water in 5 days</p>
+          </div>
+        </div>
+
+        <div class="wds-gallery-item">
+          <div class="img" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDGGCfYYHn_Hobkws70trtQySERJwQ4hl8L08Royu8mTg6CZBDRNVYoR9zucaeLrnbAu1-7cB4tb_1r8PHgl2fI43pkyt5gC2uD926D0hGs17nSU0iuMzA9HMyaQM1qv2MsucNdQycKrZ0FJrhrVXWWnm5iC6-SUDnIHf0LD8v5Ee_WDfC196behm3-VmaVrpWbVcSINiTqQTTdUPTZ3m69RfovZLc9gnbhEuTY5HWubJaQPq2AZTMag8I2eKV0CzTwTHyboUCrm9YA");'>
+            <div class="overlay">
+              <button class="wds-btn wds-btn-primary" style="border-radius:18px;">View Details</button>
+            </div>
+          </div>
+          <div class="footer">
+            <h4>Monstera</h4>
+            <p><span class="material-icons-outlined" style="font-size:14px; color:#116dff;">water_drop</span> Water in 3 days</p>
+          </div>
+        </div>
+
+        <div class="wds-gallery-item">
+          <div class="img" style="background:#e8edf2; display:flex; align-items:center; justify-content:center;">
+            <span class="material-icons-outlined" style="font-size:42px; color:#b6c1cd;">add_photo_alternate</span>
+          </div>
+          <div class="footer">
+            <h4>Pothos</h4>
+            <p><span class="material-icons-outlined" style="font-size:14px; color:#116dff;">water_drop</span> Water in 4 days</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TAB 3: WDS CONVERSION                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tab-content" id="tab-wds">
+<div class="wds wds-page">
+
+  <!-- Page.Header -->
+  <div class="wds-page-header">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div style="width:32px; height:32px; background:#eaf0ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+        <span class="material-icons-outlined" style="font-size:20px; color:#3b6ef0;">local_florist</span>
+      </div>
+      <h1>Plant Care</h1>
+    </div>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <div class="wds-search">
+        <span class="material-icons-outlined">search</span>
+        <input placeholder="Search plants..." type="search"/>
+      </div>
+      <div style="position:relative; cursor:pointer; padding:6px;">
+        <span class="material-icons-outlined" style="color:#576475; font-size:22px;">notifications</span>
+        <div class="notif-dot"></div>
+      </div>
+      <div class="wds-avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCW0TxJXX40FmN5mvFvQpkJDfZ42nh7JUcotfKEPJndBzxJe5qT9y_dFwgvq7X9rtZkZcpa0fjRR9pWvkvtGkKzYz1l93gTQTFXC-ZFHHQK-v8fgB9wgw4CI11_VIgwgcyha2X9VRhGc4UCVd6Bu_u_Rcy8QLCl2d8twJGagUnDiprXcJFQwQd7bdrXMZ1agPd-N0qYUo6j2jdVfmkBwmkFl2k7xEJxXF2TCoVpD5Zbk_LJ_0t78uVXlbeAH6x0CYFRcz7S_ZpgtMa9");'></div>
+    </div>
+  </div>
+
+  <!-- Page.Content -->
+  <div style="max-width:1100px; margin:0 auto; padding:32px 48px;">
+
+    <!-- Page title row -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+      <h2 style="font-size:28px; font-weight:700; color:#162d3d; letter-spacing:-0.03em; line-height:1.15;">My Plants</h2>
+      <button class="wds-btn wds-btn-primary">
+        <span class="material-icons-outlined" style="font-size:18px;">add</span>
+        Add New Plant
+      </button>
+    </div>
+
+    <!-- WDS Tabs -->
+    <div class="wds-inner-tabs" id="wdsTabs">
+      <div class="wds-inner-tab active" data-tab="tasks" onclick="switchWdsTab('tasks')">Upcoming Tasks</div>
+      <div class="wds-inner-tab" data-tab="allplants" onclick="switchWdsTab('allplants')">All Plants</div>
+    </div>
+
+    <!-- Tab Panel: Tasks -->
+    <div class="wds-tab-panel active" id="wds-panel-tasks" style="padding-top:24px;">
+      <div class="wds-card">
+        <div class="wds-card-header">
+          <h3>Upcoming Tasks</h3>
+          <span class="wds-badge wds-badge-info">3 plants</span>
+        </div>
+        <div class="wds-card-content">
+          <table class="wds-table">
+            <thead>
+              <tr>
+                <th>Plant</th>
+                <th>Watering</th>
+                <th>Sunlight</th>
+                <th>Fertilization</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="wds-text-emphasis">Fiddle Leaf Fig</span></td>
+                <td><span class="wds-badge wds-badge-success" style="font-size:11px;">In 2 days</span></td>
+                <td>Bright, indirect</td>
+                <td>In 3 weeks</td>
+              </tr>
+              <tr>
+                <td><span class="wds-text-emphasis">Snake Plant</span></td>
+                <td>In 5 days</td>
+                <td>Low to bright, indirect</td>
+                <td>In 6 weeks</td>
+              </tr>
+              <tr>
+                <td><span class="wds-text-emphasis">Monstera</span></td>
+                <td><span class="wds-badge wds-badge-success" style="font-size:11px;">In 3 days</span></td>
+                <td>Bright, indirect</td>
+                <td>In 4 weeks</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tab Panel: All Plants -->
+    <div class="wds-tab-panel" id="wds-panel-allplants" style="padding-top:24px;">
+      <div class="wds-gallery-grid">
+        <div class="wds-gallery-item">
+          <div class="img" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAVu_dVZcy2_o8A3wQGnYtWggbBaotN8aQlknpxuR_anhV6TBh9nlt63JVvFyOzhDJyMbyw_RZqZcryfDwt6EiHYm1mM6V4KJN6UJcDstc238JVJAAbhvk_G7IzbLQlOhgglSxBIbKGXRREBN1pPmOTHjrNIl_ZI50E_NttvKkdY3trTt6l6hhTU2qc9WLd109rePwVt3Vu2dMLi8CsNzgbjtnAgnv9uJjdT-atZmcEQ4qvkCWkOdSJQlJOprvUDDDcTMsqrpYEgzHD");'>
+            <div class="overlay">
+              <button class="wds-btn wds-btn-primary" style="border-radius:18px;">View Details</button>
+            </div>
+          </div>
+          <div class="footer">
+            <h4>Fiddle Leaf Fig</h4>
+            <p><span class="material-icons-outlined" style="font-size:14px; color:#3b6ef0;">water_drop</span> Water in 2 days</p>
+          </div>
+        </div>
+
+        <div class="wds-gallery-item">
+          <div class="img" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCeS-pfTOMRm2Wd0Tmkzg75-lX5inHOOcwZ79mWgj7biQR-Mk661RjzL0O6RJ4WBROiNhvgDPWIWFRUAIrSQSaKjffuNIzip694TU1TI5XvMyehEMjRpnkrlfIDubNM2uyf9Bff6D7Lgj8u4Ov6-rBmc1xmKxFLaSHb5p_Q_AsuYoe5ZtAKpmHIy5lE7Szv2e4H4pn4Y31VxfP0ed_sOusECZtl7V4l3u9TWsB91oLy9Z9CkQIQX3a-c-66oJkEZh7k197uLhFamL6x");'>
+            <div class="overlay">
+              <button class="wds-btn wds-btn-primary" style="border-radius:18px;">View Details</button>
+            </div>
+          </div>
+          <div class="footer">
+            <h4>Snake Plant</h4>
+            <p><span class="material-icons-outlined" style="font-size:14px; color:#3b6ef0;">water_drop</span> Water in 5 days</p>
+          </div>
+        </div>
+
+        <div class="wds-gallery-item">
+          <div class="img" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDGGCfYYHn_Hobkws70trtQySERJwQ4hl8L08Royu8mTg6CZBDRNVYoR9zucaeLrnbAu1-7cB4tb_1r8PHgl2fI43pkyt5gC2uD926D0hGs17nSU0iuMzA9HMyaQM1qv2MsucNdQycKrZ0FJrhrVXWWnm5iC6-SUDnIHf0LD8v5Ee_WDfC196behm3-VmaVrpWbVcSINiTqQTTdUPTZ3m69RfovZLc9gnbhEuTY5HWubJaQPq2AZTMag8I2eKV0CzTwTHyboUCrm9YA");'>
+            <div class="overlay">
+              <button class="wds-btn wds-btn-primary" style="border-radius:18px;">View Details</button>
+            </div>
+          </div>
+          <div class="footer">
+            <h4>Monstera</h4>
+            <p><span class="material-icons-outlined" style="font-size:14px; color:#3b6ef0;">water_drop</span> Water in 3 days</p>
+          </div>
+        </div>
+
+        <div class="wds-gallery-item">
+          <div class="img" style="background:#e8edf2; display:flex; align-items:center; justify-content:center;">
+            <span class="material-icons-outlined" style="font-size:42px; color:#b6c1cd;">add_photo_alternate</span>
+          </div>
+          <div class="footer">
+            <h4>Pothos</h4>
+            <p><span class="material-icons-outlined" style="font-size:14px; color:#3b6ef0;">water_drop</span> Water in 4 days</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+function switchTopTab(tabId) {
+  document.querySelectorAll('.top-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.top-tab[data-tab="${tabId}"]`).classList.add('active');
+  document.getElementById(`tab-${tabId}`).classList.add('active');
+}
+
+function switchWdsTab(tabId) {
+  document.querySelectorAll('.wds-inner-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.wds-tab-panel').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.wds-inner-tab[data-tab="${tabId}"]`).classList.add('active');
+  document.getElementById(`wds-panel-${tabId}`).classList.add('active');
+}
+</script>
+</body>
+</html>
