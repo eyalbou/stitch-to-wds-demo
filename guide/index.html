@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Stitch AI for Creator Kit -- Usage Guide</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<link href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/lucide.min.css" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -16,6 +15,7 @@
   --accent:#22d3ee;--accent-dim:rgba(34,211,238,0.12);
   --green:#34d399;--green-dim:rgba(52,211,153,0.12);
   --orange:#fb923c;--orange-dim:rgba(251,146,60,0.12);
+  --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);
   --radius:12px;--radius-sm:8px;
   --shadow:0 1px 3px rgba(0,0,0,0.12),0 4px 12px rgba(0,0,0,0.08);
   --font:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -32,7 +32,7 @@ code{
   background:rgba(255,255,255,0.08);padding:2px 8px;border-radius:4px;
   font-size:0.85em;font-family:'SF Mono',Menlo,monospace;color:var(--accent);
 }
-.container{max-width:960px;margin:0 auto;padding:0 32px}
+.container{max-width:1000px;margin:0 auto;padding:0 32px}
 
 /* ── Nav ── */
 .top-nav{
@@ -41,7 +41,7 @@ code{
   border-bottom:1px solid var(--border);padding:0 32px;
 }
 .top-nav-inner{
-  max-width:960px;margin:0 auto;display:flex;align-items:center;
+  max-width:1000px;margin:0 auto;display:flex;align-items:center;
   justify-content:space-between;height:52px;
 }
 .top-nav .logo{font-weight:700;font-size:15px;letter-spacing:-0.02em;color:var(--text);display:flex;align-items:center;gap:8px}
@@ -55,7 +55,7 @@ code{
 
 /* ── Hero ── */
 .hero{
-  padding:80px 0 64px;text-align:center;
+  padding:72px 0 56px;text-align:center;
   background:radial-gradient(ellipse at 50% 0%,rgba(17,109,255,0.08) 0%,transparent 60%);
 }
 .hero .badge{
@@ -65,7 +65,7 @@ code{
   letter-spacing:0.08em;padding:4px 14px;border-radius:20px;margin-bottom:24px;
 }
 .hero h1{
-  font-size:48px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;
+  font-size:44px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;
   margin-bottom:16px;
   background:linear-gradient(135deg,#f1f5f9 30%,#94a3b8 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
@@ -75,7 +75,7 @@ code{
   background:linear-gradient(135deg,var(--primary),var(--accent));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
-.hero p{font-size:18px;color:var(--text-2);max-width:600px;margin:0 auto 32px;line-height:1.5}
+.hero p{font-size:17px;color:var(--text-2);max-width:640px;margin:0 auto 28px;line-height:1.5}
 .hero-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .btn{
   display:inline-flex;align-items:center;gap:8px;
@@ -88,7 +88,7 @@ code{
 .btn-outline:hover{border-color:var(--border-hover);background:rgba(255,255,255,0.04)}
 
 /* ── Section ── */
-.section{padding:64px 0}
+.section{padding:56px 0}
 .section+.section{border-top:1px solid var(--border)}
 .section-label{
   font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;
@@ -97,29 +97,54 @@ code{
 .section h2{font-size:28px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
 .section .subtitle{color:var(--text-2);font-size:16px;margin-bottom:32px}
 
-/* ── Pipeline Diagram ── */
-.pipeline{
-  display:flex;align-items:stretch;gap:0;margin:32px 0;
-  overflow-x:auto;padding-bottom:8px;
+/* ── Stage Timeline ── */
+.timeline{position:relative;padding-left:0}
+.stage{
+  display:grid;grid-template-columns:64px 1fr;gap:0;
+  margin-bottom:4px;position:relative;
 }
-.pipe-step{
-  flex:1;min-width:180px;position:relative;
-  background:var(--bg-card);border:1px solid var(--border);
-  border-radius:var(--radius);padding:24px 20px;text-align:center;
-  transition:border-color 0.2s,box-shadow 0.2s;
+.stage-left{
+  display:flex;flex-direction:column;align-items:center;position:relative;
 }
-.pipe-step:hover{border-color:var(--border-hover);box-shadow:var(--shadow)}
-.pipe-step .step-num{
-  width:28px;height:28px;border-radius:50%;
+.stage-num{
+  width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:700;flex-shrink:0;position:relative;z-index:2;
+}
+.stage-line{
+  width:2px;flex:1;min-height:16px;
+  background:linear-gradient(180deg,var(--border-hover),var(--border));
+}
+.stage:last-child .stage-line{display:none}
+.stage-right{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 24px;margin-bottom:8px;transition:border-color 0.2s,box-shadow 0.2s;
+}
+.stage-right:hover{border-color:var(--border-hover);box-shadow:var(--shadow)}
+.stage-header{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.stage-header h3{font-size:16px;font-weight:600;letter-spacing:-0.01em}
+.stage-header .skill-tag{
+  font-size:11px;font-weight:500;padding:2px 10px;border-radius:4px;
+  background:rgba(255,255,255,0.06);color:var(--text-3);font-family:'SF Mono',Menlo,monospace;
+}
+.stage-body{font-size:14px;color:var(--text-2);line-height:1.6}
+.stage-body strong{color:var(--text);font-weight:600}
+
+/* Stage colors */
+.stage-num.existing{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text-2)}
+.stage-num.stitch{background:var(--primary-glow);border:2px solid var(--primary);color:var(--primary)}
+.stage-num.enriched{background:var(--green-dim);border:1px solid rgba(52,211,153,0.3);color:var(--green)}
+
+/* Stitch highlight */
+.stage-right.stitch-highlight{
+  border-color:rgba(17,109,255,0.3);
+  background:linear-gradient(135deg,rgba(17,109,255,0.06),rgba(34,211,238,0.03));
+}
+.stitch-badge{
+  display:inline-flex;align-items:center;gap:4px;
   background:var(--primary-glow);border:1px solid rgba(17,109,255,0.3);
-  color:var(--primary);font-size:12px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;margin:0 auto 12px;
-}
-.pipe-step h4{font-size:14px;font-weight:600;margin-bottom:4px;letter-spacing:-0.01em}
-.pipe-step p{font-size:12px;color:var(--text-3);line-height:1.4}
-.pipe-arrow{
-  display:flex;align-items:center;padding:0 4px;color:var(--text-3);font-size:20px;
-  flex-shrink:0;
+  color:var(--primary);font-size:11px;font-weight:600;text-transform:uppercase;
+  letter-spacing:0.06em;padding:2px 10px;border-radius:12px;
 }
 
 /* ── Cards ── */
@@ -132,25 +157,13 @@ code{
 .card p{color:var(--text-2);font-size:14px;line-height:1.5}
 .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
 
-/* ── Steps ── */
-.step-list{display:flex;flex-direction:column;gap:20px}
-.step-item{
-  display:flex;gap:16px;align-items:flex-start;
-  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
-  padding:20px 24px;transition:border-color 0.2s;
-}
-.step-item:hover{border-color:var(--border-hover)}
-.step-item .step-icon{
-  width:36px;height:36px;border-radius:10px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;font-weight:700;
-}
-.step-icon.blue{background:var(--primary-glow);color:var(--primary);border:1px solid rgba(17,109,255,0.2)}
-.step-icon.green{background:var(--green-dim);color:var(--green);border:1px solid rgba(52,211,153,0.2)}
-.step-icon.orange{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(251,146,60,0.2)}
-.step-icon.cyan{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(34,211,238,0.2)}
-.step-item h4{font-size:15px;font-weight:600;margin-bottom:4px}
-.step-item p{font-size:13px;color:var(--text-2);line-height:1.5}
+/* ── Legend ── */
+.legend{display:flex;gap:24px;margin-bottom:32px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2)}
+.legend-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.legend-dot.existing{background:rgba(255,255,255,0.1);border:1px solid var(--border)}
+.legend-dot.stitch{background:var(--primary-glow);border:2px solid var(--primary)}
+.legend-dot.enriched{background:var(--green-dim);border:1px solid rgba(52,211,153,0.3)}
 
 /* ── Comparison (B&W vs Color) ── */
 .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px}
@@ -160,30 +173,20 @@ code{
 }
 .compare-card:hover{border-color:var(--border-hover)}
 .compare-preview{
-  height:160px;display:flex;align-items:center;justify-content:center;
-  font-size:14px;font-weight:500;letter-spacing:-0.01em;
+  height:140px;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:500;
 }
 .compare-preview.bw{background:linear-gradient(135deg,#e2e8f0,#f8fafc);color:#334155}
 .compare-preview.color{background:linear-gradient(135deg,#116DFF,#0e5cd7);color:#fff}
-.compare-body{padding:20px}
-.compare-body h4{font-size:15px;font-weight:600;margin-bottom:4px}
-.compare-body p{font-size:13px;color:var(--text-2);line-height:1.5}
+.compare-body{padding:16px 20px}
+.compare-body h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.compare-body p{font-size:13px;color:var(--text-2);line-height:1.4}
 .compare-tag{
   display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;
-  letter-spacing:0.06em;padding:2px 8px;border-radius:4px;margin-top:8px;
+  letter-spacing:0.06em;padding:2px 8px;border-radius:4px;margin-top:6px;
 }
 .compare-tag.default{background:var(--accent-dim);color:var(--accent)}
 .compare-tag.alt{background:var(--primary-glow);color:var(--primary)}
-
-/* ── File Tree ── */
-.file-tree{
-  background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:var(--radius-sm);
-  padding:20px 24px;font-family:'SF Mono',Menlo,monospace;font-size:13px;
-  line-height:1.8;color:var(--text-2);overflow-x:auto;
-}
-.file-tree .dir{color:var(--accent);font-weight:500}
-.file-tree .file{color:var(--text-2)}
-.file-tree .label{color:var(--text-3);font-style:italic;font-family:var(--font);font-size:12px}
 
 /* ── Prereqs ── */
 .prereq-item{
@@ -200,6 +203,15 @@ code{
 .prereq-item h4{font-size:14px;font-weight:600;margin-bottom:2px}
 .prereq-item p{font-size:13px;color:var(--text-2)}
 .prereq-item code{font-size:12px}
+
+/* ── File Tree ── */
+.file-tree{
+  background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:20px 24px;font-family:'SF Mono',Menlo,monospace;font-size:13px;
+  line-height:1.8;color:var(--text-2);overflow-x:auto;
+}
+.file-tree .dir{color:var(--accent);font-weight:500}
+.file-tree .label{color:var(--text-3);font-style:italic;font-family:var(--font);font-size:12px}
 
 /* ── CTA Banner ── */
 .cta-banner{
@@ -218,13 +230,14 @@ code{
 
 /* ── Responsive ── */
 @media(max-width:768px){
-  .hero h1{font-size:32px}
-  .hero p{font-size:16px}
-  .pipeline{flex-direction:column;gap:8px}
-  .pipe-arrow{transform:rotate(90deg);padding:4px 0;justify-content:center}
+  .hero h1{font-size:28px}
+  .hero p{font-size:15px}
+  .stage{grid-template-columns:48px 1fr}
+  .stage-num{width:36px;height:36px;font-size:14px}
   .compare-grid{grid-template-columns:1fr}
   .container{padding:0 20px}
   .top-nav{padding:0 20px}
+  .legend{flex-direction:column;gap:8px}
 }
 </style>
 </head>
@@ -235,8 +248,8 @@ code{
   <div class="top-nav-inner">
     <div class="logo"><span>Stitch</span> + Creator Kit</div>
     <div class="nav-links">
-      <a href="#how-it-works">How it works</a>
-      <a href="#usage">Usage</a>
+      <a href="#flow">Full Flow</a>
+      <a href="#prereqs">Setup</a>
       <a href="#output">Output</a>
       <a href="https://eyalbou.github.io/stitch-to-wds-demo/user-manager/" target="_blank">Live Demo</a>
     </div>
@@ -246,62 +259,12 @@ code{
 <!-- Hero -->
 <section class="hero">
   <div class="container">
-    <div class="badge">New integration</div>
-    <h1>Generate UX concepts with <em>Stitch AI</em></h1>
-    <p>Higher-fidelity design output for Creator Kit, auto-converted to Wix Design System. Opt-in, non-breaking, ready to try.</p>
+    <div class="badge">Creator Kit Integration</div>
+    <h1>The full CK flow with <em>Stitch AI</em></h1>
+    <p>Stitch is an opt-in generation mode inside the existing Creator Kit pipeline. Same flow, same skills, same artifacts -- higher fidelity output at the design stage.</p>
     <div class="hero-buttons">
       <a href="https://eyalbou.github.io/stitch-to-wds-demo/user-manager/" target="_blank" class="btn btn-primary">See live demo</a>
-      <a href="https://github.com/wix-private/creator-kit/compare/master...eyalbou/stitch-integration" target="_blank" class="btn btn-outline">View branch diff</a>
-    </div>
-  </div>
-</section>
-
-<!-- How it Works -->
-<section class="section" id="how-it-works">
-  <div class="container">
-    <div class="section-label">Architecture</div>
-    <h2>How it works</h2>
-    <p class="subtitle">Stitch generates high-fidelity screens. The pipeline converts them to WDS. CK delivers them in the existing skill flow.</p>
-
-    <div class="pipeline">
-      <div class="pipe-step">
-        <div class="step-num">1</div>
-        <h4>CK Skill</h4>
-        <p>Gathers spec, strategy, research, and concept context</p>
-      </div>
-      <div class="pipe-arrow">&rarr;</div>
-      <div class="pipe-step">
-        <div class="step-num">2</div>
-        <h4>Stitch MCP</h4>
-        <p>Generates screens from text prompts via Google Stitch AI</p>
-      </div>
-      <div class="pipe-arrow">&rarr;</div>
-      <div class="pipe-step">
-        <div class="step-num">3</div>
-        <h4>WDS Convert</h4>
-        <p>Swaps fonts, colors, buttons, icons to WDS tokens</p>
-      </div>
-      <div class="pipe-arrow">&rarr;</div>
-      <div class="pipe-step">
-        <div class="step-num">4</div>
-        <h4>CK Output</h4>
-        <p>Saved to artifacts/ for edge cases, content, and handoff</p>
-      </div>
-    </div>
-
-    <div class="card-grid" style="margin-top:32px">
-      <div class="card">
-        <h3>What changes</h3>
-        <p><code>ck-ux-concepts</code> and <code>ck-ux-all-screens</code> gain a third generation mode: <strong>Stitch AI</strong>. You choose it alongside HTML and Figma.</p>
-      </div>
-      <div class="card">
-        <h3>What doesn't change</h3>
-        <p>Existing HTML and WDS React modes work exactly as before. Stitch is opt-in. Orchestrators are untouched. Artifact paths are preserved.</p>
-      </div>
-      <div class="card">
-        <h3>What CK gives Stitch</h3>
-        <p>Product spec, strategy, research insights, and current-product screenshots all feed into better Stitch prompts -- richer context, better output.</p>
-      </div>
+      <a href="#flow" class="btn btn-outline">See the 10-stage flow</a>
     </div>
   </div>
 </section>
@@ -309,165 +272,308 @@ code{
 <!-- Prerequisites -->
 <section class="section" id="prereqs">
   <div class="container">
-    <div class="section-label">Setup</div>
+    <div class="section-label">One-time setup</div>
     <h2>Prerequisites</h2>
-    <p class="subtitle">One-time setup before using Stitch mode.</p>
-
+    <p class="subtitle">Before using Stitch mode, complete these one-time steps.</p>
     <div class="card">
       <div class="prereq-item">
         <div class="prereq-check">&check;</div>
         <div>
           <h4>Google Cloud authentication</h4>
-          <p>Run <code>gcloud auth login</code> and <code>gcloud auth application-default login</code> in your terminal. Free tier covers Stitch usage (350 generations/month).</p>
+          <p>Run <code>gcloud auth login</code> and <code>gcloud auth application-default login</code>. Free tier covers Stitch (350 generations/month).</p>
         </div>
       </div>
       <div class="prereq-item">
         <div class="prereq-check">&check;</div>
         <div>
-          <h4>Stitch MCP server</h4>
-          <p>Add to <code>~/.cursor/mcp.json</code>:</p>
-          <p style="margin-top:4px"><code>"user-stitch": { "command": "npx", "args": ["-y", "@anthropic-ai/stitch-mcp"] }</code></p>
+          <h4>Stitch MCP server in Cursor</h4>
+          <p>Add to <code>~/.cursor/mcp.json</code>: <code>"user-stitch": { "command": "npx", "args": ["-y", "@anthropic-ai/stitch-mcp"] }</code></p>
         </div>
       </div>
       <div class="prereq-item">
         <div class="prereq-check">&check;</div>
         <div>
-          <h4>WDS MCP server</h4>
-          <p>Add to <code>~/.cursor/mcp.json</code>:</p>
-          <p style="margin-top:4px"><code>"wix-wds": { "type": "http", "url": "https://mcp.wix.com/mcp" }</code></p>
+          <h4>WDS MCP server in Cursor</h4>
+          <p>Add to <code>~/.cursor/mcp.json</code>: <code>"wix-wds": { "type": "http", "url": "https://mcp.wix.com/mcp" }</code></p>
         </div>
       </div>
       <div class="prereq-item">
         <div class="prereq-check">&check;</div>
         <div>
           <h4>Creator Kit with Stitch branch</h4>
-          <p>Checkout branch <code>eyalbou/stitch-integration</code> on <code>wix-private/creator-kit</code></p>
+          <p>Checkout <code>eyalbou/stitch-integration</code> on <code>wix-private/creator-kit</code></p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Usage -->
-<section class="section" id="usage">
+<!-- The Full 10-Stage Flow -->
+<section class="section" id="flow">
   <div class="container">
-    <div class="section-label">Step by step</div>
-    <h2>Usage: ck-ux-concepts</h2>
-    <p class="subtitle">Generating UX concepts with Stitch mode -- 3 decision points.</p>
+    <div class="section-label">End-to-end walkthrough</div>
+    <h2>The Full Flow: 10 Stages</h2>
+    <p class="subtitle">This is the complete Creator Kit product development pipeline. Stitch integrates at specific stages -- everything else is unchanged.</p>
 
-    <div class="step-list">
-      <div class="step-item">
-        <div class="step-icon blue">1</div>
-        <div>
-          <h4>Invoke the skill</h4>
-          <p>Say <em>"generate UX concepts"</em> or <em>"ck-ux-concepts"</em>. The skill finds your spec + strategy docs and runs silent analysis as usual.</p>
-        </div>
-      </div>
-      <div class="step-item">
-        <div class="step-icon green">2</div>
-        <div>
-          <h4>Choose delivery mode</h4>
-          <p>You're asked: <strong>"All at once"</strong> or <strong>"One by one"</strong>. Same as before -- this controls how concepts are presented.</p>
-        </div>
-      </div>
-      <div class="step-item">
-        <div class="step-icon orange">3</div>
-        <div>
-          <h4>Choose generation mode <span style="background:var(--primary-glow);color:var(--primary);font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;margin-left:8px">NEW</span></h4>
-          <p>A new Step 1C asks you to pick:<br/>
-          <strong>HTML/CSS/JS</strong> (default) -- agent writes code inline, B&W wireframes<br/>
-          <strong>Stitch AI</strong> -- generates via Google Stitch MCP, auto-converted to WDS<br/>
-          <strong>Figma</strong> -- coming soon</p>
-        </div>
-      </div>
-      <div class="step-item">
-        <div class="step-icon cyan">4</div>
-        <div>
-          <h4>Choose color mode (Stitch only) <span style="background:var(--primary-glow);color:var(--primary);font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;margin-left:8px">NEW</span></h4>
-          <p>If you picked Stitch, you're asked: <strong>B&W wireframes</strong> (CK convention) or <strong>WDS-colored</strong> (full fidelity). If you already said "in color" or "wireframes", this is skipped.</p>
-        </div>
-      </div>
-      <div class="step-item">
-        <div class="step-icon blue">5</div>
-        <div>
-          <h4>Concepts are generated</h4>
-          <p>For each concept, Stitch generates a screen, the WDS conversion pipeline runs, and the result is saved to both <code>artifacts/ux/concepts/</code> and <code>.stitch/{slug}/</code>. Documentation and delivery follow the same CK flow.</p>
-        </div>
-      </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot existing"></div> Existing CK skill (unchanged)</div>
+      <div class="legend-item"><div class="legend-dot stitch"></div> Stitch integration point (you choose here)</div>
+      <div class="legend-item"><div class="legend-dot enriched"></div> Enriched by Stitch output (auto)</div>
     </div>
 
-    <div style="margin-top:48px">
-      <h2>Usage: ck-ux-all-screens</h2>
-      <p class="subtitle">Full UX specs with Stitch mode -- same skill, new option.</p>
+    <div class="timeline">
 
-      <div class="step-list">
-        <div class="step-item">
-          <div class="step-icon blue">1</div>
-          <div>
-            <h4>Select concept + design mode</h4>
-            <p>Step 0.2 now shows three design modes: <strong>Keep concept theme</strong>, <strong>Use WDS components</strong>, and <strong>Generate with Stitch AI</strong>.</p>
-          </div>
+      <!-- Stage 1 -->
+      <div class="stage">
+        <div class="stage-left">
+          <div class="stage-num existing">1</div>
+          <div class="stage-line"></div>
         </div>
-        <div class="step-item">
-          <div class="step-icon green">2</div>
-          <div>
-            <h4>Edge-case baton</h4>
-            <p>In Stitch mode, the agent builds a prompt baton from the selected concept + edge case analysis. Each remaining screen gets a Stitch prompt that includes the concept's design language and the specific flow's edge case states.</p>
+        <div class="stage-right">
+          <div class="stage-header">
+            <h3>Start a new project</h3>
+            <span class="skill-tag">ck-new</span>
           </div>
-        </div>
-        <div class="step-item">
-          <div class="step-icon orange">3</div>
-          <div>
-            <h4>Screen-by-screen generation</h4>
-            <p>Each flow is generated via Stitch MCP, WDS-converted, annotated with the drawer system, and wired with cross-file navigation. Output goes to both CK and Stitch paths.</p>
+          <div class="stage-body">
+            Say <strong>"start a new project"</strong> or <strong>"/ck-new"</strong>. Creates the project folder and basic structure.<br/>
+            <em>No changes here -- works exactly as before.</em>
           </div>
         </div>
       </div>
-    </div>
+
+      <!-- Stage 2 -->
+      <div class="stage">
+        <div class="stage-left">
+          <div class="stage-num existing">2</div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-right">
+          <div class="stage-header">
+            <h3>Write Product Spec</h3>
+            <span class="skill-tag">ck-product-spec</span>
+          </div>
+          <div class="stage-body">
+            Define what you're building -- requirements, goals, user stories, scope, constraints.<br/>
+            Output: <code>artifacts/product/product-spec-*.md</code><br/>
+            <em>This becomes input for Stitch prompts later. Better spec = better Stitch output.</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 3 -->
+      <div class="stage">
+        <div class="stage-left">
+          <div class="stage-num existing">3</div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-right">
+          <div class="stage-header">
+            <h3>Write Product Strategy</h3>
+            <span class="skill-tag">ck-product-strategy</span>
+          </div>
+          <div class="stage-body">
+            Define the "why" -- positioning, success metrics, target users, competitive angle.<br/>
+            Output: <code>artifacts/product/product-strategy-*.md</code><br/>
+            <em>Strategy context shapes the UX direction Stitch generates.</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 4 -->
+      <div class="stage">
+        <div class="stage-left">
+          <div class="stage-num existing">4</div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-right">
+          <div class="stage-header">
+            <h3>Run UX Research</h3>
+            <span class="skill-tag">ck-ux-research</span>
+          </div>
+          <div class="stage-body">
+            Competitive analysis, user pain points, UX patterns from the market.<br/>
+            Output: <code>artifacts/ux/research/ux-research.md</code><br/>
+            <em>Research insights are woven into Stitch prompts for grounded, differentiated designs.</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 5 -->
+      <div class="stage">
+        <div class="stage-left">
+          <div class="stage-num existing">5</div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-right">
+          <div class="stage-header">
+            <h3>Build existing product prototype</h3>
+            <span class="skill-tag">ck-ux-current-product</span>
+          </div>
+          <div class="stage-body">
+            <em>Optional -- only for features on existing products.</em><br/>
+            Builds a 1:1 B&W replica of the current product from its code repo.<br/>
+            Output: <code>artifacts/ux/current-product/</code><br/>
+            <em>Can be used as image input for Stitch -- "redesign this screen".</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 6 -- STITCH -->
+      <div class="stage">
+        <div class="stage-left">
+          <div class="stage-num stitch">6</div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-right stitch-highlight">
+          <div class="stage-header">
+            <h3>Generate UX Concepts</h3>
+            <span class="skill-tag">ck-ux-concepts</span>
+            <span class="stitch-badge">Stitch integration</span>
+          </div>
+          <div class="stage-body">
+            This is the main integration point. The skill generates 5 distinct UX concepts. After silent analysis, you're asked:<br/><br/>
+            <strong>Decision 1 -- Delivery mode:</strong> "All at once" or "One by one"<br/>
+            <strong>Decision 2 -- Generation mode:</strong><br/>
+            &nbsp;&nbsp;&bull; <strong>HTML/CSS/JS</strong> (default) -- agent writes code inline, B&W wireframes<br/>
+            &nbsp;&nbsp;&bull; <strong>Stitch AI</strong> -- generates via Google Stitch MCP, auto-converted to WDS<br/>
+            &nbsp;&nbsp;&bull; <strong>Figma</strong> -- coming soon<br/><br/>
+            <strong>Decision 3 -- Color mode</strong> (Stitch only):<br/>
+            &nbsp;&nbsp;&bull; <strong>B&W wireframes</strong> -- CK convention, grayscale, layout-focused review<br/>
+            &nbsp;&nbsp;&bull; <strong>WDS-colored</strong> -- full fidelity, production-ready WDS palette<br/><br/>
+            For each concept, Stitch generates a screen, the WDS conversion pipeline runs automatically, and the result is saved to <code>artifacts/ux/concepts/</code>. Docs and delivery follow the same CK flow.<br/><br/>
+            Output: <code>artifacts/ux/concepts/concept-1-*/</code> through <code>concept-5-*/</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 7 -->
+      <div class="stage">
+        <div class="stage-left">
+          <div class="stage-num existing">7</div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-right">
+          <div class="stage-header">
+            <h3>Select concept + edge cases</h3>
+            <span class="skill-tag">ck-ux-edge-cases</span>
+          </div>
+          <div class="stage-body">
+            Review the 5 concepts, pick a winner. The edge cases skill analyzes the selected concept for error states, empty states, loading states, permission states, etc.<br/>
+            Output: <code>artifacts/ux/all-screens/edge-cases.md</code><br/>
+            <em>Edge case analysis feeds into Stitch's screen-by-screen generation in Stage 9.</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 8 -->
+      <div class="stage">
+        <div class="stage-left">
+          <div class="stage-num existing">8</div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-right">
+          <div class="stage-header">
+            <h3>Refine UX content</h3>
+            <span class="skill-tag">ck-ux-content</span>
+          </div>
+          <div class="stage-body">
+            Refines microcopy -- button labels, error messages, empty state text, tooltips.<br/>
+            Runs automatically during concept delivery and again for edge case copy.<br/>
+            <em>No changes here -- works exactly as before.</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 9 -- STITCH -->
+      <div class="stage">
+        <div class="stage-left">
+          <div class="stage-num stitch">9</div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-right stitch-highlight">
+          <div class="stage-header">
+            <h3>Full UX Spec (all screens)</h3>
+            <span class="skill-tag">ck-ux-all-screens</span>
+            <span class="stitch-badge">Stitch integration</span>
+          </div>
+          <div class="stage-body">
+            Takes the selected concept and generates ALL flows, states, and screens. You're asked to choose a design mode:<br/><br/>
+            &nbsp;&nbsp;&bull; <strong>Keep concept theme</strong> (default) -- HTML inheriting the concept's style<br/>
+            &nbsp;&nbsp;&bull; <strong>Use WDS components</strong> -- Vite + React with real @wix/design-system<br/>
+            &nbsp;&nbsp;&bull; <strong>Generate with Stitch AI</strong> -- higher fidelity, WDS-converted<br/><br/>
+            In Stitch mode, the agent builds an <strong>edge-case baton</strong>: each remaining screen gets a Stitch prompt built from the selected concept's design language + the edge case states for that specific flow. Screens are generated one by one via Stitch MCP, WDS-converted, annotated, and wired together.<br/><br/>
+            Output: <code>artifacts/ux/all-screens/*.html</code> + <code>all-screens.html</code> viewer
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 10 -- ENRICHED -->
+      <div class="stage">
+        <div class="stage-left">
+          <div class="stage-num enriched">10</div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-right">
+          <div class="stage-header">
+            <h3>Developer Handoff</h3>
+            <span class="skill-tag">ck-handoff</span>
+            <span style="display:inline-flex;align-items:center;gap:4px;background:var(--green-dim);border:1px solid rgba(52,211,153,0.3);color:var(--green);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 10px;border-radius:12px;">Enriched</span>
+          </div>
+          <div class="stage-body">
+            Packages everything into a developer handoff doc: spec, strategy, designs, edge cases, checklist.<br/><br/>
+            <strong>When Stitch was used</strong>, the handoff doc automatically gains a "WDS Components" section with:<br/>
+            &nbsp;&nbsp;&bull; <code>.tsx</code> component files (production-ready WDS React code)<br/>
+            &nbsp;&nbsp;&bull; Conversion reports (token mapping, component mapping)<br/>
+            &nbsp;&nbsp;&bull; Comparison viewer links (original vs WDS-adjusted vs WDS-converted)<br/><br/>
+            Output: <code>artifacts/handoff/handoff-*.md</code>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /timeline -->
   </div>
 </section>
 
 <!-- B&W vs Color -->
 <section class="section" id="color-mode">
   <div class="container">
-    <div class="section-label">Design choice</div>
+    <div class="section-label">Stage 6 detail</div>
     <h2>B&W wireframes vs WDS-colored</h2>
-    <p class="subtitle">CK concepts are traditionally B&W to keep focus on layout. Stitch adds the option of full-color WDS output.</p>
-
+    <p class="subtitle">When you pick Stitch AI in Stage 6, you choose the visual fidelity.</p>
     <div class="compare-grid">
       <div class="compare-card">
         <div class="compare-preview bw">
           <div style="text-align:center">
-            <div style="width:200px;height:24px;background:#cbd5e1;border-radius:4px;margin:0 auto 12px"></div>
-            <div style="width:160px;height:12px;background:#94a3b8;border-radius:3px;margin:0 auto 8px"></div>
-            <div style="width:120px;height:12px;background:#94a3b8;border-radius:3px;margin:0 auto 16px"></div>
+            <div style="width:180px;height:20px;background:#cbd5e1;border-radius:4px;margin:0 auto 10px"></div>
+            <div style="width:140px;height:10px;background:#94a3b8;border-radius:3px;margin:0 auto 6px"></div>
+            <div style="width:100px;height:10px;background:#94a3b8;border-radius:3px;margin:0 auto 14px"></div>
             <div style="display:flex;gap:8px;justify-content:center">
-              <div style="width:80px;height:32px;background:#334155;border-radius:16px"></div>
-              <div style="width:80px;height:32px;border:1px solid #94a3b8;border-radius:16px"></div>
+              <div style="width:72px;height:28px;background:#334155;border-radius:14px"></div>
+              <div style="width:72px;height:28px;border:1px solid #94a3b8;border-radius:14px"></div>
             </div>
           </div>
         </div>
         <div class="compare-body">
           <h4>B&W Wireframes</h4>
-          <p>Grayscale palette. Focuses review on layout, hierarchy, and information architecture. CK convention for early-stage concepts.</p>
+          <p>Grayscale. Review focuses on layout and information architecture. CK convention for early-stage concepts.</p>
           <span class="compare-tag default">CK Default</span>
         </div>
       </div>
       <div class="compare-card">
         <div class="compare-preview color">
           <div style="text-align:center">
-            <div style="width:200px;height:24px;background:rgba(255,255,255,0.9);border-radius:4px;margin:0 auto 12px"></div>
-            <div style="width:160px;height:12px;background:rgba(255,255,255,0.6);border-radius:3px;margin:0 auto 8px"></div>
-            <div style="width:120px;height:12px;background:rgba(255,255,255,0.6);border-radius:3px;margin:0 auto 16px"></div>
+            <div style="width:180px;height:20px;background:rgba(255,255,255,0.9);border-radius:4px;margin:0 auto 10px"></div>
+            <div style="width:140px;height:10px;background:rgba(255,255,255,0.6);border-radius:3px;margin:0 auto 6px"></div>
+            <div style="width:100px;height:10px;background:rgba(255,255,255,0.6);border-radius:3px;margin:0 auto 14px"></div>
             <div style="display:flex;gap:8px;justify-content:center">
-              <div style="width:80px;height:32px;background:#fff;border-radius:16px"></div>
-              <div style="width:80px;height:32px;border:1px solid rgba(255,255,255,0.8);border-radius:16px"></div>
+              <div style="width:72px;height:28px;background:#fff;border-radius:14px"></div>
+              <div style="width:72px;height:28px;border:1px solid rgba(255,255,255,0.8);border-radius:14px"></div>
             </div>
           </div>
         </div>
         <div class="compare-body">
           <h4>WDS-Colored</h4>
-          <p>Full Wix Design System brand colors (#116DFF primary). Production-ready fidelity. Skips a step if going straight to handoff.</p>
+          <p>Full Wix Design System brand colors. Production-ready fidelity. Skips a step to handoff.</p>
           <span class="compare-tag alt">Full Fidelity</span>
         </div>
       </div>
@@ -480,67 +586,53 @@ code{
   <div class="container">
     <div class="section-label">What you get</div>
     <h2>Output structure</h2>
-    <p class="subtitle">Stitch mode writes to both CK artifact paths and the Stitch pipeline directory.</p>
+    <p class="subtitle">Stitch writes to CK artifact paths (so downstream skills work) and the Stitch pipeline directory (for iteration).</p>
 
     <div class="file-tree">
-      <span class="dir">artifacts/ux/concepts/</span> <span class="label">&larr; CK skills read from here</span><br/>
-      &nbsp;&nbsp;<span class="file">concepts.html</span><br/>
-      &nbsp;&nbsp;<span class="file">concepts.json</span><br/>
+      <span class="dir">artifacts/ux/concepts/</span> <span class="label">&larr; CK skills read from here (stages 7-10)</span><br/>
+      &nbsp;&nbsp;<span>concepts.html</span> <span class="label">&larr; viewer with all 5 concepts</span><br/>
       &nbsp;&nbsp;<span class="dir">concept-1-dashboard-hub/</span><br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">index.html</span> <span class="label">&larr; WDS-adjusted output</span><br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">concept-1-dashboard-hub.md</span><br/>
-      &nbsp;&nbsp;<span class="dir">concept-2-spotlight-search/</span><br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">index.html</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span>index.html</span> <span class="label">&larr; WDS-adjusted output</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span>concept-1-dashboard-hub.md</span><br/>
       <br/>
-      <span class="dir">.stitch/{slug}/</span> <span class="label">&larr; Stitch pipeline reads from here</span><br/>
-      &nbsp;&nbsp;<span class="file">metadata.json</span><br/>
-      &nbsp;&nbsp;<span class="dir">designs/</span><br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">concept-1.html</span> <span class="label">&larr; Raw Stitch output</span><br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">concept-1.png</span><br/>
-      &nbsp;&nbsp;<span class="dir">wds-output/</span><br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">concept-1-adjusted.html</span> <span class="label">&larr; WDS tokens swapped</span><br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">concept-1-converted.tsx</span> <span class="label">&larr; Full WDS React code</span><br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">concept-1-report.md</span><br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">concepts-comparison.html</span> <span class="label">&larr; Tabbed viewer</span><br/>
+      <span class="dir">.stitch/{slug}/wds-output/</span> <span class="label">&larr; Stitch pipeline (for iteration)</span><br/>
+      &nbsp;&nbsp;<span>concept-1-adjusted.html</span> <span class="label">&larr; same layout, WDS tokens</span><br/>
+      &nbsp;&nbsp;<span>concept-1-converted.tsx</span> <span class="label">&larr; full WDS React code</span><br/>
+      &nbsp;&nbsp;<span>concept-1-report.md</span> <span class="label">&larr; conversion report</span><br/>
+      &nbsp;&nbsp;<span>concepts-comparison.html</span> <span class="label">&larr; tabbed side-by-side viewer</span><br/>
     </div>
 
     <div class="card-grid" style="margin-top:24px">
       <div class="card">
         <h3>Output A: WDS-Adjusted</h3>
-        <p>Same layout as the Stitch original. Fonts replaced with Wix Madefor Display, colors mapped to WDS tokens, buttons pill-shaped, Material Icons swapped to wix-ui-icons-common. Quick win -- preserves the designer's layout intent.</p>
+        <p>Same layout as Stitch original. Fonts swapped to Wix Madefor Display, colors to WDS tokens, buttons pill-shaped, icons from wix-ui-icons-common. Preserves the designer's layout.</p>
       </div>
       <div class="card">
         <h3>Output B: WDS Conversion</h3>
-        <p>Full restructure using <code>&lt;Page&gt;</code>, <code>&lt;Card&gt;</code>, <code>&lt;Table&gt;</code>, <code>&lt;Tabs&gt;</code> WDS components. React/TSX code ready for production. SP tokens, dataHooks, and proper WDS composition patterns.</p>
+        <p>Full restructure using <code>&lt;Page&gt;</code>, <code>&lt;Card&gt;</code>, <code>&lt;Table&gt;</code>, <code>&lt;Tabs&gt;</code> WDS components. React/TSX production code with SP tokens and dataHooks.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CK Skills Map -->
-<section class="section" id="skills-map">
+<!-- How to Demo -->
+<section class="section" id="demo">
   <div class="container">
-    <div class="section-label">Integration map</div>
-    <h2>Where Stitch fits in Creator Kit</h2>
-    <p class="subtitle">Stitch slots into Phase 4 (Design) as a generation mode. Earlier phases feed it context; later phases consume its output.</p>
+    <div class="section-label">For the meeting</div>
+    <h2>How to demo this</h2>
+    <p class="subtitle">Quick script for showing the integration live.</p>
 
-    <div class="card-grid">
-      <div class="card">
-        <h3 style="color:var(--accent)">Skills that enrich Stitch</h3>
-        <p style="margin-bottom:12px">These feed valuable context into Stitch prompts:</p>
-        <p><strong>ck-product-spec + strategy</strong> -- structured requirements become prompts<br/>
-        <strong>ck-ux-research</strong> -- competitive analysis and user insights<br/>
-        <strong>ck-ux-current-product</strong> -- existing product screenshots as input<br/>
-        <strong>ck-ux-edge-cases</strong> -- edge case states for each screen<br/>
-        <strong>ck-ux-content</strong> -- refined copy before generation</p>
-      </div>
-      <div class="card">
-        <h3 style="color:var(--orange)">Skills Stitch enhances</h3>
-        <p style="margin-bottom:12px">These benefit from higher-fidelity Stitch output:</p>
-        <p><strong>ck-ux-concepts</strong> -- Stitch produces richer visual prototypes than hand-written HTML<br/>
-        <strong>ck-ux-all-screens</strong> -- full UX specs with more polished screens<br/>
-        <strong>ck-handoff</strong> -- gains .tsx files and conversion reports in the handoff doc</p>
-      </div>
+    <div class="card" style="margin-bottom:20px">
+      <h3>Option A: Show existing output (2 min)</h3>
+      <p>Open the <a href="https://eyalbou.github.io/stitch-to-wds-demo/user-manager/" target="_blank">User Manager demo</a>. Walk through the tabs: original input screenshot, then 3 WDS-adjusted concepts. Show the side-by-side comparison.</p>
+    </div>
+    <div class="card" style="margin-bottom:20px">
+      <h3>Option B: Run the CK flow live (10 min)</h3>
+      <p>In Cursor, create a test project with a simple spec. Say <strong>"generate UX concepts"</strong>. When asked for generation mode, pick <strong>"Stitch AI"</strong> and <strong>"WDS-colored"</strong>. Show concepts appearing with WDS styling. Then show the artifacts/ output matching CK expectations.</p>
+    </div>
+    <div class="card">
+      <h3>Option C: Show the branch diff (5 min)</h3>
+      <p>Open the <a href="https://github.com/wix-private/creator-kit/compare/master...eyalbou/stitch-integration" target="_blank">branch comparison</a>. Walk through the 4 changed files: <code>ck-ux-concepts</code> (mode choice), <code>ck-ux-all-screens</code> (third mode), <code>stitch-integration.md</code> (shared config), <code>ck-handoff</code> (artifact discovery).</p>
     </div>
   </div>
 </section>
@@ -550,7 +642,7 @@ code{
   <div class="container">
     <div class="cta-banner">
       <h3>Try it now</h3>
-      <p>Check out the branch, set up MCP, and ask for UX concepts with Stitch mode.</p>
+      <p>Same CK flow, same artifacts, same downstream skills. Just pick "Stitch AI" when asked.</p>
       <div class="hero-buttons">
         <a href="https://eyalbou.github.io/stitch-to-wds-demo/user-manager/" target="_blank" class="btn btn-primary">Live demo: User Manager</a>
         <a href="https://github.com/wix-private/creator-kit/compare/master...eyalbou/stitch-integration" target="_blank" class="btn btn-outline">Review the branch</a>
@@ -562,7 +654,7 @@ code{
 <!-- Footer -->
 <footer class="footer">
   <div class="container">
-    Branch: <code>eyalbou/stitch-integration</code> on <code>wix-private/creator-kit</code> &middot; Shared reference: <code>skills/ck-shared/stitch-integration.md</code>
+    Branch: <code>eyalbou/stitch-integration</code> on <code>wix-private/creator-kit</code> &middot; Ref: <code>skills/ck-shared/stitch-integration.md</code>
   </div>
 </footer>
 
