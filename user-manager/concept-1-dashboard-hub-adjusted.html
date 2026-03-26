@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Wix User Manager - Dashboard Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --wds-primary: #116DFF;
+    --wds-text-primary: #162d3d;
+    --wds-text-secondary: #576475;
+    --wds-border: #dfe5eb;
+    --wds-bg: #f0f4f7;
+    --wds-surface: #ffffff;
+    --wds-success: #60bc57;
+    --wds-topbar: #162d3d;
+    --wds-font: "Wix Madefor Display", "Wix Madefor Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--wds-font);
+    background-color: var(--wds-bg);
+    color: var(--wds-text-primary);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+
+  /* Top bar: exactly 48px, dark navy */
+  .top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 48px;
+    z-index: 50;
+    background-color: var(--wds-topbar);
+    font-size: 14px;
+    letter-spacing: -0.02em;
+  }
+
+  .top-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 48px;
+    padding-right: 48px;
+    max-width: 1248px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 100%;
+  }
+
+  .brand {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .top-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .btn-feedback {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #94a3b8;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s, opacity 0.2s;
+  }
+
+  .btn-feedback:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+
+  .btn-feedback:active {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .icon-primary {
+    color: var(--wds-primary);
+  }
+
+  /* Main: max 1248px, 48px side margins */
+  .main-canvas {
+    padding-top: 80px;
+    padding-bottom: 48px;
+    padding-left: 48px;
+    padding-right: 48px;
+    max-width: 1248px;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 100vh;
+  }
+
+  .section-search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 48px;
+  }
+
+  .page-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--wds-text-primary);
+    margin: 0 0 32px 0;
+    letter-spacing: -0.02em;
+    text-align: center;
+  }
+
+  .search-shell {
+    width: 100%;
+    max-width: 48rem;
+    background: var(--wds-surface);
+    border-radius: 9999px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--wds-border);
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .search-input-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+    padding-right: 16px;
+    gap: 12px;
+  }
+
+  .icon-muted {
+    color: var(--wds-text-secondary);
+  }
+
+  .search-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--wds-text-primary);
+    font-family: inherit;
+    font-size: 14px;
+  }
+
+  .search-input::placeholder {
+    color: var(--wds-text-secondary);
+  }
+
+  .search-divider {
+    height: 32px;
+    width: 1px;
+    background-color: rgba(194, 198, 216, 0.3);
+  }
+
+  .search-filter {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .btn-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--wds-text-secondary);
+    font-weight: 500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+
+  .btn-filter:hover {
+    color: var(--wds-primary);
+  }
+
+  /* WDS Button -- medium size: 36px height, 18px radius, no shadow */
+  .btn-primary {
+    background-color: var(--wds-primary);
+    color: #ffffff;
+    font-weight: 500;
+    height: 36px;
+    padding: 0 24px;
+    border-radius: 18px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 36px;
+    transition: background-color 0.2s;
+  }
+
+  .btn-primary:hover {
+    background-color: #0e5cd7;
+  }
+
+  .btn-primary:active {
+    background-color: #0b4eb5;
+  }
+
+  .recent-row {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .recent-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--wds-text-secondary);
+  }
+
+  .recent-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    padding: 6px 16px;
+    background-color: #e8eef3;
+    border-radius: 9999px;
+    font-size: 14px;
+    color: var(--wds-text-secondary);
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    transition: background-color 0.2s;
+  }
+
+  .chip:hover {
+    background-color: #cee5fb;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .dashboard-grid {
+      grid-template-columns: 65% 35%;
+    }
+  }
+
+  .stack-y {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Cards: white, 8px radius, WDS shadow + border */
+  .card {
+    background: var(--wds-surface);
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--wds-border);
+  }
+
+  .card-pad-lg {
+    padding: 32px;
+  }
+
+  .card-pad-md {
+    padding: 24px;
+  }
+
+  .card-links {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-accent {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #3b6ef0;
+  }
+
+  .card-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--wds-text-primary);
+    margin: 0;
+  }
+
+  .links-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 48px;
+    row-gap: 24px;
+  }
+
+  @media (max-width: 640px) {
+    .links-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .link-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(194, 198, 216, 0.1);
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+
+  .link-row:hover {
+    border-bottom-color: rgba(17, 109, 255, 0.2);
+  }
+
+  .link-text {
+    color: var(--wds-text-secondary);
+    transition: color 0.2s;
+  }
+
+  .link-row:hover .link-text {
+    color: var(--wds-primary);
+  }
+
+  .link-icon {
+    font-size: 14px;
+    opacity: 0;
+    transform: translateX(8px);
+    transition: opacity 0.2s, transform 0.2s;
+    color: var(--wds-text-secondary);
+  }
+
+  .link-row:hover .link-icon {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .hero-media {
+    position: relative;
+    height: 240px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .hero-media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s;
+  }
+
+  .hero-media:hover img {
+    transform: scale(1.05);
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(22, 45, 61, 0.8), transparent);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .hero-overlay h3 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+  }
+
+  .hero-overlay p {
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 24rem;
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .tip-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 180px;
+    height: 100%;
+  }
+
+  .tip-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .tip-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    background-color: #e6f2ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tip-icon-wrap .material-symbols-outlined {
+    color: #a63b00;
+  }
+
+  .tip-body h4 {
+    font-weight: 700;
+    color: var(--wds-text-primary);
+    margin: 0 0 8px 0;
+    font-size: 16px;
+  }
+
+  .tip-body p {
+    color: var(--wds-text-secondary);
+    font-size: 14px;
+    line-height: 1.625;
+    margin: 0;
+  }
+
+  .tip-body .slack-channel {
+    color: var(--wds-primary);
+    font-weight: 600;
+  }
+
+  .tip-dots {
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+  }
+
+  .dot-active {
+    background-color: var(--wds-primary);
+  }
+
+  .dot-inactive {
+    background-color: #c2c6d8;
+  }
+
+  .status-title {
+    font-weight: 700;
+    color: var(--wds-text-primary);
+    margin: 0 0 24px 0;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-title .material-symbols-outlined {
+    color: #425c9c;
+    font-size: 18px;
+  }
+
+  .status-banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background-color: #f0f9f0;
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid rgba(96, 188, 87, 0.25);
+  }
+
+  .status-icon-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    background-color: var(--wds-success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .status-icon-circle .material-symbols-outlined {
+    color: #ffffff;
+    font-size: 14px;
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+
+  .status-banner p {
+    margin: 0;
+  }
+
+  .status-line-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--wds-text-primary);
+  }
+
+  .status-line-sub {
+    font-size: 12px;
+    color: var(--wds-text-secondary);
+  }
+
+  .status-metrics {
+    margin-top: 24px;
+  }
+
+  .metric-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+
+  .metric-label {
+    color: var(--wds-text-secondary);
+  }
+
+  .metric-value {
+    color: var(--wds-success);
+    font-weight: 500;
+  }
+
+  .metric-bar {
+    width: 100%;
+    background-color: #e8eef3;
+    height: 4px;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .metric-bar-fill {
+    background-color: var(--wds-success);
+    height: 100%;
+  }
+
+  .metric-block {
+    margin-bottom: 12px;
+  }
+
+  .metric-block.pt {
+    padding-top: 4px;
+  }
+
+  /* Quick action: primary blue card; Begin Setup is NOT second primary (outline/inverse) */
+  .card-cta-blue {
+    background-color: var(--wds-primary);
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    border: none;
+    padding: 24px;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: filter 0.2s;
+  }
+
+  .card-cta-blue:hover {
+    filter: brightness(0.97);
+  }
+
+  .card-cta-blue .bg-icon {
+    position: absolute;
+    right: -16px;
+    bottom: -16px;
+    font-size: 6rem;
+    color: rgba(255, 255, 255, 0.1);
+    transform: rotate(12deg);
+    pointer-events: none;
+  }
+
+  .card-cta-blue h4 {
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-cta-blue .sub {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 16px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* WDS Button light skin -- small size: 30px height */
+  .btn-on-primary {
+    background: #ffffff;
+    color: var(--wds-primary);
+    height: 30px;
+    padding: 0 18px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    line-height: 30px;
+    position: relative;
+    z-index: 1;
+    transition: background-color 0.2s;
+  }
+
+  .btn-on-primary:hover {
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  .site-footer {
+    max-width: 1248px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 48px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    border-top: 1px solid rgba(194, 198, 216, 0.1);
+  }
+
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .footer-powered {
+    font-size: 12px;
+    color: var(--wds-text-secondary);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 16px;
+  }
+
+  .footer-links a {
+    font-size: 12px;
+    color: var(--wds-text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover {
+    color: var(--wds-primary);
+  }
+
+  .footer-version {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.5;
+  }
+
+  .footer-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background-color: var(--wds-primary);
+  }
+
+  .footer-version span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<nav class="top-nav" aria-label="Main">
+  <div class="top-nav-inner">
+    <div class="brand">USER MANAGER</div>
+    <div class="top-nav-actions">
+      <button type="button" class="btn-feedback">
+        <span class="material-symbols-outlined icon-primary" data-icon="feedback">feedback</span>
+        <span>Give Feedback</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main class="main-canvas">
+  <section class="section-search">
+    <h1 class="page-title">Search for a user or account</h1>
+    <div class="search-shell">
+      <div class="search-input-wrap">
+        <span class="material-symbols-outlined icon-muted" data-icon="search">search</span>
+        <input class="search-input" placeholder="Enter a search term" type="text"/>
+      </div>
+      <div class="search-divider" aria-hidden="true"></div>
+      <div class="search-filter">
+        <button type="button" class="btn-filter">
+          <span>By user ID</span>
+          <span class="material-symbols-outlined" style="font-size: 14px;" data-icon="expand_more">expand_more</span>
+        </button>
+      </div>
+      <button type="button" class="btn-primary">Search</button>
+    </div>
+    <div class="recent-row">
+      <span class="recent-label">Recent Searches:</span>
+      <div class="recent-chips">
+        <button type="button" class="chip">user_9921_alpha</button>
+        <button type="button" class="chip">billing_premium_fix</button>
+        <button type="button" class="chip">dev_test_account</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="dashboard-grid">
+    <div class="stack-y">
+      <div class="card card-pad-lg card-links">
+        <div class="card-accent" aria-hidden="true"></div>
+        <div class="card-header-row">
+          <h2 class="card-title">Useful Links</h2>
+          <span class="material-symbols-outlined icon-muted" data-icon="open_in_new">open_in_new</span>
+        </div>
+        <div class="links-grid">
+          <a class="link-row" href="#"><span class="link-text">Wix Help Center</span><span class="material-symbols-outlined link-icon" data-icon="north_east">north_east</span></a>
+          <a class="link-row" href="#"><span class="link-text">Support QA - Known Issues</span><span class="material-symbols-outlined link-icon" data-icon="north_east">north_east</span></a>
+          <a class="link-row" href="#"><span class="link-text">Wix Answers</span><span class="material-symbols-outlined link-icon" data-icon="north_east">north_east</span></a>
+          <a class="link-row" href="#"><span class="link-text">Wix Status Page</span><span class="material-symbols-outlined link-icon" data-icon="north_east">north_east</span></a>
+          <a class="link-row" href="#"><span class="link-text">CS internal</span><span class="material-symbols-outlined link-icon" data-icon="north_east">north_east</span></a>
+          <a class="link-row" href="#"><span class="link-text">Customer Care - Monday Updates</span><span class="material-symbols-outlined link-icon" data-icon="north_east">north_east</span></a>
+          <a class="link-row" href="#"><span class="link-text">Wix Library</span><span class="material-symbols-outlined link-icon" data-icon="north_east">north_east</span></a>
+        </div>
+      </div>
+
+      <div class="hero-media">
+        <img alt="abstract flowing blue gradients and smooth curves suggesting technological movement and clarity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVVX3Yj1vDRpNGXjEISdMpmMN_3IJpatEeGmikyVmf0qhaBdsHEx6_J2j4-MzMJ_0WnLXmg1mYC9k7h6azp8uuapmf_SeImNTGNmpGy4ME0bmMq0W5f9UTVYkL_A055uxWD0M3BKBQmwLtuMhl5sQ4-IyxgosWX-3JHSApjBrFV1xROjvYFi_WWL90zisPQM0qvA22W1wegThKj5Tmv7LM4GqD0bc9MfYJZ4jFRro-r--b2cMoLvSxMFsK581kMnBLS5g3tXeq2JE"/>
+        <div class="hero-overlay">
+          <h3>Enhancing Your Workflow</h3>
+          <p>Check out the latest updates in the user management portal to streamline account debugging.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-y">
+      <div class="card card-pad-md tip-card">
+        <div class="tip-top">
+          <div class="tip-icon-wrap">
+            <span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
+          </div>
+          <div class="tip-body">
+            <h4>Pro Tip</h4>
+            <p>In case of an issue please contact us on Slack - <span class="slack-channel">#user-manager</span></p>
+          </div>
+        </div>
+        <div class="tip-dots">
+          <div class="dot dot-active"></div>
+          <div class="dot dot-inactive"></div>
+          <div class="dot dot-inactive"></div>
+        </div>
+      </div>
+
+      <div class="card card-pad-md">
+        <h4 class="status-title">
+          <span class="material-symbols-outlined" data-icon="hub">hub</span>
+          Wix Services Status
+        </h4>
+        <div class="status-banner">
+          <div class="status-icon-circle">
+            <span class="material-symbols-outlined" data-icon="check">check</span>
+          </div>
+          <div>
+            <p class="status-line-title">Everything is working</p>
+            <p class="status-line-sub">All systems are operational</p>
+          </div>
+        </div>
+        <div class="status-metrics">
+          <div class="metric-block">
+            <div class="metric-row">
+              <span class="metric-label">Auth Service</span>
+              <span class="metric-value">99.9%</span>
+            </div>
+            <div class="metric-bar">
+              <div class="metric-bar-fill" style="width: 99.9%;"></div>
+            </div>
+          </div>
+          <div class="metric-block pt">
+            <div class="metric-row">
+              <span class="metric-label">Billing API</span>
+              <span class="metric-value">100%</span>
+            </div>
+            <div class="metric-bar">
+              <div class="metric-bar-fill" style="width: 100%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-cta-blue">
+        <span class="material-symbols-outlined bg-icon" data-icon="person_add">person_add</span>
+        <h4>New Account?</h4>
+        <p class="sub">Start a guided onboarding process for new user clusters.</p>
+        <button type="button" class="btn-on-primary">Begin Setup</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-left">
+    <span class="footer-powered">Powered by Wix Internal Ops</span>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">System Logs</a>
+    </div>
+  </div>
+  <div class="footer-version">
+    <div class="footer-dot"></div>
+    <span>V 4.12.0 Stable</span>
+  </div>
+</footer>
+</body>
+</html>

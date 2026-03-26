@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Wix User Manager - Spotlight Search</title>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --wds-primary: #116DFF;
+    --wds-text-primary: #162d3d;
+    --wds-text-secondary: #576475;
+    --wds-border: #dfe5eb;
+    --wds-bg: #f0f4f7;
+    --wds-surface: #ffffff;
+    --wds-topbar: #162d3d;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    background-color: var(--wds-bg);
+    color: var(--wds-text-primary);
+    font-family: "Wix Madefor Display", "Wix Madefor Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+  .um-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 48px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 48px;
+    background-color: var(--wds-topbar);
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    box-shadow: none;
+  }
+
+  .um-header-inner {
+    width: 100%;
+    max-width: 1248px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .um-brand {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #fff;
+  }
+
+  .um-header-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .um-nav-desktop {
+    display: none;
+    align-items: center;
+    gap: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .um-nav-desktop {
+      display: flex;
+    }
+  }
+
+  .um-nav-desktop a {
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    padding: 4px 12px;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .um-nav-desktop a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .um-nav-desktop a.um-nav-active {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .um-header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .um-feedback {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 10px;
+    font-weight: 500;
+    font-family: inherit;
+    transition: color 0.2s;
+  }
+
+  .um-feedback:hover {
+    color: #fff;
+  }
+
+  .um-icon-btn {
+    color: #fff;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+
+  .um-icon-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .um-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 48px 0;
+    position: relative;
+    width: 100%;
+    max-width: calc(1248px + 96px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .um-tip {
+    position: absolute;
+    top: 96px;
+    right: 32px;
+    z-index: 10;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--wds-surface);
+    padding: 8px 16px;
+    border-radius: 9999px;
+    border: 1px solid var(--wds-border);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    transform: scale(0.95);
+    transition: transform 0.3s;
+    cursor: default;
+  }
+
+  @media (min-width: 1024px) {
+    .um-tip {
+      display: flex;
+    }
+  }
+
+  .um-tip:hover {
+    transform: scale(1);
+  }
+
+  .um-tip .material-symbols-outlined {
+    color: var(--wds-primary);
+    font-size: 14px;
+  }
+
+  .um-tip-text {
+    color: var(--wds-text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+  }
+
+  .um-spotlight-wrap {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: -96px;
+  }
+
+  .um-h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--wds-text-primary);
+    letter-spacing: -0.025em;
+    margin: 0 0 32px;
+  }
+
+  .um-search-shell {
+    width: 100%;
+    background-color: var(--wds-surface);
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid var(--wds-border);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    transition: box-shadow 0.3s;
+  }
+
+  .um-search-shell:focus-within {
+    box-shadow: 0 4px 24px rgba(17, 109, 255, 0.12);
+  }
+
+  .um-search-icon-wrap {
+    padding-left: 16px;
+    padding-right: 12px;
+    display: flex;
+    align-items: center;
+    color: rgba(87, 100, 117, 0.5);
+    transition: color 0.2s;
+  }
+
+  .um-search-shell:focus-within .um-search-icon-wrap {
+    color: var(--wds-primary);
+  }
+
+  .um-search-icon-wrap .material-symbols-outlined {
+    font-size: 24px;
+  }
+
+  .um-search-input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--wds-text-primary);
+    padding: 16px 0;
+    height: 56px;
+    font-family: inherit;
+  }
+
+  .um-search-input::placeholder {
+    color: rgba(87, 100, 117, 0.4);
+  }
+
+  .um-divider-v {
+    height: 32px;
+    width: 1px;
+    background-color: rgba(223, 229, 235, 0.8);
+    margin: 0 8px;
+  }
+
+  .um-dropdown-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    color: var(--wds-text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background-color 0.2s;
+  }
+
+  .um-dropdown-trigger:hover {
+    background-color: #eaeef1;
+  }
+
+  .um-dropdown-trigger .material-symbols-outlined {
+    font-size: 18px;
+  }
+
+  /* WDS Button -- medium size: 36px height, 18px radius, no shadow */
+  .um-btn-primary {
+    background-color: var(--wds-primary);
+    color: #fff;
+    border: none;
+    height: 36px;
+    padding: 0 24px;
+    border-radius: 18px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 36px;
+    cursor: pointer;
+    margin-left: 8px;
+    font-family: inherit;
+    transition: background-color 0.2s;
+  }
+
+  .um-btn-primary:hover {
+    background-color: #0e5cd7;
+  }
+
+  .um-btn-primary:active {
+    background-color: #0b4eb5;
+  }
+
+  .um-hint {
+    margin: 24px 0 0;
+    color: rgba(87, 100, 117, 0.6);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+  }
+
+  .um-hint a {
+    color: var(--wds-text-secondary);
+    text-decoration: underline;
+    text-decoration-color: rgba(17, 109, 255, 0.3);
+    text-underline-offset: 4px;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .um-hint a:hover {
+    color: var(--wds-primary);
+  }
+
+  .um-status-card {
+    position: fixed;
+    bottom: 96px;
+    right: 32px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--wds-surface);
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--wds-border);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s;
+  }
+
+  .um-status-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .um-status-inner {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .um-ping-wrap {
+    position: relative;
+    display: flex;
+    height: 10px;
+    width: 10px;
+  }
+
+  .um-ping {
+    position: absolute;
+    display: inline-flex;
+    height: 100%;
+    width: 100%;
+    border-radius: 9999px;
+    background-color: #34d399;
+    opacity: 0.75;
+    animation: um-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes um-ping {
+    75%, 100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  .um-ping-dot {
+    position: relative;
+    display: inline-flex;
+    border-radius: 9999px;
+    height: 10px;
+    width: 10px;
+    background-color: #10b981;
+  }
+
+  .um-status-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: rgba(87, 100, 117, 0.5);
+  }
+
+  .um-status-msg {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--wds-text-primary);
+  }
+
+  .um-footer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 96px;
+  }
+
+  @media (min-width: 768px) {
+    .um-footer {
+      padding-bottom: 32px;
+    }
+  }
+
+  .um-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px 12px;
+    padding: 0 48px;
+    max-width: 1248px;
+  }
+
+  .um-footer-links a {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(87, 100, 117, 0.7);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .um-footer-links a:hover {
+    color: var(--wds-primary);
+  }
+
+  .um-footer-sep {
+    color: rgba(87, 100, 117, 0.3);
+    font-size: 11px;
+  }
+
+  .um-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: var(--wds-bg);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    box-shadow: 0 -4px 20px rgba(22, 45, 61, 0.05);
+  }
+
+  @media (min-width: 768px) {
+    .um-bottom-nav {
+      display: none;
+    }
+  }
+
+  .um-bottom-nav button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    border-radius: 8px;
+    transition: transform 0.3s ease-out, background-color 0.2s;
+  }
+
+  .um-bottom-nav button:active {
+    background-color: #e3eefc;
+  }
+
+  .um-nav-item-active {
+    background-color: #e3eefc;
+    color: var(--wds-primary);
+  }
+
+  .um-nav-item {
+    background: transparent;
+    color: var(--wds-text-secondary);
+  }
+
+  .um-nav-item:hover {
+    background-color: #eaeef1;
+  }
+
+  .um-bottom-nav button span:last-child {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    margin-top: 2px;
+  }
+
+  .um-bg-deco {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -10;
+    opacity: 0.3;
+    overflow: hidden;
+  }
+
+  .um-bg-blob {
+    position: absolute;
+    top: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120%;
+    height: 60%;
+    background: linear-gradient(135deg, #116DFF 0%, #0d5cd9 100%);
+    filter: blur(120px);
+    border-radius: 50%;
+    opacity: 0.1;
+  }
+</style>
+</head>
+<body>
+<header class="um-header">
+  <div class="um-header-inner">
+    <div class="um-header-left">
+      <span class="um-brand">USER MANAGER</span>
+      <nav class="um-nav-desktop">
+        <a href="#">Search</a>
+        <a class="um-nav-active" href="#">Users</a>
+        <a href="#">Roles</a>
+        <a href="#">Settings</a>
+      </nav>
+    </div>
+    <div class="um-header-right">
+      <button type="button" class="um-feedback">Give Feedback</button>
+      <span class="material-symbols-outlined um-icon-btn" role="button" tabindex="0">chat_bubble</span>
+    </div>
+  </div>
+</header>
+<main class="um-main">
+  <div class="um-tip">
+    <span class="material-symbols-outlined">lightbulb</span>
+    <span class="um-tip-text">Tip: You can use @mention in Slack to quickly search for a user.</span>
+  </div>
+  <div class="um-spotlight-wrap">
+    <h1 class="um-h1">Search for a user or account</h1>
+    <div class="um-search-shell">
+      <div class="um-search-icon-wrap">
+        <span class="material-symbols-outlined">search</span>
+      </div>
+      <input class="um-search-input" placeholder="Enter a search term" type="text"/>
+      <div class="um-divider-v" aria-hidden="true"></div>
+      <div>
+        <button type="button" class="um-dropdown-trigger">
+          By user ID
+          <span class="material-symbols-outlined">expand_more</span>
+        </button>
+      </div>
+      <button type="button" class="um-btn-primary">Search</button>
+    </div>
+    <p class="um-hint">
+      Try searching by <a href="#">user ID</a>,
+      <a href="#">email</a>, or
+      <a href="#">account name</a>
+    </p>
+  </div>
+  <div class="um-status-card">
+    <div class="um-ping-wrap">
+      <span class="um-ping" aria-hidden="true"></span>
+      <span class="um-ping-dot" aria-hidden="true"></span>
+    </div>
+    <div class="um-status-inner">
+      <span class="um-status-label">Status</span>
+      <span class="um-status-msg">Wix Services: Everything is working</span>
+    </div>
+  </div>
+</main>
+<footer class="um-footer">
+  <div class="um-footer-links">
+    <a href="#">Wix Help Center</a>
+    <span class="um-footer-sep">•</span>
+    <a href="#">Support QA</a>
+    <span class="um-footer-sep">•</span>
+    <a href="#">Wix Answers</a>
+    <span class="um-footer-sep">•</span>
+    <a href="#">Wix Status Page</a>
+    <span class="um-footer-sep">•</span>
+    <a href="#">CS internal</a>
+    <span class="um-footer-sep">•</span>
+    <a href="#">Customer Care Monday</a>
+    <span class="um-footer-sep">•</span>
+    <a href="#">Wix Library</a>
+  </div>
+</footer>
+<nav class="um-bottom-nav" aria-label="Mobile">
+  <button type="button" class="um-nav-item-active">
+    <span class="material-symbols-outlined">search</span>
+    <span>Search</span>
+  </button>
+  <button type="button" class="um-nav-item">
+    <span class="material-symbols-outlined">group</span>
+    <span>Users</span>
+  </button>
+  <button type="button" class="um-nav-item">
+    <span class="material-symbols-outlined">badge</span>
+    <span>Roles</span>
+  </button>
+  <button type="button" class="um-nav-item">
+    <span class="material-symbols-outlined">settings</span>
+    <span>Settings</span>
+  </button>
+</nav>
+<div class="um-bg-deco">
+  <div class="um-bg-blob"></div>
+</div>
+</body>
+</html>

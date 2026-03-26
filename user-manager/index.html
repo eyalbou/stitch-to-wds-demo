@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>User Manager -- 3 WDS Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --wds-primary: #116DFF;
+    --wds-bg: #f0f4f7;
+    --wds-surface: #ffffff;
+    --wds-text: #162d3d;
+    --wds-text-sec: #576475;
+    --wds-border: #dfe5eb;
+    --wds-font: "Wix Madefor Display", "Wix Madefor Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --wds-radius: 8px;
+  }
+  body {
+    font-family: var(--wds-font);
+    background: var(--wds-bg);
+    color: var(--wds-text);
+    min-height: 100vh;
+  }
+  .header {
+    background: var(--wds-surface);
+    border-bottom: 1px solid var(--wds-border);
+    padding: 20px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .header h1 span { color: var(--wds-primary); }
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+  }
+  .badge-wds { background: #e7f0ff; color: var(--wds-primary); }
+  .badge-original { background: #fff3e0; color: #e65100; }
+  .tabs {
+    display: flex;
+    gap: 6px;
+    padding: 12px 48px;
+    background: var(--wds-surface);
+    border-bottom: 1px solid var(--wds-border);
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  .tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: var(--wds-radius);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--wds-text-sec);
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .tab:hover { background: #f7f9fb; color: var(--wds-text); }
+  .tab.active {
+    background: #e7f0ff;
+    color: var(--wds-primary);
+    border-color: var(--wds-primary);
+    font-weight: 600;
+  }
+  .tab .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--wds-border);
+    color: var(--wds-text-sec);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .tab.active .num { background: var(--wds-primary); color: #fff; }
+  .info-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 48px;
+    background: #fafbfc;
+    border-bottom: 1px solid var(--wds-border);
+    font-size: 13px;
+    color: var(--wds-text-sec);
+  }
+  .info-bar strong { color: var(--wds-text); }
+  .wds-tag {
+    font-size: 10px; font-weight: 600; color: #60bc57;
+    background: #eaf7e9; padding: 3px 8px; border-radius: 10px;
+  }
+  .original-tag {
+    font-size: 10px; font-weight: 600; color: #e65100;
+    background: #fff3e0; padding: 3px 8px; border-radius: 10px;
+  }
+  .panel { padding: 24px 48px 48px; }
+  .panel.hidden { display: none; }
+  .panel iframe {
+    width: 100%;
+    height: calc(100vh - 200px);
+    border: 1px solid var(--wds-border);
+    border-radius: var(--wds-radius);
+    background: #fff;
+  }
+  .image-panel {
+    padding: 24px 48px 48px;
+    display: flex;
+    justify-content: center;
+  }
+  .image-panel.hidden { display: none; }
+  .image-panel img {
+    max-width: 100%;
+    max-height: calc(100vh - 220px);
+    border: 1px solid var(--wds-border);
+    border-radius: var(--wds-radius);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>User Manager -- <span>3 Concepts</span></h1>
+  <span class="badge badge-wds">WDS-Adjusted</span>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" data-idx="0">
+    <span class="num" style="background:#e65100;color:#fff;">&#9654;</span>
+    Original
+    <span class="badge badge-original" style="font-size:10px;padding:2px 6px;">Current</span>
+  </div>
+  <div class="tab" data-idx="1">
+    <span class="num">1</span>
+    Dashboard Hub
+  </div>
+  <div class="tab" data-idx="2">
+    <span class="num">2</span>
+    Spotlight Search
+  </div>
+  <div class="tab" data-idx="3">
+    <span class="num">3</span>
+    Split Panel
+  </div>
+</div>
+
+<div class="info-bar" id="info-bar">
+  <span><strong>Original</strong> -- Current User Manager screenshot provided as reference</span>
+  <span class="original-tag">Reference</span>
+</div>
+
+<div class="image-panel" id="panel-0">
+  <img src="original-input.png" alt="Current User Manager UI" />
+</div>
+
+<div class="panel hidden" id="panel-1">
+  <iframe src="concept-1-dashboard-hub-adjusted.html" loading="lazy"></iframe>
+</div>
+
+<div class="panel hidden" id="panel-2">
+  <iframe src="concept-2-spotlight-search-adjusted.html" loading="lazy"></iframe>
+</div>
+
+<div class="panel hidden" id="panel-3">
+  <iframe src="concept-3-split-panel-adjusted.html" loading="lazy"></iframe>
+</div>
+
+<script>
+const tabs = document.querySelectorAll('.tab');
+const infoBar = document.getElementById('info-bar');
+const infos = [
+  { label: '<strong>Original</strong> -- Current User Manager screenshot provided as reference', tag: '<span class="original-tag">Reference</span>' },
+  { label: '<strong>Concept 1: Dashboard Hub</strong> -- Search + recent searches + dashboard cards with useful links and status widgets', tag: '<span class="wds-tag">WDS Tokens Applied</span>' },
+  { label: '<strong>Concept 2: Spotlight Search</strong> -- Minimalist centered search with floating tips and compact bottom links bar', tag: '<span class="wds-tag">WDS Tokens Applied</span>' },
+  { label: '<strong>Concept 3: Split Panel</strong> -- Persistent left sidebar with links/tips/status, right panel dedicated to search', tag: '<span class="wds-tag">WDS Tokens Applied</span>' },
+];
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const idx = parseInt(tab.dataset.idx);
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    for (let i = 0; i <= 3; i++) {
+      const p = document.getElementById('panel-' + i);
+      if (p) { if (i === idx) p.classList.remove('hidden'); else p.classList.add('hidden'); }
+    }
+    infoBar.innerHTML = '<span>' + infos[idx].label + '</span>' + infos[idx].tag;
+  });
+});
+</script>
+</body>
+</html>
