@@ -3,12 +3,11 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>User Manager v2 -- UX Concepts Comparison</title>
+<title>User Manager v2 -- Stitch + WDS Concepts</title>
 <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root {
   --wds-primary: #116DFF;
-  --wds-primary-hover: #0e5cd7;
   --wds-text-primary: #162d3d;
   --wds-text-secondary: #576475;
   --wds-border: #dfe5eb;
@@ -28,6 +27,11 @@ header .subtitle { font-size: 13px; color: var(--wds-text-secondary); }
 .badge-pipeline {
   display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
   border-radius: 12px; background: rgba(17,109,255,0.08); color: var(--wds-primary);
+  font-size: 12px; font-weight: 600;
+}
+.badge-stitch {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
+  border-radius: 12px; background: rgba(96,188,87,0.1); color: #3a8a31;
   font-size: 12px; font-weight: 600;
 }
 
@@ -50,6 +54,7 @@ header .subtitle { font-size: 13px; color: var(--wds-text-secondary); }
   letter-spacing: 0.04em; margin-left: 6px; vertical-align: middle;
 }
 .tab .tag-original { background: rgba(0,0,0,0.06); color: var(--wds-text-secondary); }
+.tab .tag-stitch { background: rgba(96,188,87,0.1); color: #3a8a31; }
 .tab .tag-wds { background: rgba(17,109,255,0.1); color: var(--wds-primary); }
 
 .tab-content { display: none; }
@@ -73,17 +78,20 @@ header .subtitle { font-size: 13px; color: var(--wds-text-secondary); }
 
 <header>
   <div>
-    <h1>User Manager v2 -- UX Concepts</h1>
-    <div class="subtitle">Generated via CK Phase 4 (ck-flow-ux-concepts) with Stitch AI + WDS conversion</div>
+    <h1>User Manager v2 -- Full Pipeline Test</h1>
+    <div class="subtitle">Generated via Stitch MCP &rarr; WDS Conversion Pipeline &rarr; CK Phase 4 Output</div>
   </div>
-  <div class="badge-pipeline">Phase 4: UX Concepts</div>
+  <div style="display:flex;gap:8px">
+    <div class="badge-stitch">Stitch Generated</div>
+    <div class="badge-pipeline">WDS Converted</div>
+  </div>
 </header>
 
 <div class="tabs" id="tabs">
   <div class="tab active" data-tab="0">Original Input <span class="tag tag-original">Input</span></div>
-  <div class="tab" data-tab="1">Kanban Board <span class="tag tag-wds">WDS</span></div>
-  <div class="tab" data-tab="2">Timeline View <span class="tag tag-wds">WDS</span></div>
-  <div class="tab" data-tab="3">Command Palette <span class="tag tag-wds">WDS</span></div>
+  <div class="tab" data-tab="1">Dashboard <span class="tag tag-stitch">Stitch</span><span class="tag tag-wds">WDS</span></div>
+  <div class="tab" data-tab="2">Timeline Feed <span class="tag tag-stitch">Stitch</span><span class="tag tag-wds">WDS</span></div>
+  <div class="tab" data-tab="3">Command Palette <span class="tag tag-stitch">Stitch</span><span class="tag tag-wds">WDS</span></div>
 </div>
 
 <div class="tab-content active" id="tab-0">
@@ -94,19 +102,19 @@ header .subtitle { font-size: 13px; color: var(--wds-text-secondary); }
 
 <div class="tab-content" id="tab-1">
   <div class="concept-tab">
-    <iframe src="concept-1-kanban-board/index.html"></iframe>
+    <iframe src="concept-1-dashboard-adjusted.html"></iframe>
   </div>
 </div>
 
 <div class="tab-content" id="tab-2">
   <div class="concept-tab">
-    <iframe src="concept-2-timeline-view/index.html"></iframe>
+    <iframe src="concept-2-timeline-adjusted.html"></iframe>
   </div>
 </div>
 
 <div class="tab-content" id="tab-3">
   <div class="concept-tab">
-    <iframe src="concept-3-command-palette/index.html"></iframe>
+    <iframe src="concept-3-command-palette-adjusted.html"></iframe>
   </div>
 </div>
 

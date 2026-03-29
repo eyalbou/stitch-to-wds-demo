@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Architect Intelligence | User Manager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed-variant": "#7f2b00",
+                        "surface-tint": "#0056d1",
+                        "tertiary-container": "#cf4b00",
+                        "on-surface": "#162d3d",
+                        "surface-container-highest": "#d6e4f8",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#0e5cd7",
+                        "surface-container": "#e4efff",
+                        "surface-container-low": "#eef4ff",
+                        "secondary-fixed-dim": "#b2c9de",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#33495a",
+                        "secondary-fixed": "#cee5fb",
+                        "surface-container-high": "#dce9fe",
+                        "inverse-primary": "#b2c5ff",
+                        "on-primary-fixed": "#001847",
+                        "secondary": "#4b6173",
+                        "surface-variant": "#d6e4f8",
+                        "tertiary-fixed-dim": "#ffb599",
+                        "on-secondary-fixed": "#041e2d",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary": "#116DFF",
+                        "on-surface-variant": "#576475",
+                        "tertiary": "#a63b00",
+                        "surface": "#f0f4f7",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#e9f1ff",
+                        "on-primary-container": "#ffffff",
+                        "error": "#ba1a1a",
+                        "background": "#f0f4f7",
+                        "tertiary-fixed": "#ffdbce",
+                        "surface-bright": "#f0f4f7",
+                        "primary-fixed": "#dae2ff",
+                        "outline-variant": "#dfe5eb",
+                        "primary-container": "#116dff",
+                        "on-secondary-container": "#516779",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-primary": "#ffffff",
+                        "on-background": "#162d3d",
+                        "outline": "#7a92a5",
+                        "inverse-surface": "#253141",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#370e00",
+                        "secondary-container": "#cee5fb",
+                        "surface-dim": "#cedbef"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: "Wix Madefor Display", "Wix Madefor Text", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+        h1, h2, .font-headline { font-family: "Wix Madefor Display", "Wix Madefor Text", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 w-full h-[48px] z-50 bg-[#041e2d] flex items-center justify-between px-6 w-full tonal-transition">
+<div class="flex items-center gap-4">
+<span class="text-lg font-bold text-white tracking-tight font-headline">Architect Intelligence</span>
+<div class="hidden md:flex items-center ml-8 gap-6">
+<a class="text-white border-b-2 border-[#116dff] font-['Manrope'] font-semibold text-sm py-3 transition-colors" href="#">Users</a>
+<a class="text-slate-400 font-['Manrope'] font-semibold text-sm hover:bg-white/10 transition-colors py-3 px-2" href="#">Resources</a>
+<a class="text-slate-400 font-['Manrope'] font-semibold text-sm hover:bg-white/10 transition-colors py-3 px-2" href="#">Network</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center bg-white/10 rounded-lg px-2 py-1 text-slate-400 text-xs font-mono">
+<span class="material-symbols-outlined text-sm mr-1">keyboard_command_key</span>K
+            </div>
+<span class="material-symbols-outlined text-slate-400 hover:text-white cursor-pointer">help</span>
+<span class="material-symbols-outlined text-slate-400 hover:text-white cursor-pointer">notifications</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/20">
+<img alt="User profile" data-alt="close-up portrait of a professional system administrator with a friendly expression in a modern office environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMUQYKjk2l7VOZJw3nekwFQE07AXKQHEgk6WcOpUAocMIRy0o2xlbovmTKk3o4ucaBvOSYL5NUX9DflG0tfWZGevPLhEZ9HUtFQBIsMxMf7uvkdvBCvqiDZQiWct5sGAnvSN2P4bl3lAUdnjuNaW458psuN25jXtm8UrKogyxmpw8Nc5C3GHtZbvK8LIua3exr_V4sHmkLcwak9AyQSqnocHVniRXlGMEkMG1BV1zY3xqkvwK1S7M_N2vkjEYxd7l0ECctKrIAzW_i"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-[48px] h-[calc(100vh-48px)] w-[228px] z-40 bg-[#041e2d] border-r border-white/5 flex flex-col py-6 gap-2">
+<div class="px-6 mb-6">
+<p class="text-white font-semibold text-sm">System Admin</p>
+<p class="text-slate-500 text-xs">Management Suite</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-2 border-l-4 border-[#116dff] text-white bg-white/5 font-semibold transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="search">search</span>
+<span class="font-['Inter'] text-[0.875rem]">Quick Search</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-2 text-slate-400 pl-4 hover:text-white hover:bg-white/5 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group">group</span>
+<span class="font-['Inter'] text-[0.875rem]">All Users</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-2 text-slate-400 pl-4 hover:text-white hover:bg-white/5 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="analytics">analytics</span>
+<span class="font-['Inter'] text-[0.875rem]">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-2 text-slate-400 pl-4 hover:text-white hover:bg-white/5 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="layers">layers</span>
+<span class="font-['Inter'] text-[0.875rem]">Bulk Actions</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-2 text-slate-400 pl-4 hover:text-white hover:bg-white/5 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="history">history</span>
+<span class="font-['Inter'] text-[0.875rem]">Recent</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-2 text-slate-400 pl-4 hover:text-white hover:bg-white/5 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="font-['Inter'] text-[0.875rem]">Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full h-9 flex items-center justify-center gap-2 bg-primary-container text-white rounded-full text-sm font-medium hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-sm">add</span> New Entry
+            </button>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="pl-[228px] pt-[48px] min-h-screen">
+<div class="max-w-[1400px] mx-auto p-8">
+<!-- Command Palette Header -->
+<div class="mb-10">
+<div class="relative max-w-2xl mx-auto">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-primary-container">search</span>
+</div>
+<input class="w-full h-[52px] pl-12 pr-4 bg-surface-container-lowest border-2 border-primary-container rounded-xl shadow-[0px_12px_32px_rgba(15,28,43,0.08)] focus:ring-0 focus:border-primary-container text-lg font-body text-on-surface" placeholder="Search for users, sites, or actions..." type="text" value="Sarah Miller"/>
+<div class="absolute inset-y-0 right-4 flex items-center">
+<kbd class="bg-surface-container-high px-2 py-1 rounded text-xs text-on-surface-variant font-mono">ESC</kbd>
+</div>
+</div>
+<div class="mt-4 max-w-2xl mx-auto flex justify-between items-center">
+<h2 class="text-headline-sm font-headline text-on-surface">7 results for <span class="text-primary font-bold">Sarah Miller</span></h2>
+<span class="text-label-md font-label text-on-surface-variant">Showing members and contributors</span>
+</div>
+</div>
+<!-- Asymmetric Split Layout -->
+<div class="flex gap-8 items-start">
+<!-- Left Column: User List (360px) -->
+<div class="w-[360px] flex-shrink-0 bg-surface-container-low rounded-xl overflow-hidden">
+<div class="p-4 border-b border-outline-variant/20 flex justify-between items-center">
+<span class="text-title-md font-headline font-semibold">Directory</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm cursor-pointer">filter_list</span>
+</div>
+<div class="h-[calc(100vh-340px)] overflow-y-auto custom-scrollbar">
+<!-- Active User -->
+<div class="p-4 bg-surface-container-lowest border-l-4 border-primary-container cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold">SM</div>
+<div class="flex-1 min-w-0">
+<p class="text-body-md font-semibold truncate">Sarah Miller</p>
+<p class="text-label-md text-on-surface-variant truncate">sarah.m@arch-intel.com</p>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-700">Active</span>
+</div>
+</div>
+<!-- List Item -->
+<div class="p-4 hover:bg-surface-container-high cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full" data-alt="profile photo of an older businessman with glasses and a grey suit in a professional headshot style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPy8IvMmp0i06ldA1Yi4LKAHpTHhAmUtGw2udlqyonMK_J0QbTio7iM-2_4vXj0aCrs1sTEWKwma9GHskiRns0Ga2XI8sH0ec6To1lnki8p3-AOD-qGqOrdXuRNtUszKsJaZdMetlVgfCdQrzHxnowd8WgsalB_yYa5pVNGb2ExoqVoYYuw8gah3xhOhLAntOD-72eWf26Sa4f4NGai29wRmZdKGGmyraz7iJWNJ63DevSlYNZV4mqbB9OlhzBxCWhJUnKRr4keZ6Q"/>
+<div class="flex-1 min-w-0">
+<p class="text-body-md font-semibold truncate">James Sarahson</p>
+<p class="text-label-md text-on-surface-variant truncate">james.s@client-org.net</p>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-amber-100 text-amber-700">Trial</span>
+</div>
+</div>
+<!-- List Item -->
+<div class="p-4 hover:bg-surface-container-high cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-secondary font-bold">MS</div>
+<div class="flex-1 min-w-0">
+<p class="text-body-md font-semibold truncate">Miller, Sarah J.</p>
+<p class="text-label-md text-on-surface-variant truncate">s.j.miller@edu.global</p>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-red-100 text-red-700">Suspended</span>
+</div>
+</div>
+<!-- List Item -->
+<div class="p-4 hover:bg-surface-container-high cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full" data-alt="professional woman portrait with soft lighting and minimalist office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABj2Df00pMpos55sq5MUv-t5T-u0b4H9jIJzsYLYVVV3_H-aGhvprum0RIFfTdS1JUB8qflPZ6eApu3Xg6VsUFjMl0gm5CMDAJ2YjRCgYa6O9HQGKQ1JWfbc9-21qyrknHRViG9Pnsgiu6uwiCrpFZeSJdTO7WsT5cAEDM1nYQ0z7XUuiCNAxaI581Bf4kZHjCKdbMaWlBmlun5pOolvr69Ncr99x1W34xM-vXvD0RoL_3R4plHdnQYXpdffllsStpMvt-NczQOk8X"/>
+<div class="flex-1 min-w-0">
+<p class="text-body-md font-semibold truncate">Sarah Al-Miller</p>
+<p class="text-label-md text-on-surface-variant truncate">al-miller@design.studio</p>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-700">Active</span>
+</div>
+</div>
+<!-- Decorative Filler Items -->
+<div class="p-4 hover:bg-surface-container-high cursor-pointer transition-colors opacity-60">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest"></div>
+<div class="flex-1 space-y-2">
+<div class="h-3 bg-surface-container-high w-24 rounded"></div>
+<div class="h-2 bg-surface-container-high w-32 rounded"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Detail View (Expanded) -->
+<div class="flex-1 space-y-6">
+<!-- Header Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(15,28,43,0.08)]">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-6">
+<div class="w-24 h-24 rounded-2xl bg-primary-fixed flex items-center justify-center text-3xl font-bold text-primary shadow-inner">
+                                    SM
+                                </div>
+<div>
+<h1 class="text-display-md font-headline leading-tight">Sarah Miller</h1>
+<p class="text-title-md text-on-surface-variant mb-2">sarah.m@arch-intel.com</p>
+<div class="flex items-center gap-3">
+<span class="text-label-md font-mono bg-surface-container-low px-3 py-1 rounded-md">ID: ARCH-9218-X</span>
+<span class="flex items-center gap-1 text-green-600 text-label-md">
+<span class="w-2 h-2 rounded-full bg-green-500"></span> Online Now
+                                        </span>
+</div>
+</div>
+</div>
+<button class="flex items-center gap-2 text-primary font-semibold hover:bg-primary/5 px-4 py-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined">edit</span> Edit Profile
+                            </button>
+</div>
+<!-- Detail Tabs -->
+<div class="flex gap-8 mt-10 border-b border-outline-variant/20">
+<button class="pb-4 text-primary font-bold border-b-2 border-primary">Overview</button>
+<button class="pb-4 text-on-surface-variant font-medium hover:text-on-surface transition-colors">Sites (12)</button>
+<button class="pb-4 text-on-surface-variant font-medium hover:text-on-surface transition-colors">Activity</button>
+<button class="pb-4 text-on-surface-variant font-medium hover:text-on-surface transition-colors">Billing</button>
+</div>
+</div>
+<!-- Bento Info Grid -->
+<div class="grid grid-cols-3 gap-6">
+<!-- Account Details Card -->
+<div class="col-span-2 bg-surface-container-lowest rounded-xl p-6 shadow-sm">
+<h3 class="text-title-md font-headline mb-4">Account Metadata</h3>
+<div class="grid grid-cols-2 gap-y-6 gap-x-12">
+<div>
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Status</p>
+<p class="text-body-md font-semibold text-green-700">Active Member</p>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Plan</p>
+<p class="text-body-md font-semibold">Enterprise Architecture Plus</p>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Registered</p>
+<p class="text-body-md font-semibold">Oct 12, 2023 • 14:20</p>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Last Login</p>
+<p class="text-body-md font-semibold">2 hours ago via Web</p>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Phone</p>
+<p class="text-body-md font-semibold">+1 (555) 012-4492</p>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Billing Status</p>
+<p class="text-body-md font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-green-600 text-sm">check_circle</span> Verified
+                                    </p>
+</div>
+</div>
+</div>
+<!-- Quick Stats / Tertiary Card -->
+<div class="bg-primary-container text-white rounded-xl p-6 relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="text-title-md font-headline mb-6">Activity Score</h3>
+<div class="text-4xl font-bold mb-2">94.2</div>
+<p class="text-primary-fixed text-sm mb-8">Top 5% of all users this month.</p>
+<div class="w-full bg-white/20 h-2 rounded-full">
+<div class="bg-white h-2 rounded-full w-[94%]"></div>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">insights</span>
+</div>
+</div>
+</div>
+<!-- Sites Table Section -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
+<div class="p-6 border-b border-outline-variant/10 flex justify-between items-center">
+<h3 class="text-title-md font-headline">Managed Sites</h3>
+<button class="text-primary text-sm font-semibold">View All Sites</button>
+</div>
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-label-md text-on-surface-variant uppercase">
+<tr>
+<th class="px-6 py-3 font-semibold">Site Name</th>
+<th class="px-6 py-3 font-semibold">Environment</th>
+<th class="px-6 py-3 font-semibold text-right">Traffic</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-4">
+<p class="text-body-md font-medium">metro-central-park.ai</p>
+<p class="text-xs text-on-surface-variant">Production</p>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-surface-container text-primary text-[10px] font-bold rounded">US-EAST-1</span>
+</td>
+<td class="px-6 py-4 text-right font-mono text-sm">42.1k / mo</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-4">
+<p class="text-body-md font-medium">dev-staging-sarah.io</p>
+<p class="text-xs text-on-surface-variant">Staging</p>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-surface-container text-primary text-[10px] font-bold rounded">EU-WEST-2</span>
+</td>
+<td class="px-6 py-4 text-right font-mono text-sm">1.4k / mo</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Quick Actions Grid -->
+<div class="bg-surface-container-low rounded-xl p-6">
+<h3 class="text-title-md font-headline mb-6">Administrative Controls</h3>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+<button class="h-9 px-4 bg-surface-container-lowest text-on-surface border border-outline-variant/20 rounded-full text-sm font-medium hover:bg-white/50 transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-[18px]">lock_reset</span> Reset Password
+                            </button>
+<button class="h-9 px-4 bg-surface-container-lowest text-tertiary border border-outline-variant/20 rounded-full text-sm font-medium hover:bg-tertiary hover:text-white transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-[18px]">block</span> Suspend
+                            </button>
+<button class="h-9 px-4 bg-surface-container-lowest text-on-surface border border-outline-variant/20 rounded-full text-sm font-medium hover:bg-white/50 transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-[18px]">upgrade</span> Change Plan
+                            </button>
+<button class="h-9 px-4 bg-surface-container-lowest text-on-surface border border-outline-variant/20 rounded-full text-sm font-medium hover:bg-white/50 transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-[18px]">move_up</span> Transfer Site
+                            </button>
+<button class="h-9 px-4 bg-surface-container-lowest text-on-surface border border-outline-variant/20 rounded-full text-sm font-medium hover:bg-white/50 transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-[18px]">mail</span> Send Email
+                            </button>
+<button class="h-9 px-4 bg-surface-container-lowest text-on-surface border border-outline-variant/20 rounded-full text-sm font-medium hover:bg-white/50 transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-[18px]">history_edu</span> Audit Log
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Visual Polish: Decorative Background Gradients -->
+<div class="fixed top-0 right-0 -z-10 w-[500px] h-[500px] bg-primary-container/5 blur-[120px] rounded-full pointer-events-none"></div>
+<div class="fixed bottom-0 left-[228px] -z-10 w-[300px] h-[300px] bg-tertiary/5 blur-[80px] rounded-full pointer-events-none"></div>
+</body></html>

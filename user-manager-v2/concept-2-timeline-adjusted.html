@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Manager - Activity Feed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#116DFF",
+              surface: "#ffffff",
+              background: "#f0f4f7",
+              "text-main": "#162d3d",
+              "text-secondary": "#576475",
+              border: "#dfe5eb",
+              "slate-900": "#162d3d"
+            },
+            fontFamily: {
+              "headline": ["Dm Sans", "sans-serif"],
+              "body": ["Dm Sans", "sans-serif"],
+              "label": ["Dm Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Dm Sans', sans-serif; background-color: #f0f4f7; color: #162d3d; }
+        .material-symbols-outlined { font-size: 20px; vertical-align: middle; }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #dfe5eb;
+            z-index: 0;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #dfe5eb; border-radius: 10px; }
+    </style>
+</head>
+<body class="antialiased">
+<!-- TopNavBar -->
+<header class="flex items-center justify-between px-4 w-full h-12 z-50 fixed top-0 bg-slate-900 dark:bg-black border-b border-slate-800 shadow-sm">
+<div class="flex items-center gap-8">
+<span class="text-lg font-bold text-white">User Manager</span>
+<div class="hidden md:flex items-center bg-slate-800 rounded-md px-3 py-1 gap-2">
+<span class="material-symbols-outlined text-slate-400">search</span>
+<input class="bg-transparent border-none text-white text-sm focus:ring-0 w-64 placeholder-slate-500" placeholder="Search users..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:bg-slate-800 hover:text-white transition-colors p-1.5 rounded cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-400 hover:bg-slate-800 hover:text-white transition-colors p-1.5 rounded cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-700">
+<img alt="Admin Profile" data-alt="professional headshot of a male executive in a dark suit with soft studio lighting and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4ntUT5CmRiSWeg84g6Xg0f67fGUPdMEsJfdrpHls0PireN2U2Y2_4ctxKCYMI_bS1Orv3ob6OHXjqXuTe-oLyDAJ5O8eaCfTsW8WKmu6sjnfm6NQqVXNbm6FcoYxPzOqkVlzSzOtPJXJs62wBiiJ31D3lLgAi2js93v1uqVf2UGz3VkfFXzmXrgPZA6yrn6X_c2qYsXfQzGuSS-YVywIE1_Jemye4wvxyz4tZWOJzWyMqVOE_5nenkWW3rP_zY-H_Gi_4NfAkLNtg"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-12 h-[calc(100vh-48px)] w-[228px] flex flex-col pt-4 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 z-40">
+<div class="px-6 mb-6">
+<h2 class="text-blue-600 font-black text-lg">Wix Admin</h2>
+<p class="text-slate-600 dark:text-slate-400 text-[12px]">Internal Tools</p>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-blue-600 transition-all duration-200 ease-in-out font-sans text-[14px] rounded-lg" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>All Users</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-blue-600 font-semibold bg-blue-50 dark:bg-blue-900/20 border-r-4 border-blue-600 transition-all duration-200 ease-in-out font-sans text-[14px]" href="#">
+<span class="material-symbols-outlined">route</span>
+<span>Activity Feed</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-blue-600 transition-all duration-200 ease-in-out font-sans text-[14px] rounded-lg" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-blue-600 transition-all duration-200 ease-in-out font-sans text-[14px] rounded-lg" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span>Bulk Actions</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-blue-600 transition-all duration-200 ease-in-out font-sans text-[14px] rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-100 dark:border-slate-800">
+<div class="bg-blue-50 dark:bg-blue-900/10 p-3 rounded-xl">
+<p class="text-[11px] font-bold text-blue-600 uppercase tracking-wider mb-1">System Status</p>
+<div class="flex items-center gap-2">
+<span class="h-2 w-2 rounded-full bg-green-500"></span>
+<span class="text-[12px] text-slate-600 dark:text-slate-300">All systems operational</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-[228px] mt-12 min-h-[calc(100vh-48px)] flex">
+<!-- Left Section: Timeline -->
+<div class="flex-1 p-8">
+<div class="max-w-4xl mx-auto">
+<!-- Header & Filters -->
+<div class="mb-8">
+<div class="flex items-center justify-between mb-6">
+<h1 class="text-2xl font-bold text-[#162d3d]">Activity Feed</h1>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-white border border-[#dfe5eb] rounded-full text-sm font-medium hover:bg-gray-50 transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+                                Filters
+                            </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-medium hover:bg-blue-700 transition-colors">
+<span class="material-symbols-outlined">export_notes</span>
+                                Export CSV
+                            </button>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<button class="h-[36px] px-5 rounded-full bg-blue-600 text-white text-sm font-medium shadow-sm">All Activity</button>
+<button class="h-[36px] px-5 rounded-full bg-white border border-[#dfe5eb] text-[#576475] text-sm font-medium hover:bg-gray-50">Logins</button>
+<button class="h-[36px] px-5 rounded-full bg-white border border-[#dfe5eb] text-[#576475] text-sm font-medium hover:bg-gray-50">Account Changes</button>
+<button class="h-[36px] px-5 rounded-full bg-white border border-[#dfe5eb] text-[#576475] text-sm font-medium hover:bg-gray-50">Billing</button>
+<button class="h-[36px] px-5 rounded-full bg-white border border-[#dfe5eb] text-[#576475] text-sm font-medium hover:bg-gray-50">Alerts</button>
+</div>
+</div>
+<!-- Timeline Feed -->
+<div class="space-y-12">
+<!-- Today Group -->
+<div>
+<h3 class="text-xs font-bold text-[#576475] uppercase tracking-widest mb-6 px-4">Today — Oct 24, 2023</h3>
+<div class="relative timeline-line space-y-8">
+<!-- Event 1: Alert -->
+<div class="relative z-10 flex items-start gap-4 group">
+<div class="h-10 w-10 rounded-full bg-white border-2 border-red-500 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-red-500" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+<div class="bg-white p-4 rounded-xl border border-[#dfe5eb] shadow-sm flex-1 group-hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<img alt="User Avatar" class="h-6 w-6 rounded-full" data-alt="Close-up portrait of a smiling middle-aged man with beard and glasses wearing a casual denim shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6rv32_Frr6cxDVrwMxlH_o53K-T7AdaPblZK--OgC4k--lCs1e_ASZNwVCx-CpqoRSkY80E7Ht_5sTTQT7lONSCTI2k9KR05S_OkT_qlZTuAISldBYOl9nLE5B3dcl4Yf0PdHC5Dv53u2JD42RWRdO6DbVCVyEkavOzPxVpzmzxGNWfa-tdk2cXAVVE6qC4TvD2n-qkVWmjHDjOTgmmip-v8uSomXq1U5MMF1KrHHp4y2EUQapLC_gUhx_aGQDC8XCOUGzvq4UoOR"/>
+<span class="font-bold text-sm">Marcus Thorne</span>
+<span class="text-xs text-[#576475]">9:42 AM</span>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-50 text-red-600 uppercase tracking-tighter">Alert</span>
+</div>
+<p class="text-sm text-[#162d3d]">Multiple failed login attempts detected from a new IP address in Berlin, DE.</p>
+</div>
+</div>
+<!-- Event 2: Action -->
+<div class="relative z-10 flex items-start gap-4 group">
+<div class="h-10 w-10 rounded-full bg-white border-2 border-blue-500 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-blue-500" style="font-variation-settings: 'FILL' 1;">edit_square</span>
+</div>
+<div class="bg-white p-4 rounded-xl border border-[#dfe5eb] shadow-sm flex-1 group-hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<img alt="User Avatar" class="h-6 w-6 rounded-full" data-alt="Young professional woman with confident expression wearing modern business attire in a bright office environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDkXagwllZyJUcuLAIAfk6a9LaEX_hGC5mAJzdDOr31KIMGg6P_dI_lER4n1DBS7DtGsf41QkdXNmiYudYcl1r7K0-VbzaAdiuFxj8P5U6FUw9lCEsIDiwRul2GPbYF5gjlAZ729gBfcp52OsnfrT2vg1eTWAMdmuYW3N_56sb_tIbTAHSmAMpgy14deQTVopv5RbR7OVkrpvr_zAveh9y0TojyoQ6sim0QLqZST8ZGjqW-pC4UFxfzdhnah3BmeZyHOSXHoF3BGg2"/>
+<span class="font-bold text-sm">Elena Rodriguez</span>
+<span class="text-xs text-[#576475]">8:15 AM</span>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-600 uppercase tracking-tighter">Action</span>
+</div>
+<p class="text-sm text-[#162d3d]">Updated profile information and changed registered email address.</p>
+</div>
+</div>
+<!-- Event 3: Login -->
+<div class="relative z-10 flex items-start gap-4 group">
+<div class="h-10 w-10 rounded-full bg-white border-2 border-green-500 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-green-500" style="font-variation-settings: 'FILL' 1;">login</span>
+</div>
+<div class="bg-white p-4 rounded-xl border border-[#dfe5eb] shadow-sm flex-1 group-hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<img alt="User Avatar" class="h-6 w-6 rounded-full" data-alt="portrait of a young man with curly hair smiling outdoors against a blurred architectural background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnUxHHD16Sd1BYuq9VwxCemT0GaxRP199BzD7uGheKOrVNBrDUExBTadwn2s103GVcSnt-1HnAtzW4RfbQzJ_hnrgH0_2k9omgrhpuLoSI6AlPN1gtntOQzpRqvVxlxnh1WS374yPbMDH3EBJOV6uMO-DLyFaZnLYeVcZPvniMywbFjDB-WdsG3U4wuRY7gkLTfE8BIVZCH1wgv5MZd0OooslKZxvlJQjM__hH_c4HrOIZoYBSuTOvzT3VgDJnCr-Bkvm07Hb6Pqtr"/>
+<span class="font-bold text-sm">Samuel Lee</span>
+<span class="text-xs text-[#576475]">7:30 AM</span>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-green-50 text-green-600 uppercase tracking-tighter">Login</span>
+</div>
+<p class="text-sm text-[#162d3d]">Successful login via Google Auth from macOS Chrome.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Yesterday Group -->
+<div>
+<h3 class="text-xs font-bold text-[#576475] uppercase tracking-widest mb-6 px-4">Yesterday — Oct 23, 2023</h3>
+<div class="relative timeline-line space-y-8">
+<!-- Event 4: Billing -->
+<div class="relative z-10 flex items-start gap-4 group">
+<div class="h-10 w-10 rounded-full bg-white border-2 border-yellow-500 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<div class="bg-white p-4 rounded-xl border border-[#dfe5eb] shadow-sm flex-1 group-hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<img alt="User Avatar" class="h-6 w-6 rounded-full" data-alt="Woman with short dark hair and thoughtful expression in minimal lighting studio photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHNM7ZdFtbJoMZq4omQVM1WhLX-5Ns3DL04whZRtbHw8AgKqmdo-rpJgNUwPuKhUfAQFBBgQVrtYemIB9-9_Bq_uw2FfhLsjWtkqdalSbWD3QsWa4oVgw6SSiFmxyfWsvRd8kX8sXI3IasCeD0psCKGSC2ao3rr7B6d7HmOgvvJl0pXIAKvqd8aa0rSWV755VmMvbHcwuelhJoMoHNP27am2tjFV4okur-6p-ZwA-B4rfNMDxXZmWUOhPsTavX3kQe_5QXjWQ2_suI"/>
+<span class="font-bold text-sm">Sarah Jenkins</span>
+<span class="text-xs text-[#576475]">4:55 PM</span>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-yellow-50 text-yellow-700 uppercase tracking-tighter">Billing</span>
+</div>
+<p class="text-sm text-[#162d3d]">Subscription renewed successfully. Charged $49.00 to card ending in 4242.</p>
+</div>
+</div>
+<!-- Event 5: Action -->
+<div class="relative z-10 flex items-start gap-4 group">
+<div class="h-10 w-10 rounded-full bg-white border-2 border-blue-500 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-blue-500" style="font-variation-settings: 'FILL' 1;">settings</span>
+</div>
+<div class="bg-white p-4 rounded-xl border border-[#dfe5eb] shadow-sm flex-1 group-hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<img alt="User Avatar" class="h-6 w-6 rounded-full" data-alt="Clean-shaven man in his 30s with a professional look wearing a light blue oxford shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJ_6YDOk99LBrHWukVLWGEgSCSlcdY1PARZoSGiLa4tdphAuvAgmn7dRdz30x0BK8douq3A83Bhas6_x7SqDcASpPqlxHgcGaD9X93m4SWNgHdo6Zy32vhgQ2Z9eHjL2WqIqnneb90rZvbPKzzs77DgTT6uphnxO9NTQKbpgpU-ne3CIue078_gnwjMjNoj8XxqYTmJkytTKmJoibvgJhk3tzcTg9pCdPuHI-626e7tPQpVayA3nyU7SsB4ZK-dbgJWGAyCOSFFxe0"/>
+<span class="font-bold text-sm">David Chen</span>
+<span class="text-xs text-[#576475]">1:20 PM</span>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-600 uppercase tracking-tighter">Action</span>
+</div>
+<p class="text-sm text-[#162d3d]">User upgraded workspace plan to 'Enterprise' with 15 additional seats.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Section: Detail Panel -->
+<aside class="w-[380px] bg-white border-l border-[#dfe5eb] overflow-y-auto custom-scrollbar sticky top-12 h-[calc(100vh-48px)]">
+<div class="p-6">
+<!-- User Profile Header -->
+<div class="text-center mb-8">
+<div class="relative inline-block mb-4">
+<img alt="Marcus Thorne" class="h-24 w-24 rounded-full border-4 border-white shadow-lg mx-auto" data-alt="Professional headshot of a middle-aged male executive with glasses and a kind smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTzKcMb6hkp7_2kcqp5InozTVr4coFaEnekd5OgQniZQB2I5DDaKIf6GyKOXV1cjdEqzwjtebZanbLVmyCg8YAhZKVP4WdS30B0T6hbzcnak4vxN7xNMwVArJrjCLzcp6L9yEAeJOqEyyeIgXwUpM7TTREWmXHPXFdLc_tCHfArSi-EPVdr6qLoIg_E0UQSJdKdZPuy90jd7yZ-aTU8ZLv35ceT1RH2DzPEewCyLZBcNDJmPdpEah2cyPAzS1UyzYlqRbs6LtRn7-D"/>
+<div class="absolute bottom-1 right-1 h-5 w-5 bg-green-500 border-2 border-white rounded-full"></div>
+</div>
+<h2 class="text-xl font-bold text-[#162d3d]">Marcus Thorne</h2>
+<p class="text-sm text-[#576475]">m.thorne@example.com</p>
+<div class="mt-4 flex justify-center gap-2">
+<button class="px-4 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-xs font-bold transition-colors">Message</button>
+<button class="px-4 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-full text-xs font-bold transition-colors">Suspend</button>
+</div>
+</div>
+<!-- Account Details -->
+<div class="mb-8">
+<h3 class="text-xs font-bold text-[#576475] uppercase tracking-wider mb-4">Account Details</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center py-2 border-b border-[#f0f4f7]">
+<span class="text-sm text-[#576475]">Status</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-green-100 text-green-700 uppercase">Active</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-[#f0f4f7]">
+<span class="text-sm text-[#576475]">Plan</span>
+<span class="text-sm font-medium text-[#162d3d]">Premium Yearly</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-[#f0f4f7]">
+<span class="text-sm text-[#576475]">User ID</span>
+<code class="text-xs bg-gray-50 px-1.5 py-0.5 rounded text-[#576475]">#UX-90231-M</code>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-[#f0f4f7]">
+<span class="text-sm text-[#576475]">Registered</span>
+<span class="text-sm font-medium text-[#162d3d]">Jan 12, 2021</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="text-sm text-[#576475]">Last Login</span>
+<span class="text-sm font-medium text-[#162d3d]">Today, 9:42 AM</span>
+</div>
+</div>
+</div>
+<!-- Site List -->
+<div>
+<h3 class="text-xs font-bold text-[#576475] uppercase tracking-wider mb-4">Associated Sites (4)</h3>
+<div class="space-y-3">
+<div class="flex items-center gap-3 p-3 bg-[#f0f4f7] rounded-xl hover:bg-gray-200 cursor-pointer transition-colors">
+<div class="h-10 w-10 bg-white rounded-lg flex items-center justify-center border border-[#dfe5eb]">
+<span class="material-symbols-outlined text-blue-600">language</span>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="text-sm font-bold text-[#162d3d] truncate">Thorne Architecture</p>
+<p class="text-[11px] text-[#576475] truncate">thorne-arch.wixsite.com</p>
+</div>
+<span class="material-symbols-outlined text-gray-400">chevron_right</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-white rounded-xl border border-[#dfe5eb] hover:bg-gray-50 cursor-pointer transition-colors">
+<div class="h-10 w-10 bg-gray-100 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-gray-400">shopping_bag</span>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="text-sm font-bold text-[#162d3d] truncate">Modern Blueprint Shop</p>
+<p class="text-[11px] text-[#576475] truncate">blueprint-shop.com</p>
+</div>
+<span class="material-symbols-outlined text-gray-400">chevron_right</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-white rounded-xl border border-[#dfe5eb] hover:bg-gray-50 cursor-pointer transition-colors">
+<div class="h-10 w-10 bg-gray-100 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-gray-400">gallery_thumbnail</span>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="text-sm font-bold text-[#162d3d] truncate">Personal Portfolio</p>
+<p class="text-[11px] text-[#576475] truncate">mthorne.me</p>
+</div>
+<span class="material-symbols-outlined text-gray-400">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Footer Stats -->
+<div class="mt-12 p-4 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl text-white">
+<p class="text-xs opacity-80 mb-1">Lifetime Value</p>
+<p class="text-2xl font-bold mb-4">$1,248.50</p>
+<div class="flex justify-between items-end">
+<div>
+<p class="text-xs opacity-80">Support Tickets</p>
+<p class="text-lg font-bold">12</p>
+</div>
+<span class="material-symbols-outlined opacity-30 text-4xl">trending_up</span>
+</div>
+</div>
+</div>
+</aside>
+</main>
+</body></html>
