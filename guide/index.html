@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Stitch AI for Creator Kit -- Usage Guide</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -18,7 +18,7 @@
   --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);
   --radius:12px;--radius-sm:8px;
   --shadow:0 1px 3px rgba(0,0,0,0.12),0 4px 12px rgba(0,0,0,0.08);
-  --font:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font:'Wix Madefor Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 }
 html{scroll-behavior:smooth}
 body{
@@ -264,7 +264,7 @@ code{
     <p>Stitch is an opt-in generation mode inside the existing Creator Kit pipeline. Same flow, same skills, same artifacts -- higher fidelity output at the design stage.</p>
     <div class="hero-buttons">
       <a href="https://eyalbou.github.io/stitch-to-wds-demo/user-manager/" target="_blank" class="btn btn-primary">See live demo</a>
-      <a href="#flow" class="btn btn-outline">See the 10-stage flow</a>
+      <a href="#flow" class="btn btn-outline">See the 6-phase pipeline</a>
     </div>
   </div>
 </section>
@@ -308,22 +308,22 @@ code{
   </div>
 </section>
 
-<!-- The Full 10-Stage Flow -->
+<!-- The 6-Phase Pipeline -->
 <section class="section" id="flow">
   <div class="container">
     <div class="section-label">End-to-end walkthrough</div>
-    <h2>The Full Flow: 10 Stages</h2>
-    <p class="subtitle">This is the complete Creator Kit product development pipeline. Stitch integrates at specific stages -- everything else is unchanged.</p>
+    <h2>The 6-Phase Pipeline with Stitch</h2>
+    <p class="subtitle">The Creator Kit product development pipeline has 6 phases. Stitch integrates at Phase 4 and Phase 5 -- everything else is unchanged.</p>
 
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot existing"></div> Existing CK skill (unchanged)</div>
+      <div class="legend-item"><div class="legend-dot existing"></div> Existing CK phase (unchanged)</div>
       <div class="legend-item"><div class="legend-dot stitch"></div> Stitch integration point (you choose here)</div>
       <div class="legend-item"><div class="legend-dot enriched"></div> Enriched by Stitch output (auto)</div>
     </div>
 
     <div class="timeline">
 
-      <!-- Stage 1 -->
+      <!-- Phase 1 -->
       <div class="stage">
         <div class="stage-left">
           <div class="stage-num existing">1</div>
@@ -331,17 +331,17 @@ code{
         </div>
         <div class="stage-right">
           <div class="stage-header">
-            <h3>Start a new project</h3>
-            <span class="skill-tag">ck-new</span>
+            <h3>Initiation</h3>
+            <span class="skill-tag">/ck-new</span>
           </div>
           <div class="stage-body">
-            Say <strong>"start a new project"</strong> or <strong>"/ck-new"</strong>. Creates the project folder and basic structure.<br/>
+            Say <strong>"/ck-new"</strong> to start a project. Creates the folder structure and basic scaffolding.<br/>
             <em>No changes here -- works exactly as before.</em>
           </div>
         </div>
       </div>
 
-      <!-- Stage 2 -->
+      <!-- Phase 2 -->
       <div class="stage">
         <div class="stage-left">
           <div class="stage-num existing">2</div>
@@ -349,18 +349,18 @@ code{
         </div>
         <div class="stage-right">
           <div class="stage-header">
-            <h3>Write Product Spec</h3>
-            <span class="skill-tag">ck-product-spec</span>
+            <h3>Discovery</h3>
+            <span class="skill-tag">/ck-flow-discovery</span>
           </div>
           <div class="stage-body">
-            Define what you're building -- requirements, goals, user stories, scope, constraints.<br/>
-            Output: <code>artifacts/product/product-spec-*.md</code><br/>
-            <em>This becomes input for Stitch prompts later. Better spec = better Stitch output.</em>
+            Competitive analysis, user pain points, UX patterns from the market. Runs <code>ck-research-*</code> and <code>ck-ux-research</code> skills.<br/>
+            Output: <code>artifacts/ux/research/</code><br/>
+            <em>Research insights are woven into Stitch prompts for grounded, differentiated designs.</em>
           </div>
         </div>
       </div>
 
-      <!-- Stage 3 -->
+      <!-- Phase 3 -->
       <div class="stage">
         <div class="stage-left">
           <div class="stage-num existing">3</div>
@@ -368,70 +368,32 @@ code{
         </div>
         <div class="stage-right">
           <div class="stage-header">
-            <h3>Write Product Strategy</h3>
-            <span class="skill-tag">ck-product-strategy</span>
+            <h3>Product Sculpting</h3>
+            <span class="skill-tag">/ck-flow-product</span>
           </div>
           <div class="stage-body">
-            Define the "why" -- positioning, success metrics, target users, competitive angle.<br/>
-            Output: <code>artifacts/product/product-strategy-*.md</code><br/>
-            <em>Strategy context shapes the UX direction Stitch generates.</em>
+            Defines spec (requirements, goals, user stories) and strategy (positioning, success metrics, target users).<br/>
+            Runs <code>ck-product-spec</code> + <code>ck-product-strategy</code> skills. Optionally builds a B&W replica of the existing product (<code>ck-ux-current-product</code>).<br/>
+            Output: <code>artifacts/product/product-spec-*.md</code>, <code>artifacts/product/product-strategy-*.md</code><br/>
+            <em>Better spec &amp; strategy = better Stitch output. These docs feed into prompts.</em>
           </div>
         </div>
       </div>
 
-      <!-- Stage 4 -->
+      <!-- Phase 4 -- STITCH -->
       <div class="stage">
         <div class="stage-left">
-          <div class="stage-num existing">4</div>
-          <div class="stage-line"></div>
-        </div>
-        <div class="stage-right">
-          <div class="stage-header">
-            <h3>Run UX Research</h3>
-            <span class="skill-tag">ck-ux-research</span>
-          </div>
-          <div class="stage-body">
-            Competitive analysis, user pain points, UX patterns from the market.<br/>
-            Output: <code>artifacts/ux/research/ux-research.md</code><br/>
-            <em>Research insights are woven into Stitch prompts for grounded, differentiated designs.</em>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 5 -->
-      <div class="stage">
-        <div class="stage-left">
-          <div class="stage-num existing">5</div>
-          <div class="stage-line"></div>
-        </div>
-        <div class="stage-right">
-          <div class="stage-header">
-            <h3>Build existing product prototype</h3>
-            <span class="skill-tag">ck-ux-current-product</span>
-          </div>
-          <div class="stage-body">
-            <em>Optional -- only for features on existing products.</em><br/>
-            Builds a 1:1 B&W replica of the current product from its code repo.<br/>
-            Output: <code>artifacts/ux/current-product/</code><br/>
-            <em>Can be used as image input for Stitch -- "redesign this screen".</em>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 6 -- STITCH -->
-      <div class="stage">
-        <div class="stage-left">
-          <div class="stage-num stitch">6</div>
+          <div class="stage-num stitch">4</div>
           <div class="stage-line"></div>
         </div>
         <div class="stage-right stitch-highlight">
           <div class="stage-header">
-            <h3>Generate UX Concepts</h3>
-            <span class="skill-tag">ck-ux-concepts</span>
+            <h3>UX Concepts</h3>
+            <span class="skill-tag">/ck-flow-ux-concepts</span>
             <span class="stitch-badge">Stitch integration</span>
           </div>
           <div class="stage-body">
-            This is the main integration point. The skill generates 5 distinct UX concepts. After silent analysis, you're asked:<br/><br/>
+            This is the main integration point. The flow generates 5 distinct UX concepts. After silent analysis, you're asked:<br/><br/>
             <strong>Decision 1 -- Delivery mode:</strong> "All at once" or "One by one"<br/>
             <strong>Decision 2 -- Generation mode:</strong><br/>
             &nbsp;&nbsp;&bull; <strong>HTML/CSS/JS</strong> (default) -- agent writes code inline, B&W wireframes<br/>
@@ -446,58 +408,20 @@ code{
         </div>
       </div>
 
-      <!-- Stage 7 -->
+      <!-- Phase 5 -- STITCH -->
       <div class="stage">
         <div class="stage-left">
-          <div class="stage-num existing">7</div>
-          <div class="stage-line"></div>
-        </div>
-        <div class="stage-right">
-          <div class="stage-header">
-            <h3>Select concept + edge cases</h3>
-            <span class="skill-tag">ck-ux-edge-cases</span>
-          </div>
-          <div class="stage-body">
-            Review the 5 concepts, pick a winner. The edge cases skill analyzes the selected concept for error states, empty states, loading states, permission states, etc.<br/>
-            Output: <code>artifacts/ux/all-screens/edge-cases.md</code><br/>
-            <em>Edge case analysis feeds into Stitch's screen-by-screen generation in Stage 9.</em>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 8 -->
-      <div class="stage">
-        <div class="stage-left">
-          <div class="stage-num existing">8</div>
-          <div class="stage-line"></div>
-        </div>
-        <div class="stage-right">
-          <div class="stage-header">
-            <h3>Refine UX content</h3>
-            <span class="skill-tag">ck-ux-content</span>
-          </div>
-          <div class="stage-body">
-            Refines microcopy -- button labels, error messages, empty state text, tooltips.<br/>
-            Runs automatically during concept delivery and again for edge case copy.<br/>
-            <em>No changes here -- works exactly as before.</em>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 9 -- STITCH -->
-      <div class="stage">
-        <div class="stage-left">
-          <div class="stage-num stitch">9</div>
+          <div class="stage-num stitch">5</div>
           <div class="stage-line"></div>
         </div>
         <div class="stage-right stitch-highlight">
           <div class="stage-header">
-            <h3>Full UX Spec (all screens)</h3>
-            <span class="skill-tag">ck-ux-all-screens</span>
+            <h3>All Screens</h3>
+            <span class="skill-tag">/ck-flow-final-ux</span>
             <span class="stitch-badge">Stitch integration</span>
           </div>
           <div class="stage-body">
-            Takes the selected concept and generates ALL flows, states, and screens. You're asked to choose a design mode:<br/><br/>
+            Takes the selected concept and generates ALL flows, states, and screens. Includes edge case analysis (<code>ck-ux-edge-cases</code>) and content refinement (<code>ck-ux-content</code>). You're asked to choose a design mode:<br/><br/>
             &nbsp;&nbsp;&bull; <strong>Keep concept theme</strong> (default) -- HTML inheriting the concept's style<br/>
             &nbsp;&nbsp;&bull; <strong>Use WDS components</strong> -- Vite + React with real @wix/design-system<br/>
             &nbsp;&nbsp;&bull; <strong>Generate with Stitch AI</strong> -- higher fidelity, WDS-converted<br/><br/>
@@ -507,16 +431,16 @@ code{
         </div>
       </div>
 
-      <!-- Stage 10 -- ENRICHED -->
+      <!-- Phase 6 -- ENRICHED -->
       <div class="stage">
         <div class="stage-left">
-          <div class="stage-num enriched">10</div>
+          <div class="stage-num enriched">6</div>
           <div class="stage-line"></div>
         </div>
         <div class="stage-right">
           <div class="stage-header">
-            <h3>Developer Handoff</h3>
-            <span class="skill-tag">ck-handoff</span>
+            <h3>Handoff</h3>
+            <span class="skill-tag">/ck-handoff</span>
             <span style="display:inline-flex;align-items:center;gap:4px;background:var(--green-dim);border:1px solid rgba(52,211,153,0.3);color:var(--green);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 10px;border-radius:12px;">Enriched</span>
           </div>
           <div class="stage-body">
@@ -537,9 +461,9 @@ code{
 <!-- B&W vs Color -->
 <section class="section" id="color-mode">
   <div class="container">
-    <div class="section-label">Stage 6 detail</div>
+    <div class="section-label">Phase 4 detail</div>
     <h2>B&W wireframes vs WDS-colored</h2>
-    <p class="subtitle">When you pick Stitch AI in Stage 6, you choose the visual fidelity.</p>
+    <p class="subtitle">When you pick Stitch AI in Phase 4 (UX Concepts), you choose the visual fidelity.</p>
     <div class="compare-grid">
       <div class="compare-card">
         <div class="compare-preview bw">
@@ -589,7 +513,7 @@ code{
     <p class="subtitle">Stitch writes to CK artifact paths (so downstream skills work) and the Stitch pipeline directory (for iteration).</p>
 
     <div class="file-tree">
-      <span class="dir">artifacts/ux/concepts/</span> <span class="label">&larr; CK skills read from here (stages 7-10)</span><br/>
+      <span class="dir">artifacts/ux/concepts/</span> <span class="label">&larr; CK skills read from here (phases 5-6)</span><br/>
       &nbsp;&nbsp;<span>concepts.html</span> <span class="label">&larr; viewer with all 5 concepts</span><br/>
       &nbsp;&nbsp;<span class="dir">concept-1-dashboard-hub/</span><br/>
       &nbsp;&nbsp;&nbsp;&nbsp;<span>index.html</span> <span class="label">&larr; WDS-adjusted output</span><br/>
