@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Search Command Center — User Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #116dff;
+      --primary-hover: #0e5cd7;
+      --text: #162d3d;
+      --text-secondary: #576475;
+      --bg: #f0f4f7;
+      --surface: #ffffff;
+      --border: #dfe5eb;
+      --success: #60bc57;
+      --warning: #fdb10c;
+      --error: #ee5951;
+      --topbar: #162d3d;
+      --shadow-card: 0 1px 6px rgba(0, 0, 0, 0.06);
+      --radius-card: 8px;
+      --radius-input: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Wix Madefor Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      font-size: 20px;
+      line-height: 1;
+      vertical-align: middle;
+    }
+
+    .topbar {
+      height: 48px;
+      background: var(--topbar);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-brand {
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary-top {
+      height: 36px;
+      padding: 0 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      background: transparent;
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-secondary-top:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #fff;
+    }
+
+    .main-wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 220px 1fr 280px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1100px) {
+      .main-wrap {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 18px;
+      color: var(--text);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .chip {
+      height: 30px;
+      padding: 0 12px;
+      border-radius: 15px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .chip:hover {
+      border-color: var(--primary);
+      color: var(--text);
+    }
+
+    .chip.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .saved-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .saved-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--text);
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .saved-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .saved-item:hover {
+      color: var(--primary);
+    }
+
+    .saved-item .material-symbols-outlined {
+      color: var(--warning);
+      font-size: 18px;
+    }
+
+    .center-col {
+      min-width: 0;
+    }
+
+    .page-heading {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 6px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .page-sub {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0 0 24px;
+    }
+
+    .search-shell {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      height: 48px;
+      padding: 0 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-input);
+      box-shadow: var(--shadow-card);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .search-row:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(17, 109, 255, 0.15);
+    }
+
+    .search-row .material-symbols-outlined {
+      color: var(--text-secondary);
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      height: 36px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text);
+      background: transparent;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .detect-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+      min-height: 24px;
+    }
+
+    .badge-detect {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 24px;
+      padding: 0 12px;
+      border-radius: 12px;
+      background: rgba(17, 109, 255, 0.1);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .badge-detect.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .floating-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: 0 12px 36px rgba(22, 45, 61, 0.12);
+      padding: 18px;
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    }
+
+    .search-shell:focus-within .floating-panel {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .panel-block + .panel-block {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    .panel-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+
+    .panel-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .panel-row:hover {
+      background: var(--bg);
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .panel-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .panel-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .panel-email {
+      font-size: 12px;
+      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ai-block-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 18px;
+    }
+
+    .ai-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .ai-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ai-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      cursor: default;
+    }
+
+    .ai-card:hover {
+      box-shadow: 0 8px 24px rgba(22, 45, 61, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .ai-card-hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .ai-card-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ai-card-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ai-card-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .ai-card-email {
+      font-size: 12px;
+      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .confidence {
+      margin-top: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .smart-section {
+      margin-top: 36px;
+    }
+
+    .smart-section .section-title {
+      margin-bottom: 12px;
+    }
+
+    .smart-caption {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin: 0 0 18px;
+    }
+
+    .queue-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .queue-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .queue-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .queue-card:hover {
+      box-shadow: 0 8px 24px rgba(22, 45, 61, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .queue-tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--success);
+      margin-bottom: 12px;
+    }
+
+    .ticker-card {
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .ticker-viewport {
+      height: 320px;
+      overflow: hidden;
+      position: relative;
+      mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+    }
+
+    .ticker-mover {
+      animation: ticker-scroll 22s linear infinite;
+    }
+
+    .ticker-mover:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes ticker-scroll {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(-50%);
+      }
+    }
+
+    .ticker-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ticker-item:last-child {
+      border-bottom: none;
+    }
+
+    .ticker-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ticker-text {
+      font-size: 14px;
+      color: var(--text);
+      margin: 0 0 6px;
+      line-height: 1.35;
+    }
+
+    .ticker-time {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .health-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .health-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .health-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-right: 12px;
+    }
+
+    .status-dot.ok {
+      background: var(--success);
+    }
+
+    .status-dot.warn {
+      background: var(--warning);
+    }
+
+    .status-dot.err {
+      background: var(--error);
+    }
+
+    .health-left {
+      display: flex;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <button type="button" class="icon-btn" data-hook="topbar-home" aria-label="Home">
+        <span class="material-symbols-outlined">home</span>
+      </button>
+      <span class="topbar-brand">USER MANAGER</span>
+    </div>
+    <button type="button" class="btn-secondary-top" data-hook="feedback">Give Feedback</button>
+  </header>
+
+  <div class="main-wrap">
+    <aside>
+      <div class="card">
+        <h2 class="section-title">Quick Filters</h2>
+        <div class="chips" id="filter-chips">
+          <button type="button" class="chip" data-filter="active">Active Users</button>
+          <button type="button" class="chip" data-filter="suspended">Suspended</button>
+          <button type="button" class="chip active" data-filter="premium">Premium</button>
+          <button type="button" class="chip" data-filter="trial">Trial</button>
+          <button type="button" class="chip" data-filter="gdpr">GDPR Flagged</button>
+        </div>
+        <h2 class="section-title">Saved Searches</h2>
+        <ul class="saved-list">
+          <li class="saved-item">
+            <span class="material-symbols-outlined">star</span>
+            High-risk logins (7d)
+          </li>
+          <li class="saved-item">
+            <span class="material-symbols-outlined">star</span>
+            Churning trials — EU
+          </li>
+          <li class="saved-item">
+            <span class="material-symbols-outlined">star</span>
+            Sites with 3+ owners
+          </li>
+          <li class="saved-item">
+            <span class="material-symbols-outlined">star</span>
+            Duplicate billing emails
+          </li>
+          <li class="saved-item">
+            <span class="material-symbols-outlined">star</span>
+            SSO mismatch audit
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="center-col">
+      <h1 class="page-heading">Find any user, instantly</h1>
+      <p class="page-sub">Command-center search with queue-aware predictions and live team context.</p>
+
+      <div class="search-shell">
+        <div class="search-row">
+          <span class="material-symbols-outlined">search</span>
+          <input
+            type="search"
+            class="search-input"
+            id="main-search"
+            placeholder="Search by email, ID, name, or URL..."
+            autocomplete="off"
+            data-hook="command-search"
+          />
+        </div>
+        <div class="floating-panel" id="floating-panel" role="listbox" aria-label="Suggestions">
+          <div class="panel-block">
+            <div class="panel-label">Recent lookups</div>
+            <div class="panel-row">
+              <div class="avatar" style="background: #116dff">AK</div>
+              <div class="panel-meta">
+                <div class="panel-name">Avery Kim</div>
+                <div class="panel-email">avery.kim@northwind.io</div>
+              </div>
+            </div>
+            <div class="panel-row">
+              <div class="avatar" style="background: #576475">MR</div>
+              <div class="panel-meta">
+                <div class="panel-name">Morgan Reyes</div>
+                <div class="panel-email">user_8f2c91@wix.com</div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-block">
+            <div class="panel-label">Predicted from your queue</div>
+            <div class="panel-row">
+              <div class="avatar" style="background: #60bc57">LS</div>
+              <div class="panel-meta">
+                <div class="panel-name">Lina Sato</div>
+                <div class="panel-email">billing-escalation #4421</div>
+              </div>
+            </div>
+            <div class="panel-row">
+              <div class="avatar" style="background: #fdb10c">JD</div>
+              <div class="panel-meta">
+                <div class="panel-name">Jordan Diaz</div>
+                <div class="panel-email">Matched: domain velocity spike</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detect-wrap">
+        <span class="badge-detect" id="detect-badge">
+          <span class="material-symbols-outlined" style="font-size: 16px">auto_awesome</span>
+          <span id="detect-text">Auto-detect: idle</span>
+        </span>
+      </div>
+
+      <h2 class="ai-block-title">You might be looking for…</h2>
+      <div class="ai-cards">
+        <div class="ai-card">
+          <div class="ai-card-hint">Based on open ticket #8842</div>
+          <div class="ai-card-user">
+            <div class="avatar" style="background: #116dff">EP</div>
+            <div class="ai-card-info">
+              <div class="ai-card-name">Elena Park</div>
+              <div class="ai-card-email">elena.park@auroradev.co</div>
+            </div>
+          </div>
+          <div class="confidence">Confidence 94%</div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-hint">Similar to last resolved case</div>
+          <div class="ai-card-user">
+            <div class="avatar" style="background: #ee5951">TW</div>
+            <div class="ai-card-info">
+              <div class="ai-card-name">Theo Wright</div>
+              <div class="ai-card-email">theo@wright-builds.site</div>
+            </div>
+          </div>
+          <div class="confidence">Confidence 88%</div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-hint">Shared billing with flagged site</div>
+          <div class="ai-card-user">
+            <div class="avatar" style="background: #576475">NC</div>
+            <div class="ai-card-info">
+              <div class="ai-card-name">Noor Chen</div>
+              <div class="ai-card-email">noor.chen@example.org</div>
+            </div>
+          </div>
+          <div class="confidence">Confidence 81%</div>
+        </div>
+      </div>
+
+      <section class="smart-section">
+        <h2 class="section-title">Smart Suggestions</h2>
+        <p class="smart-caption">AI-predicted accounts you may need next, based on your current queue and team patterns.</p>
+        <div class="queue-cards">
+          <div class="queue-card">
+            <span class="queue-tag">Next in queue</span>
+            <div class="ai-card-user">
+              <div class="avatar" style="background: #116dff">RK</div>
+              <div class="ai-card-info">
+                <div class="ai-card-name">Ravi Kulkarni</div>
+                <div class="ai-card-email">Premium downgrade dispute</div>
+              </div>
+            </div>
+          </div>
+          <div class="queue-card">
+            <span class="queue-tag">Linked workspace</span>
+            <div class="ai-card-user">
+              <div class="avatar" style="background: #60bc57">SB</div>
+              <div class="ai-card-info">
+                <div class="ai-card-name">Samira Boyd</div>
+                <div class="ai-card-email">Co-owner on site #A-9012</div>
+              </div>
+            </div>
+          </div>
+          <div class="queue-card">
+            <span class="queue-tag">Risk cluster</span>
+            <div class="ai-card-user">
+              <div class="avatar" style="background: #fdb10c">VH</div>
+              <div class="ai-card-info">
+                <div class="ai-card-name">Viktor Hale</div>
+                <div class="ai-card-email">3 failed verifications (24h)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside>
+      <div class="card ticker-card">
+        <h2 class="section-title">Live Activity</h2>
+        <div class="ticker-viewport">
+          <div class="ticker-mover" id="ticker-mover">
+          <div class="ticker-track" id="ticker-track">
+            <div class="ticker-item">
+              <div class="avatar" style="background: #116dff; width: 32px; height: 32px; font-size: 11px">IL</div>
+              <div class="ticker-body">
+                <p class="ticker-text"><strong>Iris L.</strong> opened user <strong>site_owner_22</strong></p>
+                <span class="ticker-time">Just now</span>
+              </div>
+            </div>
+            <div class="ticker-item">
+              <div class="avatar" style="background: #576475; width: 32px; height: 32px; font-size: 11px">DK</div>
+              <div class="ticker-body">
+                <p class="ticker-text"><strong>Devon K.</strong> ran saved search <em>Churning trials</em></p>
+                <span class="ticker-time">42s ago</span>
+              </div>
+            </div>
+            <div class="ticker-item">
+              <div class="avatar" style="background: #60bc57; width: 32px; height: 32px; font-size: 11px">AM</div>
+              <div class="ticker-body">
+                <p class="ticker-text"><strong>Aya M.</strong> flagged GDPR review on <strong>acct_771</strong></p>
+                <span class="ticker-time">1m ago</span>
+              </div>
+            </div>
+            <div class="ticker-item">
+              <div class="avatar" style="background: #fdb10c; width: 32px; height: 32px; font-size: 11px">JT</div>
+              <div class="ticker-body">
+                <p class="ticker-text"><strong>Jules T.</strong> copied billing email for escalation</p>
+                <span class="ticker-time">2m ago</span>
+              </div>
+            </div>
+            <div class="ticker-item">
+              <div class="avatar" style="background: #ee5951; width: 32px; height: 32px; font-size: 11px">CN</div>
+              <div class="ticker-body">
+                <p class="ticker-text"><strong>Chris N.</strong> suspended user after fraud signal</p>
+                <span class="ticker-time">3m ago</span>
+              </div>
+            </div>
+            <div class="ticker-item">
+              <div class="avatar" style="background: #116dff; width: 32px; height: 32px; font-size: 11px">PL</div>
+              <div class="ticker-body">
+                <p class="ticker-text"><strong>Priya L.</strong> merged duplicate profiles</p>
+                <span class="ticker-time">4m ago</span>
+              </div>
+            </div>
+            <div class="ticker-item">
+              <div class="avatar" style="background: #576475; width: 32px; height: 32px; font-size: 11px">OW</div>
+              <div class="ticker-body">
+                <p class="ticker-text"><strong>Owen W.</strong> exported audit trail CSV</p>
+                <span class="ticker-time">6m ago</span>
+              </div>
+            </div>
+            <div class="ticker-item">
+              <div class="avatar" style="background: #60bc57; width: 32px; height: 32px; font-size: 11px">HF</div>
+              <div class="ticker-body">
+                <p class="ticker-text"><strong>Hana F.</strong> resolved ticket linked to <strong>user_441b</strong></p>
+                <span class="ticker-time">8m ago</span>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">System Health</h2>
+        <ul class="health-list">
+          <li class="health-row">
+            <span class="health-left"><span class="status-dot ok"></span>Search index</span>
+            <span style="color: var(--text-secondary); font-size: 12px">Operational</span>
+          </li>
+          <li class="health-row">
+            <span class="health-left"><span class="status-dot ok"></span>Identity graph</span>
+            <span style="color: var(--text-secondary); font-size: 12px">Operational</span>
+          </li>
+          <li class="health-row">
+            <span class="health-left"><span class="status-dot warn"></span>AI suggestions</span>
+            <span style="color: var(--warning); font-size: 12px">Elevated latency</span>
+          </li>
+          <li class="health-row">
+            <span class="health-left"><span class="status-dot ok"></span>Audit stream</span>
+            <span style="color: var(--text-secondary); font-size: 12px">Operational</span>
+          </li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    (function () {
+      var chips = document.querySelectorAll("#filter-chips .chip");
+      chips.forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          chip.classList.toggle("active");
+        });
+      });
+
+      var search = document.getElementById("main-search");
+      var badge = document.getElementById("detect-badge");
+      var detectText = document.getElementById("detect-text");
+
+      function detectType(value) {
+        var v = value.trim();
+        if (!v) {
+          return { label: "Auto-detect: idle", show: false };
+        }
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+          return { label: "Detected: Email address", show: true };
+        }
+        if (/^user_[a-z0-9]+$/i.test(v) || /^acct_[0-9]+$/i.test(v)) {
+          return { label: "Detected: Internal user ID", show: true };
+        }
+        if (/^https?:\/\//i.test(v) || /\.(com|io|org|site)\b/i.test(v)) {
+          return { label: "Detected: URL / domain", show: true };
+        }
+        if (/^\d{6,}$/.test(v)) {
+          return { label: "Detected: Numeric ID", show: true };
+        }
+        if (v.length >= 2) {
+          return { label: "Detected: Name / fuzzy match", show: true };
+        }
+        return { label: "Auto-detect: typing…", show: true };
+      }
+
+      search.addEventListener("input", function () {
+        var r = detectType(search.value);
+        detectText.textContent = r.label;
+        badge.classList.toggle("visible", r.show);
+      });
+
+      var panel = document.getElementById("floating-panel");
+      if (panel) {
+        panel.addEventListener("mousedown", function (e) {
+          e.preventDefault();
+        });
+      }
+
+      var mover = document.getElementById("ticker-mover");
+      var track = document.getElementById("ticker-track");
+      if (mover && track) {
+        var clone = track.cloneNode(true);
+        clone.removeAttribute("id");
+        clone.setAttribute("aria-hidden", "true");
+        mover.appendChild(clone);
+      }
+    })();
+  </script>
+</body>
+</html>

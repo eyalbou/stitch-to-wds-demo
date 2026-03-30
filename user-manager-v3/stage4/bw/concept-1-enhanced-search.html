@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enhanced Search Hub — Wireframe</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #fff;
+      color: #000;
+    }
+    .top-bar {
+      height: 48px;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      border-bottom: 2px solid #000;
+    }
+    .top-bar__brand {
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.06em;
+    }
+    .top-bar__btn {
+      background: #fff;
+      color: #000;
+      border: 2px solid #fff;
+      padding: 6px 14px;
+      font: inherit;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .top-bar__btn:hover,
+    .top-bar__btn:focus-visible {
+      background: #000;
+      color: #fff;
+      outline: none;
+    }
+    .shell {
+      max-width: 1248px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+      background: #fff;
+    }
+    .page-title {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 32px;
+    }
+    .search-wrap {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto 40px;
+    }
+    .search-row {
+      display: flex;
+      gap: 0;
+      border: 2px solid #000;
+    }
+    .search-row__input {
+      flex: 1;
+      min-width: 0;
+      border: none;
+      border-right: 2px solid #000;
+      padding: 12px 14px;
+      font: inherit;
+      font-size: 14px;
+      color: #000;
+      background: #fff;
+    }
+    .search-row__input:focus {
+      outline: none;
+    }
+    .search-row__input::placeholder {
+      color: #000;
+      opacity: 1;
+    }
+    .search-row__input::-webkit-input-placeholder {
+      color: #000;
+    }
+    .search-row__input::-moz-placeholder {
+      color: #000;
+      opacity: 1;
+    }
+    .select-wrap {
+      position: relative;
+      border-right: 2px solid #000;
+      flex: 0 0 200px;
+    }
+    .select-trigger {
+      width: 100%;
+      height: 100%;
+      min-height: 44px;
+      padding: 0 12px;
+      border: none;
+      background: #fff;
+      color: #000;
+      font: inherit;
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .select-trigger:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: -2px;
+    }
+    .select-trigger__caret {
+      font-size: 10px;
+      font-weight: 700;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .select-list {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      background: #fff;
+      border: 2px solid #000;
+      border-top: none;
+      z-index: 30;
+    }
+    .select-list.is-open {
+      display: block;
+    }
+    .select-option {
+      padding: 10px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      border-bottom: 2px solid #000;
+    }
+    .select-option:last-child {
+      border-bottom: none;
+    }
+    .select-option:hover,
+    .select-option.is-selected {
+      background: #000;
+      color: #fff;
+    }
+    .search-row__submit {
+      flex: 0 0 auto;
+      min-width: 100px;
+      border: none;
+      background: #000;
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 20px;
+      cursor: pointer;
+    }
+    .search-row__submit:hover,
+    .search-row__submit:focus-visible {
+      background: #fff;
+      color: #000;
+      outline: 2px solid #000;
+      outline-offset: -2px;
+    }
+    .dropdown {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 0px);
+      margin-top: -2px;
+      background: #fff;
+      border: 2px solid #000;
+      border-top: none;
+      z-index: 20;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+    .dropdown.is-visible {
+      display: block;
+    }
+    .dropdown__section-label {
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 2px solid #000;
+      background: #fff;
+      color: #000;
+    }
+    .dropdown__item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 12px;
+      border-bottom: 2px solid #000;
+      cursor: pointer;
+    }
+    .dropdown__item:last-child {
+      border-bottom: none;
+    }
+    .dropdown__item:hover,
+    .dropdown__item.is-active {
+      background: #000;
+      color: #fff;
+    }
+    .dropdown__item:hover .dropdown__meta,
+    .dropdown__item.is-active .dropdown__meta {
+      color: #fff;
+    }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      background: #fff;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .dropdown__item:hover .avatar,
+    .dropdown__item.is-active .avatar {
+      background: #000;
+      color: #fff;
+      border-color: #fff;
+    }
+    .dropdown__body {
+      min-width: 0;
+      flex: 1;
+    }
+    .dropdown__name {
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .dropdown__meta {
+      font-size: 12px;
+      margin-top: 2px;
+      color: #000;
+    }
+    .section-heading {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 0 16px;
+    }
+    .recent-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      margin-bottom: 40px;
+      border: 2px solid #000;
+    }
+    .recent-card {
+      flex: 1 1 22%;
+      min-width: 200px;
+      padding: 14px;
+      border-right: 2px solid #000;
+      border-bottom: 2px solid #000;
+      background: #fff;
+      color: #000;
+      cursor: pointer;
+      text-align: left;
+      font: inherit;
+    }
+    .recent-card:nth-child(4n) {
+      border-right: none;
+    }
+    .recent-card:hover,
+    .recent-card:focus-visible {
+      outline: 4px solid #000;
+      outline-offset: -4px;
+      z-index: 1;
+      position: relative;
+    }
+    .recent-card__row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .recent-card__avatar {
+      width: 36px;
+      height: 36px;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .recent-card__title {
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .recent-card__email {
+      font-size: 11px;
+      margin-top: 2px;
+    }
+    .recent-card__time {
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .bottom {
+      display: flex;
+      gap: 0;
+      align-items: stretch;
+      border: 2px solid #000;
+    }
+    .bottom__main {
+      flex: 1;
+      min-width: 0;
+      border-right: 2px solid #000;
+      padding: 20px;
+    }
+    .bottom__aside {
+      flex: 0 0 320px;
+      display: flex;
+      flex-direction: column;
+    }
+    .links-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 2px solid #000;
+    }
+    .link-cell {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 14px;
+      border-right: 2px solid #000;
+      border-bottom: 2px solid #000;
+      background: #fff;
+      color: #000;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .link-cell:nth-child(2n) {
+      border-right: none;
+    }
+    .link-cell:hover,
+    .link-cell:focus-visible {
+      background: #000;
+      color: #fff;
+      outline: none;
+    }
+    .link-cell__arrow {
+      font-size: 16px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .aside-card {
+      padding: 16px;
+      border-bottom: 2px solid #000;
+      background: #fff;
+      color: #000;
+    }
+    .aside-card:last-child {
+      border-bottom: none;
+      flex: 1;
+    }
+    .aside-card__title {
+      font-size: 14px;
+      font-weight: 700;
+      margin: 0 0 10px;
+    }
+    .aside-card__text {
+      font-size: 13px;
+      line-height: 1.45;
+      margin: 0;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .status-icon {
+      width: 28px;
+      height: 28px;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    @media (max-width: 900px) {
+      .search-row {
+        flex-wrap: wrap;
+      }
+      .search-row__input {
+        border-right: none;
+        border-bottom: 2px solid #000;
+        flex: 1 1 100%;
+      }
+      .select-wrap {
+        flex: 1 1 50%;
+        border-right: 2px solid #000;
+      }
+      .search-row__submit {
+        flex: 1 1 50%;
+      }
+      .bottom {
+        flex-direction: column;
+      }
+      .bottom__main {
+        border-right: none;
+        border-bottom: 2px solid #000;
+      }
+      .bottom__aside {
+        flex: none;
+        width: 100%;
+      }
+      .links-grid {
+        grid-template-columns: 1fr;
+      }
+      .link-cell {
+        border-right: none;
+      }
+      .link-cell:nth-child(2n) {
+        border-right: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <span class="top-bar__brand">USER MANAGER</span>
+    <button type="button" class="top-bar__btn" data-hook="give-feedback">Give Feedback</button>
+  </header>
+
+  <main class="shell">
+    <h1 class="page-title">Search for a user or account</h1>
+
+    <div class="search-wrap" id="searchWrap">
+      <div class="search-row">
+        <input
+          type="text"
+          class="search-row__input"
+          id="searchInput"
+          placeholder="Search by ID, email, name, or site URL"
+          autocomplete="off"
+          aria-expanded="false"
+          aria-controls="searchDropdown"
+          aria-autocomplete="list"
+        />
+        <div class="select-wrap" id="typeSelectWrap">
+          <button
+            type="button"
+            class="select-trigger"
+            id="typeSelectTrigger"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            aria-controls="typeSelectList"
+          >
+            <span id="typeSelectLabel">By user ID</span>
+            <span class="select-trigger__caret" aria-hidden="true">▼</span>
+          </button>
+          <ul class="select-list" id="typeSelectList" role="listbox" aria-label="Search type">
+            <li class="select-option is-selected" role="option" data-value="id" tabindex="0">By user ID</li>
+            <li class="select-option" role="option" data-value="email" tabindex="0">By email</li>
+            <li class="select-option" role="option" data-value="account" tabindex="0">By account name</li>
+            <li class="select-option" role="option" data-value="site" tabindex="0">By site URL</li>
+          </ul>
+        </div>
+        <button type="button" class="search-row__submit" id="searchBtn">Search</button>
+      </div>
+
+      <div class="dropdown" id="searchDropdown" role="listbox" aria-label="Search suggestions"></div>
+    </div>
+
+    <h2 class="section-heading">Recent Lookups</h2>
+    <div class="recent-grid" role="list">
+      <button type="button" class="recent-card" data-hook="recent-1">
+        <div class="recent-card__row">
+          <div class="recent-card__avatar" aria-hidden="true">AC</div>
+          <div>
+            <div class="recent-card__title">Acme Co.</div>
+            <div class="recent-card__email">billing@acme.example</div>
+          </div>
+        </div>
+        <div class="recent-card__time">2h ago</div>
+      </button>
+      <button type="button" class="recent-card" data-hook="recent-2">
+        <div class="recent-card__row">
+          <div class="recent-card__avatar" aria-hidden="true">JD</div>
+          <div>
+            <div class="recent-card__title">Jordan Diaz</div>
+            <div class="recent-card__email">j.diaz@example.com</div>
+          </div>
+        </div>
+        <div class="recent-card__time">2h ago</div>
+      </button>
+      <button type="button" class="recent-card" data-hook="recent-3">
+        <div class="recent-card__row">
+          <div class="recent-card__avatar" aria-hidden="true">NS</div>
+          <div>
+            <div class="recent-card__title">Northwind Studio</div>
+            <div class="recent-card__email">hello@northwind.example</div>
+          </div>
+        </div>
+        <div class="recent-card__time">2h ago</div>
+      </button>
+      <button type="button" class="recent-card" data-hook="recent-4">
+        <div class="recent-card__row">
+          <div class="recent-card__avatar" aria-hidden="true">PL</div>
+          <div>
+            <div class="recent-card__title">Pixel Loft</div>
+            <div class="recent-card__email">team@pixelloft.example</div>
+          </div>
+        </div>
+        <div class="recent-card__time">2h ago</div>
+      </button>
+    </div>
+
+    <div class="bottom">
+      <div class="bottom__main">
+        <h2 class="section-heading" style="margin-top:0">Useful Links</h2>
+        <nav class="links-grid" aria-label="Useful links">
+          <a class="link-cell" href="#" data-hook="link-help">Wix Help Center <span class="link-cell__arrow" aria-hidden="true">→</span></a>
+          <a class="link-cell" href="#" data-hook="link-qa">Support QA - Known Issues <span class="link-cell__arrow" aria-hidden="true">→</span></a>
+          <a class="link-cell" href="#" data-hook="link-answers">Wix Answers <span class="link-cell__arrow" aria-hidden="true">→</span></a>
+          <a class="link-cell" href="#" data-hook="link-status">Wix Status Page <span class="link-cell__arrow" aria-hidden="true">→</span></a>
+          <a class="link-cell" href="#" data-hook="link-cs">CS Internal <span class="link-cell__arrow" aria-hidden="true">→</span></a>
+          <a class="link-cell" href="#" data-hook="link-monday">Customer Care - Monday Updates <span class="link-cell__arrow" aria-hidden="true">→</span></a>
+          <a class="link-cell" href="#" data-hook="link-library" style="grid-column: 1 / -1; border-right: none;">Wix Library <span class="link-cell__arrow" aria-hidden="true">→</span></a>
+        </nav>
+      </div>
+      <aside class="bottom__aside">
+        <div class="aside-card">
+          <h3 class="aside-card__title">Tip</h3>
+          <p class="aside-card__text">
+            Paste a full site URL or user UUID to jump straight to the record. Use the type selector when you know which field you are matching.
+          </p>
+        </div>
+        <div class="aside-card">
+          <h3 class="aside-card__title">Wix Services Status</h3>
+          <div class="status-row">
+            <span class="status-icon" aria-hidden="true">✓</span>
+            <span>Everything is working</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var RECENT_SEARCHES = [
+        { initials: "MR", name: "Morgan Rivera", email: "m.rivera@example.com", id: "usr_8k2m9q" },
+        { initials: "TB", name: "Taylor Brooks", email: "t.brooks@example.com", id: "usr_3p7n1x" },
+        { initials: "SK", name: "Sam Kim", email: "sam.kim@example.com", id: "usr_9j4h2w" }
+      ];
+
+      var POOL = [
+        { initials: "MR", name: "Morgan Rivera", email: "m.rivera@example.com", id: "usr_8k2m9q" },
+        { initials: "TB", name: "Taylor Brooks", email: "t.brooks@example.com", id: "usr_3p7n1x" },
+        { initials: "SK", name: "Sam Kim", email: "sam.kim@example.com", id: "usr_9j4h2w" },
+        { initials: "LW", name: "Lee Wong", email: "lee@studio.example", id: "usr_1a2b3c" },
+        { initials: "AP", name: "Avery Park", email: "avery.park@example.com", id: "usr_4d5e6f" }
+      ];
+
+      var MOCK_SEARCH_RESULTS = [
+        { initials: "MR", name: "Morgan Rivera", email: "m.rivera@example.com", id: "usr_8k2m9q" },
+        { initials: "TB", name: "Taylor Brooks", email: "t.brooks@example.com", id: "usr_3p7n1x" },
+        { initials: "SK", name: "Sam Kim", email: "sam.kim@example.com", id: "usr_9j4h2w" }
+      ];
+
+      var searchInput = document.getElementById("searchInput");
+      var searchBtn = document.getElementById("searchBtn");
+      var searchDropdown = document.getElementById("searchDropdown");
+      var searchWrap = document.getElementById("searchWrap");
+      var typeTrigger = document.getElementById("typeSelectTrigger");
+      var typeLabel = document.getElementById("typeSelectLabel");
+      var typeList = document.getElementById("typeSelectList");
+      var typeOptions = typeList.querySelectorAll(".select-option");
+
+      function esc(s) {
+        var d = document.createElement("div");
+        d.textContent = s;
+        return d.innerHTML;
+      }
+
+      function itemHtml(row) {
+        return (
+          '<div class="dropdown__item" role="option" tabindex="0">' +
+          '<div class="avatar" aria-hidden="true">' + esc(row.initials) + "</div>" +
+          '<div class="dropdown__body">' +
+          '<div class="dropdown__name">' + esc(row.name) + "</div>" +
+          '<div class="dropdown__meta">' + esc(row.email) + " · " + esc(row.id) + "</div>" +
+          "</div></div>"
+        );
+      }
+
+      function buildSuggestHtml(query) {
+        var q = (query || "").trim().toLowerCase();
+        var matches = !q
+          ? POOL.slice(0, 2)
+          : POOL.filter(function (p) {
+              return (
+                p.name.toLowerCase().indexOf(q) !== -1 ||
+                p.email.toLowerCase().indexOf(q) !== -1 ||
+                p.id.toLowerCase().indexOf(q) !== -1
+              );
+            }).slice(0, 2);
+        var mi = 0;
+        while (matches.length < 2 && mi < POOL.length) {
+          if (matches.indexOf(POOL[mi]) === -1) matches.push(POOL[mi]);
+          mi++;
+        }
+        matches = matches.slice(0, 2);
+        var html = "";
+        html += '<div class="dropdown__section-label">Recent searches</div>';
+        RECENT_SEARCHES.forEach(function (r) {
+          html += itemHtml(r);
+        });
+        html += '<div class="dropdown__section-label">Matches</div>';
+        matches.forEach(function (r) {
+          html += itemHtml(r);
+        });
+        return html;
+      }
+
+      function buildResultsHtml() {
+        var html = '<div class="dropdown__section-label">Suggestions</div>';
+        MOCK_SEARCH_RESULTS.forEach(function (r) {
+          html += itemHtml(r);
+        });
+        return html;
+      }
+
+      var suggestMode = true;
+
+      function showDropdown(mode) {
+        suggestMode = mode !== "results";
+        if (suggestMode) {
+          searchDropdown.innerHTML = buildSuggestHtml(searchInput.value);
+        } else {
+          searchDropdown.innerHTML = buildResultsHtml();
+        }
+        searchDropdown.classList.add("is-visible");
+        searchInput.setAttribute("aria-expanded", "true");
+      }
+
+      function hideDropdown() {
+        searchDropdown.classList.remove("is-visible");
+        searchInput.setAttribute("aria-expanded", "false");
+      }
+
+      function refreshSuggest() {
+        if (!suggestMode || !searchDropdown.classList.contains("is-visible")) return;
+        searchDropdown.innerHTML = buildSuggestHtml(searchInput.value);
+      }
+
+      searchInput.addEventListener("focus", function () {
+        showDropdown("suggest");
+      });
+
+      searchInput.addEventListener("input", function () {
+        if (!searchDropdown.classList.contains("is-visible")) {
+          showDropdown("suggest");
+        } else if (suggestMode) {
+          refreshSuggest();
+        }
+      });
+
+      searchBtn.addEventListener("click", function () {
+        showDropdown("results");
+      });
+
+      document.addEventListener("click", function (e) {
+        if (!searchWrap.contains(e.target)) {
+          hideDropdown();
+          closeTypeSelect();
+        }
+      });
+
+      searchDropdown.addEventListener("click", function (e) {
+        var item = e.target.closest(".dropdown__item");
+        if (item) {
+          var nameEl = item.querySelector(".dropdown__name");
+          if (nameEl) searchInput.value = nameEl.textContent;
+          hideDropdown();
+        }
+      });
+
+      function closeTypeSelect() {
+        typeList.classList.remove("is-open");
+        typeTrigger.setAttribute("aria-expanded", "false");
+      }
+
+      function openTypeSelect() {
+        typeList.classList.add("is-open");
+        typeTrigger.setAttribute("aria-expanded", "true");
+      }
+
+      typeTrigger.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (typeList.classList.contains("is-open")) closeTypeSelect();
+        else openTypeSelect();
+      });
+
+      typeOptions.forEach(function (opt) {
+        opt.addEventListener("click", function (e) {
+          e.stopPropagation();
+          typeOptions.forEach(function (o) {
+            o.classList.remove("is-selected");
+          });
+          opt.classList.add("is-selected");
+          typeLabel.textContent = opt.textContent;
+          closeTypeSelect();
+        });
+        opt.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            opt.click();
+          }
+        });
+      });
+
+      document.querySelectorAll(".recent-card").forEach(function (card) {
+        card.addEventListener("click", function () {
+          var title = card.querySelector(".recent-card__title");
+          if (title) searchInput.value = title.textContent;
+        });
+      });
+
+      document.querySelectorAll(".link-cell").forEach(function (a) {
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

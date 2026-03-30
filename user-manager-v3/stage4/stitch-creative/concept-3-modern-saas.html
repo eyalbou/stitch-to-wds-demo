@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Manager — Workspace Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #116dff;
+      --text: #162d3d;
+      --text-secondary: #576475;
+      --bg: #f0f4f7;
+      --surface: #ffffff;
+      --border: #dfe5eb;
+      --success: #60bc57;
+      --warning: #fdb10c;
+      --error: #ee5951;
+      --topbar: #162d3d;
+      --shadow-card: 0 1px 6px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 12px 48px rgba(22, 45, 61, 0.12), 0 4px 16px rgba(22, 45, 61, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Wix Madefor Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      font-size: 20px;
+      vertical-align: middle;
+      line-height: 1;
+    }
+
+    .top-bar {
+      height: 48px;
+      background: var(--topbar);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .top-bar-brand {
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .icon-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary {
+      height: 36px;
+      padding: 0 18px;
+      border-radius: 18px;
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: #0e5cd7;
+      border-color: #0e5cd7;
+    }
+
+    .btn-secondary {
+      height: 36px;
+      padding: 0 18px;
+      border-radius: 18px;
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(17, 109, 255, 0.06);
+    }
+
+    .btn-secondary-sm {
+      height: 30px;
+      padding: 0 14px;
+      border-radius: 15px;
+      font-size: 12px;
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-secondary-sm:hover {
+      background: rgba(17, 109, 255, 0.06);
+    }
+
+    .btn-topbar {
+      height: 30px;
+      padding: 0 14px;
+      border-radius: 15px;
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-topbar:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-shell {
+      position: sticky;
+      top: 48px;
+      z-index: 150;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .horizontal-nav {
+      height: 42px;
+      display: flex;
+      align-items: stretch;
+      padding: 0 48px;
+      gap: 0;
+    }
+
+    .nav-item-wrap {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+    }
+
+    .nav-tab {
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      position: relative;
+      height: 100%;
+    }
+
+    .nav-tab:hover {
+      color: var(--text);
+    }
+
+    .nav-tab.active {
+      color: var(--primary);
+    }
+
+    .nav-tab.active::after {
+      content: "";
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 0;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .mega-panel {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      padding: 0 48px 24px;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    .nav-item-wrap:hover .mega-panel,
+    .mega-panel.is-open {
+      display: block;
+      pointer-events: auto;
+    }
+
+    .mega-card {
+      background: var(--surface);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      padding: 24px;
+      margin-top: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px 36px;
+    }
+
+    .mega-col h4 {
+      margin: 0 0 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .mega-link {
+      display: block;
+      padding: 6px 0;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .mega-link:hover {
+      color: var(--primary);
+    }
+
+    .mega-desc {
+      display: block;
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .page-header {
+      padding: 24px 48px 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .page-header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .page-header .subtitle {
+      margin: 6px 0 0;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .widget-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      padding: 24px 48px 48px;
+      align-items: start;
+    }
+
+    .widget-card {
+      background: var(--surface);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .widget-card:hover {
+      box-shadow: 0 8px 24px rgba(22, 45, 61, 0.1), 0 2px 8px rgba(22, 45, 61, 0.06);
+      transform: translateY(-2px);
+    }
+
+    .widget-card.dragging {
+      opacity: 0.65;
+      transform: scale(1.02);
+      box-shadow: var(--shadow-lg);
+      z-index: 50;
+    }
+
+    .widget-card.drag-over {
+      outline: 2px dashed var(--primary);
+      outline-offset: 4px;
+    }
+
+    .widget-span-2 {
+      grid-column: span 2;
+    }
+
+    .widget-span-1 {
+      grid-column: span 1;
+    }
+
+    .widget-title {
+      margin: 0 0 18px;
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .drag-hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+      position: relative;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input-wrap .material-symbols-outlined {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px 0 44px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--surface);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(17, 109, 255, 0.15);
+    }
+
+    .search-results {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      max-height: 240px;
+      overflow-y: auto;
+      z-index: 80;
+    }
+
+    .search-results.open {
+      display: block;
+    }
+
+    .search-result-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .search-result-item:last-child {
+      border-bottom: none;
+    }
+
+    .search-result-item:hover {
+      background: var(--bg);
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      height: 30px;
+      padding: 0 12px;
+      border-radius: 15px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .pill:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .user-mini {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .user-mini:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #3b6ef0);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .user-mini-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-mini-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .user-mini-email {
+      font-size: 12px;
+      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .user-mini-time {
+      font-size: 12px;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    .feed-item {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .feed-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .feed-text {
+      font-size: 14px;
+      flex: 1;
+    }
+
+    .feed-text strong {
+      font-weight: 600;
+    }
+
+    .feed-time {
+      font-size: 12px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .status-row:last-child {
+      border-bottom: none;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-dot.ok {
+      background: var(--success);
+    }
+
+    .status-dot.warn {
+      background: var(--warning);
+    }
+
+    .links-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 24px;
+    }
+
+    .link-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .link-item:hover {
+      text-decoration: underline;
+    }
+
+    .link-item .material-symbols-outlined {
+      font-size: 18px;
+      color: var(--text-secondary);
+    }
+
+    .badge-new {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 11px;
+      background: rgba(17, 109, 255, 0.12);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tips-body {
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .text-link {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .text-link:hover {
+      text-decoration: underline;
+    }
+
+    .section-placeholder {
+      padding: 48px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 16px;
+    }
+
+    .nav-item-wrap .mega-panel {
+      left: 50%;
+      right: auto;
+      width: 100vw;
+      margin-left: -50vw;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 1100px) {
+      .widget-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .widget-span-2 {
+        grid-column: span 1;
+      }
+
+      .mega-card {
+        grid-template-columns: 1fr;
+      }
+
+      .links-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <button type="button" class="icon-btn" aria-label="Home" data-hook="topbar-home">
+        <span class="material-symbols-outlined">home</span>
+      </button>
+      <span class="top-bar-brand">USER MANAGER</span>
+    </div>
+    <button type="button" class="btn btn-topbar" data-hook="topbar-feedback">Give Feedback</button>
+  </header>
+
+  <div class="nav-shell">
+    <nav class="horizontal-nav" aria-label="Workspace sections">
+      <div class="nav-item-wrap" data-nav="overview">
+        <button type="button" class="nav-tab active" data-tab="overview">Overview</button>
+        <div class="mega-panel" id="mega-overview">
+          <div class="mega-card">
+            <div class="mega-col">
+              <h4>Workspace</h4>
+              <a href="#" class="mega-link">Dashboard widgets<span class="mega-desc">Arrange your hub</span></a>
+              <a href="#" class="mega-link">Saved views<span class="mega-desc">Quick layouts</span></a>
+            </div>
+            <div class="mega-col">
+              <h4>Activity</h4>
+              <a href="#" class="mega-link">Notifications<span class="mega-desc">Alerts and mentions</span></a>
+              <a href="#" class="mega-link">Announcements<span class="mega-desc">Team updates</span></a>
+            </div>
+            <div class="mega-col">
+              <h4>Shortcuts</h4>
+              <a href="#" class="mega-link">Invite teammate<span class="mega-desc">Share workspace access</span></a>
+              <a href="#" class="mega-link">What's new<span class="mega-desc">Release notes</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item-wrap" data-nav="users">
+        <button type="button" class="nav-tab" data-tab="users">Users</button>
+        <div class="mega-panel" id="mega-users">
+          <div class="mega-card">
+            <div class="mega-col">
+              <h4>Search</h4>
+              <a href="#" class="mega-link">Find Users<span class="mega-desc">Search by name or email</span></a>
+              <a href="#" class="mega-link">Advanced Search<span class="mega-desc">Filters and segments</span></a>
+              <a href="#" class="mega-link">Bulk Lookup<span class="mega-desc">Paste IDs or CSV</span></a>
+            </div>
+            <div class="mega-col">
+              <h4>Manage</h4>
+              <a href="#" class="mega-link">Active Accounts<span class="mega-desc">Live users</span></a>
+              <a href="#" class="mega-link">Suspended<span class="mega-desc">Review holds</span></a>
+              <a href="#" class="mega-link">GDPR Requests<span class="mega-desc">Export and delete</span></a>
+            </div>
+            <div class="mega-col">
+              <h4>Reports</h4>
+              <a href="#" class="mega-link">User Growth<span class="mega-desc">Signups over time</span></a>
+              <a href="#" class="mega-link">Premium Conversion<span class="mega-desc">Upgrade funnel</span></a>
+              <a href="#" class="mega-link">Churn Analysis<span class="mega-desc">Retention signals</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item-wrap" data-nav="tools">
+        <button type="button" class="nav-tab" data-tab="tools">Tools</button>
+        <div class="mega-panel" id="mega-tools">
+          <div class="mega-card">
+            <div class="mega-col">
+              <h4>Automation</h4>
+              <a href="#" class="mega-link">Workflow builder<span class="mega-desc">Trigger actions</span></a>
+              <a href="#" class="mega-link">Scheduled jobs<span class="mega-desc">Cron and batches</span></a>
+            </div>
+            <div class="mega-col">
+              <h4>Data</h4>
+              <a href="#" class="mega-link">Importer<span class="mega-desc">CSV and API</span></a>
+              <a href="#" class="mega-link">Exporter<span class="mega-desc">Reports to file</span></a>
+            </div>
+            <div class="mega-col">
+              <h4>Integrations</h4>
+              <a href="#" class="mega-link">Webhooks<span class="mega-desc">Outbound events</span></a>
+              <a href="#" class="mega-link">API keys<span class="mega-desc">Secure access</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item-wrap" data-nav="reports">
+        <button type="button" class="nav-tab" data-tab="reports">Reports</button>
+        <div class="mega-panel" id="mega-reports">
+          <div class="mega-card">
+            <div class="mega-col">
+              <h4>Library</h4>
+              <a href="#" class="mega-link">Saved reports<span class="mega-desc">Your templates</span></a>
+            </div>
+            <div class="mega-col">
+              <h4>Build</h4>
+              <a href="#" class="mega-link">Custom metrics<span class="mega-desc">Define KPIs</span></a>
+            </div>
+            <div class="mega-col">
+              <h4>Share</h4>
+              <a href="#" class="mega-link">Schedule email<span class="mega-desc">Weekly digest</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item-wrap" data-nav="settings">
+        <button type="button" class="nav-tab" data-tab="settings">Settings</button>
+        <div class="mega-panel" id="mega-settings">
+          <div class="mega-card">
+            <div class="mega-col">
+              <h4>Workspace</h4>
+              <a href="#" class="mega-link">Profile<span class="mega-desc">Name and avatar</span></a>
+            </div>
+            <div class="mega-col">
+              <h4>Security</h4>
+              <a href="#" class="mega-link">SSO<span class="mega-desc">SAML setup</span></a>
+            </div>
+            <div class="mega-col">
+              <h4>Billing</h4>
+              <a href="#" class="mega-link">Plan & usage<span class="mega-desc">Seats and limits</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <main id="main-overview">
+    <div class="page-header">
+      <div>
+        <h1>Welcome back, Sarah</h1>
+        <p class="subtitle">Your workspace — Acme Growth Ops</p>
+      </div>
+      <button type="button" class="btn btn-secondary-sm" id="btn-customize">Customize</button>
+    </div>
+
+    <div class="widget-grid" id="widget-grid">
+      <article class="widget-card widget-span-2" draggable="true" data-widget="search" data-span="2">
+        <h2 class="widget-title">
+          Search Users
+          <span class="drag-hint"><span class="material-symbols-outlined" style="font-size:16px">drag_indicator</span> Drag</span>
+        </h2>
+        <div class="search-row">
+          <div class="search-input-wrap">
+            <span class="material-symbols-outlined">search</span>
+            <input type="search" class="search-input" id="user-search" placeholder="Search by name, email, or ID" autocomplete="off" />
+            <div class="search-results" id="search-results" role="listbox"></div>
+          </div>
+          <button type="button" class="btn btn-primary" id="btn-search" style="height:48px;border-radius:24px;padding:0 24px">Search</button>
+        </div>
+        <div class="pills" id="recent-pills">
+          <button type="button" class="pill" data-q="jordan@acme.com">jordan@acme.com</button>
+          <button type="button" class="pill" data-q="Alex Morgan">Alex Morgan</button>
+          <button type="button" class="pill" data-q="site: premium trial">site: premium trial</button>
+        </div>
+      </article>
+
+      <article class="widget-card widget-span-1" draggable="true" data-widget="stats" data-span="1">
+        <h2 class="widget-title">
+          Quick Stats
+          <span class="drag-hint"><span class="material-symbols-outlined" style="font-size:16px">drag_indicator</span> Drag</span>
+        </h2>
+        <div class="stat-row">
+          <span class="stat-label">Total Users</span>
+          <span class="stat-value" data-count="1200000" data-suffix="" data-format="compact">0</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Active Today</span>
+          <span class="stat-value" data-count="847000" data-suffix="" data-format="compact">0</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Premium</span>
+          <span class="stat-value" data-count="423000" data-suffix="" data-format="compact">0</span>
+        </div>
+      </article>
+
+      <article class="widget-card widget-span-1" draggable="true" data-widget="recent" data-span="1">
+        <h2 class="widget-title">
+          My Recent
+          <span class="drag-hint"><span class="material-symbols-outlined" style="font-size:16px">drag_indicator</span> Drag</span>
+        </h2>
+        <div class="user-mini">
+          <div class="avatar">JM</div>
+          <div class="user-mini-body">
+            <div class="user-mini-name">Jordan Miles</div>
+            <div class="user-mini-email">jordan@acme.com</div>
+          </div>
+          <span class="user-mini-time">2m ago</span>
+        </div>
+        <div class="user-mini">
+          <div class="avatar">AL</div>
+          <div class="user-mini-body">
+            <div class="user-mini-name">Alex Lee</div>
+            <div class="user-mini-email">alex@studio.io</div>
+          </div>
+          <span class="user-mini-time">18m ago</span>
+        </div>
+        <div class="user-mini">
+          <div class="avatar">SK</div>
+          <div class="user-mini-body">
+            <div class="user-mini-name">Sam Kim</div>
+            <div class="user-mini-email">sam.kim@north.app</div>
+          </div>
+          <span class="user-mini-time">1h ago</span>
+        </div>
+        <div class="user-mini">
+          <div class="avatar">PR</div>
+          <div class="user-mini-body">
+            <div class="user-mini-name">Priya Rao</div>
+            <div class="user-mini-email">priya.rao@loom.co</div>
+          </div>
+          <span class="user-mini-time">Yesterday</span>
+        </div>
+      </article>
+
+      <article class="widget-card widget-span-1" draggable="true" data-widget="feed" data-span="1">
+        <h2 class="widget-title">
+          Team Feed
+          <span class="drag-hint"><span class="material-symbols-outlined" style="font-size:16px">drag_indicator</span> Drag</span>
+        </h2>
+        <div class="feed-item">
+          <div class="avatar" style="width:32px;height:32px;font-size:11px">TC</div>
+          <div class="feed-text"><strong>Taylor</strong> exported GDPR bundle for user #8821</div>
+          <span class="feed-time">3m</span>
+        </div>
+        <div class="feed-item">
+          <div class="avatar" style="width:32px;height:32px;font-size:11px">EV</div>
+          <div class="feed-text"><strong>Evan</strong> suspended 12 accounts (policy)</div>
+          <span class="feed-time">22m</span>
+        </div>
+        <div class="feed-item">
+          <div class="avatar" style="width:32px;height:32px;font-size:11px">NR</div>
+          <div class="feed-text"><strong>Nina</strong> shared report “Premium conversion”</div>
+          <span class="feed-time">1h</span>
+        </div>
+        <div class="feed-item">
+          <div class="avatar" style="width:32px;height:32px;font-size:11px">DL</div>
+          <div class="feed-text"><strong>Devon</strong> added webhook for churn alerts</div>
+          <span class="feed-time">3h</span>
+        </div>
+        <div class="feed-item">
+          <div class="avatar" style="width:32px;height:32px;font-size:11px">MK</div>
+          <div class="feed-text"><strong>Morgan</strong> invited you to “Growth Ops”</div>
+          <span class="feed-time">5h</span>
+        </div>
+      </article>
+
+      <article class="widget-card widget-span-1" draggable="true" data-widget="status" data-span="1">
+        <h2 class="widget-title">
+          Service Status
+          <span class="drag-hint"><span class="material-symbols-outlined" style="font-size:16px">drag_indicator</span> Drag</span>
+        </h2>
+        <div class="status-row">
+          <span class="status-dot ok"></span>
+          <span>Auth API</span>
+        </div>
+        <div class="status-row">
+          <span class="status-dot ok"></span>
+          <span>Search index</span>
+        </div>
+        <div class="status-row">
+          <span class="status-dot warn"></span>
+          <span>Webhooks (elevated latency)</span>
+        </div>
+        <div class="status-row">
+          <span class="status-dot ok"></span>
+          <span>Billing sync</span>
+        </div>
+      </article>
+
+      <article class="widget-card widget-span-2" draggable="true" data-widget="links" data-span="2">
+        <h2 class="widget-title">
+          Useful Links
+          <span class="drag-hint"><span class="material-symbols-outlined" style="font-size:16px">drag_indicator</span> Drag</span>
+        </h2>
+        <div class="links-grid">
+          <a href="#" class="link-item"><span class="material-symbols-outlined">menu_book</span> Admin guide</a>
+          <a href="#" class="link-item"><span class="material-symbols-outlined">policy</span> Compliance center</a>
+          <a href="#" class="link-item"><span class="material-symbols-outlined">api</span> API reference</a>
+          <a href="#" class="link-item"><span class="material-symbols-outlined">support_agent</span> Support</a>
+          <a href="#" class="link-item"><span class="material-symbols-outlined">forum</span> Community</a>
+          <a href="#" class="link-item"><span class="material-symbols-outlined">changelog</span> Changelog</a>
+          <a href="#" class="link-item"><span class="material-symbols-outlined">shield</span> Security advisories</a>
+        </div>
+      </article>
+
+      <article class="widget-card widget-span-1" draggable="true" data-widget="tips" data-span="1">
+        <h2 class="widget-title">
+          Tips &amp; Updates
+          <span class="badge-new">New</span>
+        </h2>
+        <p class="tips-body">Pin widgets you use daily and drag to reorder. Your layout syncs across sessions in this prototype.</p>
+        <a href="#" class="text-link">What's new in v2.4</a>
+      </article>
+    </div>
+  </main>
+
+  <main id="main-other" hidden>
+    <div class="section-placeholder" id="section-placeholder"></div>
+  </main>
+
+  <script>
+    (function () {
+      var MOCK_USERS = [
+        { name: "Jordan Miles", email: "jordan@acme.com", id: "usr_8821" },
+        { name: "Alex Morgan", email: "alex.morgan@acme.com", id: "usr_4410" },
+        { name: "Alex Lee", email: "alex@studio.io", id: "usr_2201" },
+        { name: "Sarah Chen", email: "sarah@acmegrowth.com", id: "usr_1001" },
+        { name: "Sam Kim", email: "sam.kim@north.app", id: "usr_9932" },
+        { name: "Priya Rao", email: "priya.rao@loom.co", id: "usr_7712" }
+      ];
+
+      function formatCompact(n) {
+        if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M";
+        if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, "") + "K";
+        return String(n);
+      }
+
+      function runCountUp() {
+        var els = document.querySelectorAll(".stat-value[data-count]");
+        var duration = 1400;
+        var start = performance.now();
+        var targets = Array.prototype.map.call(els, function (el) {
+          return {
+            el: el,
+            end: parseInt(el.getAttribute("data-count"), 10),
+            format: el.getAttribute("data-format")
+          };
+        });
+
+        function frame(now) {
+          var t = Math.min(1, (now - start) / duration);
+          var eased = 1 - Math.pow(1 - t, 3);
+          targets.forEach(function (item) {
+            var val = Math.round(item.end * eased);
+            item.el.textContent =
+              item.format === "compact" ? formatCompact(val) : String(val);
+          });
+          if (t < 1) requestAnimationFrame(frame);
+          else {
+            targets.forEach(function (item) {
+              item.el.textContent =
+                item.format === "compact"
+                  ? formatCompact(item.end)
+                  : String(item.end);
+            });
+          }
+        }
+        requestAnimationFrame(frame);
+      }
+
+      var searchInput = document.getElementById("user-search");
+      var searchResults = document.getElementById("search-results");
+      var btnSearch = document.getElementById("btn-search");
+
+      function renderResults(query) {
+        var q = (query || "").trim().toLowerCase();
+        searchResults.innerHTML = "";
+        if (!q) {
+          searchResults.classList.remove("open");
+          return;
+        }
+        var matches = MOCK_USERS.filter(function (u) {
+          return (
+            u.name.toLowerCase().indexOf(q) !== -1 ||
+            u.email.toLowerCase().indexOf(q) !== -1 ||
+            u.id.toLowerCase().indexOf(q) !== -1
+          );
+        });
+        if (matches.length === 0) {
+          var empty = document.createElement("div");
+          empty.className = "search-result-item";
+          empty.textContent = "No users match — try another term";
+          searchResults.appendChild(empty);
+        } else {
+          matches.forEach(function (u) {
+            var row = document.createElement("div");
+            row.className = "search-result-item";
+            row.setAttribute("role", "option");
+            row.innerHTML =
+              '<div class="avatar" style="width:32px;height:32px;font-size:10px">' +
+              u.name
+                .split(" ")
+                .map(function (p) {
+                  return p[0];
+                })
+                .join("")
+                .slice(0, 2) +
+              "</div><div><div class=\"user-mini-name\">" +
+              u.name +
+              "</div><div class=\"user-mini-email\">" +
+              u.email +
+              "</div></div>";
+            row.addEventListener("mousedown", function (e) {
+              e.preventDefault();
+              searchInput.value = u.email;
+              searchResults.classList.remove("open");
+            });
+            searchResults.appendChild(row);
+          });
+        }
+        searchResults.classList.add("open");
+      }
+
+      searchInput.addEventListener("input", function () {
+        renderResults(searchInput.value);
+      });
+      searchInput.addEventListener("focus", function () {
+        if (searchInput.value.trim()) renderResults(searchInput.value);
+      });
+      document.addEventListener("click", function (e) {
+        if (!e.target.closest(".search-input-wrap")) {
+          searchResults.classList.remove("open");
+        }
+      });
+      btnSearch.addEventListener("click", function () {
+        renderResults(searchInput.value);
+      });
+
+      document.getElementById("recent-pills").addEventListener("click", function (e) {
+        var pill = e.target.closest(".pill");
+        if (!pill) return;
+        var q = pill.getAttribute("data-q") || pill.textContent;
+        searchInput.value = q;
+        renderResults(q);
+        searchInput.focus();
+      });
+
+      var tabs = document.querySelectorAll(".nav-tab");
+      var mainOverview = document.getElementById("main-overview");
+      var mainOther = document.getElementById("main-other");
+      var placeholder = document.getElementById("section-placeholder");
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          tabs.forEach(function (t) {
+            t.classList.remove("active");
+          });
+          tab.classList.add("active");
+          var id = tab.getAttribute("data-tab");
+          if (id === "overview") {
+            mainOverview.hidden = false;
+            mainOther.hidden = true;
+          } else {
+            mainOverview.hidden = true;
+            mainOther.hidden = false;
+            var labels = {
+              users: "Users",
+              tools: "Tools",
+              reports: "Reports",
+              settings: "Settings"
+            };
+            placeholder.textContent =
+              (labels[id] || id) +
+              " — full workspace view would load here. Use the mega menu above for common actions.";
+          }
+        });
+      });
+
+      var navWraps = document.querySelectorAll(".nav-item-wrap");
+      navWraps.forEach(function (wrap) {
+        var tab = wrap.querySelector(".nav-tab");
+        var panel = wrap.querySelector(".mega-panel");
+        wrap.addEventListener("mouseenter", function () {
+          document.querySelectorAll(".mega-panel.is-open").forEach(function (p) {
+            p.classList.remove("is-open");
+          });
+        });
+        tab.addEventListener("focus", function () {
+          panel.classList.add("is-open");
+        });
+        tab.addEventListener("blur", function () {
+          setTimeout(function () {
+            if (!wrap.matches(":hover")) panel.classList.remove("is-open");
+          }, 120);
+        });
+        wrap.addEventListener("mouseleave", function () {
+          panel.classList.remove("is-open");
+        });
+        wrap.addEventListener("mouseenter", function () {
+          panel.classList.add("is-open");
+        });
+      });
+
+      document.getElementById("btn-customize").addEventListener("click", function () {
+        alert("Customize: in a product build this would open widget layout controls.");
+      });
+
+      var grid = document.getElementById("widget-grid");
+      var dragEl = null;
+
+      function spanClass(n) {
+        return n === "2" ? "widget-span-2" : "widget-span-1";
+      }
+
+      grid.querySelectorAll(".widget-card").forEach(function (card) {
+        card.addEventListener("dragstart", function (e) {
+          dragEl = card;
+          card.classList.add("dragging");
+          e.dataTransfer.effectAllowed = "move";
+          e.dataTransfer.setData("text/plain", card.getAttribute("data-widget"));
+        });
+        card.addEventListener("dragend", function () {
+          card.classList.remove("dragging");
+          grid.querySelectorAll(".drag-over").forEach(function (c) {
+            c.classList.remove("drag-over");
+          });
+          dragEl = null;
+        });
+        card.addEventListener("dragover", function (e) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+          if (card !== dragEl) card.classList.add("drag-over");
+        });
+        card.addEventListener("dragleave", function () {
+          card.classList.remove("drag-over");
+        });
+        card.addEventListener("drop", function (e) {
+          e.preventDefault();
+          card.classList.remove("drag-over");
+          if (!dragEl || dragEl === card) return;
+          var a = dragEl;
+          var b = card;
+          var spanA = a.getAttribute("data-span");
+          var spanB = b.getAttribute("data-span");
+          a.setAttribute("data-span", spanB);
+          b.setAttribute("data-span", spanA);
+          a.classList.remove("widget-span-1", "widget-span-2");
+          b.classList.remove("widget-span-1", "widget-span-2");
+          a.classList.add(spanClass(spanB));
+          b.classList.add(spanClass(spanA));
+          var refB = b.nextSibling;
+          grid.insertBefore(b, a);
+          grid.insertBefore(a, refB);
+        });
+      });
+
+      runCountUp();
+    })();
+  </script>
+</body>
+</html>

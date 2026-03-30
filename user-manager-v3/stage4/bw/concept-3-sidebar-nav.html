@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Manager — Sidebar Navigation + Search (B&amp;W Wireframe)</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: #fff;
+      color: #000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+      color: #000;
+      background: #fff;
+      border: 2px solid #000;
+      margin: 0;
+    }
+
+    button {
+      cursor: pointer;
+      padding: 8px 16px;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    a:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+    }
+
+    .topbar {
+      height: 48px;
+      background: #000;
+      color: #fff;
+      border-bottom: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+
+    .topbar__title {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-size: 14px;
+    }
+
+    .topbar__btn {
+      background: #000;
+      color: #fff;
+      border: 2px solid #fff;
+    }
+
+    .topbar__btn:hover {
+      background: #fff;
+      color: #000;
+      border-color: #000;
+    }
+
+    .shell {
+      display: flex;
+      min-height: calc(100vh - 48px);
+    }
+
+    .sidebar {
+      width: 228px;
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 2px solid #000;
+      display: flex;
+      flex-direction: column;
+      transition: width 0.2s ease, margin 0.2s ease;
+      overflow: hidden;
+    }
+
+    .sidebar.is-collapsed {
+      width: 48px;
+    }
+
+    .sidebar__inner {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 228px;
+      opacity: 1;
+      transition: opacity 0.15s ease;
+    }
+
+    .sidebar.is-collapsed .sidebar__inner {
+      flex: 0 0 auto;
+      height: 0;
+      min-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .sidebar__toggle-wrap {
+      flex-shrink: 0;
+      border-bottom: 2px solid #000;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      min-height: 48px;
+    }
+
+    .sidebar.is-collapsed .sidebar__toggle-wrap {
+      justify-content: center;
+      padding: 8px 4px;
+    }
+
+    .sidebar__toggle {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      background: #000;
+      color: #fff;
+      border: 2px solid #000;
+    }
+
+    .sidebar__toggle:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .nav {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      flex: 1;
+    }
+
+    .nav__item {
+      border-bottom: 2px solid #000;
+    }
+
+    .nav__btn {
+      width: 100%;
+      text-align: left;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 0;
+      background: #fff;
+      color: #000;
+      display: block;
+    }
+
+    .nav__btn:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    .nav__btn.is-active {
+      background: #000;
+      color: #fff;
+    }
+
+    .sidebar__footer {
+      border-top: 2px solid #000;
+      padding: 12px 16px;
+    }
+
+    .sidebar__footer a {
+      color: #000;
+      font-weight: 600;
+    }
+
+    .sidebar__status {
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    .main {
+      flex: 1;
+      padding: 32px 24px 48px;
+      min-width: 0;
+    }
+
+    .main__heading {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 24px;
+    }
+
+    .search-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      max-width: 720px;
+      margin: 0 auto 32px;
+    }
+
+    .search-row input[type="search"] {
+      flex: 1 1 200px;
+      min-width: 160px;
+      padding: 10px 12px;
+    }
+
+    .search-row select {
+      padding: 10px 12px;
+      min-width: 140px;
+    }
+
+    .search-row .btn-primary {
+      background: #000;
+      color: #fff;
+      border: 2px solid #000;
+    }
+
+    .search-row .btn-primary:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .results {
+      max-width: 720px;
+      margin: 0 auto 32px;
+      border: 2px solid #000;
+      padding: 16px;
+      display: none;
+    }
+
+    .results.is-visible {
+      display: block;
+    }
+
+    .results__title {
+      font-weight: 700;
+      margin: 0 0 12px;
+    }
+
+    .results__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .results__list li {
+      border: 2px solid #000;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      background: #fff;
+    }
+
+    .results__list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .content-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: flex-start;
+      justify-content: center;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .card {
+      border: 2px solid #000;
+      background: #fff;
+      padding: 16px;
+    }
+
+    .card__title {
+      font-weight: 700;
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .links-card {
+      flex: 1 1 320px;
+      min-width: 280px;
+    }
+
+    .links-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .links-grid a {
+      display: block;
+      padding: 10px 12px;
+      border: 2px solid #000;
+      margin: -2px 0 0 -2px;
+      color: #000;
+      background: #fff;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .links-grid a:nth-child(-n + 2) {
+      margin-top: 0;
+    }
+
+    .links-grid a:nth-child(odd) {
+      margin-left: 0;
+    }
+
+    .links-grid a:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    .tip-card {
+      flex: 0 1 280px;
+      min-width: 240px;
+    }
+
+    .tip-card__body {
+      min-height: 120px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .tip-card__controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tip-card__dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tip-card__dot {
+      width: 10px;
+      height: 10px;
+      border: 2px solid #000;
+      padding: 0;
+      background: #fff;
+    }
+
+    .tip-card__dot.is-active {
+      background: #000;
+    }
+
+    .tip-card__nav {
+      display: flex;
+      gap: 8px;
+    }
+
+    .tip-card__nav button {
+      padding: 6px 12px;
+      background: #fff;
+      color: #000;
+    }
+
+    .tip-card__nav button:hover {
+      background: #000;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <span class="topbar__title">USER MANAGER</span>
+    <button type="button" class="topbar__btn" data-hook="give-feedback">Give Feedback</button>
+  </header>
+
+  <div class="shell">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <div class="sidebar__toggle-wrap">
+        <button
+          type="button"
+          class="sidebar__toggle"
+          id="sidebarToggle"
+          aria-expanded="true"
+          aria-controls="sidebarNav"
+          title="Collapse sidebar"
+        >
+          &lt;
+        </button>
+      </div>
+      <div class="sidebar__inner">
+        <nav id="sidebarNav" aria-label="Primary">
+          <ul class="nav" id="navList">
+            <li class="nav__item">
+              <button type="button" class="nav__btn is-active" data-nav="home">Home</button>
+            </li>
+            <li class="nav__item">
+              <button type="button" class="nav__btn" data-nav="search">Search</button>
+            </li>
+            <li class="nav__item">
+              <button type="button" class="nav__btn" data-nav="accounts">Accounts</button>
+            </li>
+            <li class="nav__item">
+              <button type="button" class="nav__btn" data-nav="bulk">Bulk Actions</button>
+            </li>
+            <li class="nav__item">
+              <button type="button" class="nav__btn" data-nav="activity">Activity Log</button>
+            </li>
+            <li class="nav__item">
+              <button type="button" class="nav__btn" data-nav="settings">Settings</button>
+            </li>
+          </ul>
+        </nav>
+        <div class="sidebar__footer">
+          <a href="#" onclick="return false;">Help</a>
+          <div class="sidebar__status">&#10003; All systems OK</div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <h1 class="main__heading">Search for a user or account</h1>
+
+      <form class="search-row" id="searchForm" action="#" onsubmit="return false;">
+        <input
+          type="search"
+          id="searchInput"
+          name="q"
+          placeholder="Enter query"
+          autocomplete="off"
+          aria-label="Search query"
+        />
+        <select id="searchScope" name="scope" aria-label="Search by">
+          <option value="userId">By user ID</option>
+          <option value="email">By email</option>
+          <option value="account">By account</option>
+        </select>
+        <button type="submit" class="btn-primary" id="searchBtn">Search</button>
+      </form>
+
+      <section class="results" id="resultsPanel" aria-live="polite">
+        <h2 class="results__title" id="resultsTitle">Results</h2>
+        <ul class="results__list" id="resultsList"></ul>
+      </section>
+
+      <div class="content-row">
+        <section class="card links-card" aria-labelledby="useful-links-heading">
+          <h2 class="card__title" id="useful-links-heading">Useful Links</h2>
+          <div class="links-grid">
+            <a href="#" onclick="return false;">Wix Help Center</a>
+            <a href="#" onclick="return false;">Support QA - Known Issues</a>
+            <a href="#" onclick="return false;">Wix Answers</a>
+            <a href="#" onclick="return false;">Wix Status Page</a>
+            <a href="#" onclick="return false;">CS Internal</a>
+            <a href="#" onclick="return false;">Customer Care - Monday Updates</a>
+            <a href="#" onclick="return false;">Wix Library</a>
+          </div>
+        </section>
+
+        <section class="card tip-card" aria-labelledby="tip-heading">
+          <h2 class="card__title" id="tip-heading">Tip</h2>
+          <p class="tip-card__body" id="tipBody"></p>
+          <div class="tip-card__controls">
+            <div class="tip-card__dots" id="tipDots" role="tablist" aria-label="Tips"></div>
+            <div class="tip-card__nav">
+              <button type="button" id="tipPrev" aria-label="Previous tip">Prev</button>
+              <button type="button" id="tipNext" aria-label="Next tip">Next</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var navList = document.getElementById("navList");
+      var sidebar = document.getElementById("sidebar");
+      var sidebarToggle = document.getElementById("sidebarToggle");
+      var searchForm = document.getElementById("searchForm");
+      var searchInput = document.getElementById("searchInput");
+      var searchScope = document.getElementById("searchScope");
+      var resultsPanel = document.getElementById("resultsPanel");
+      var resultsList = document.getElementById("resultsList");
+      var resultsTitle = document.getElementById("resultsTitle");
+      var tipBody = document.getElementById("tipBody");
+      var tipDots = document.getElementById("tipDots");
+      var tipPrev = document.getElementById("tipPrev");
+      var tipNext = document.getElementById("tipNext");
+
+      var tips = [
+        "Use the scope dropdown to narrow results before you search.",
+        "Did this page help? Use Give Feedback to tell the team what to improve.",
+        "Bookmark Useful Links for faster access to internal resources.",
+      ];
+
+      var tipIndex = 0;
+
+      function setActiveNav(btn) {
+        var buttons = navList.querySelectorAll(".nav__btn");
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].classList.remove("is-active");
+        }
+        btn.classList.add("is-active");
+      }
+
+      navList.addEventListener("click", function (e) {
+        var t = e.target;
+        if (t.classList && t.classList.contains("nav__btn")) {
+          setActiveNav(t);
+        }
+      });
+
+      var collapsed = false;
+      sidebarToggle.addEventListener("click", function () {
+        collapsed = !collapsed;
+        sidebar.classList.toggle("is-collapsed", collapsed);
+        sidebarToggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        sidebarToggle.textContent = collapsed ? ">" : "<";
+        sidebarToggle.setAttribute("title", collapsed ? "Expand sidebar" : "Collapse sidebar");
+      });
+
+      function mockResults(query, scope) {
+        var q = (query || "").trim();
+        var label =
+          scope === "email"
+            ? "email"
+            : scope === "account"
+              ? "account"
+              : "user ID";
+        var base = q || "(empty query)";
+        return [
+          "Match 1 — " + label + ": " + base + " — preview row",
+          "Match 2 — related " + label + " — preview row",
+          "Match 3 — suggestion — preview row",
+        ];
+      }
+
+      function showResults() {
+        var q = searchInput.value;
+        var scope = searchScope.value;
+        var items = mockResults(q, scope);
+        resultsList.innerHTML = "";
+        for (var i = 0; i < items.length; i++) {
+          var li = document.createElement("li");
+          li.textContent = items[i];
+          resultsList.appendChild(li);
+        }
+        resultsTitle.textContent =
+          "Results for " + (q.trim() ? "\"" + q.trim() + "\"" : "your search");
+        resultsPanel.classList.add("is-visible");
+      }
+
+      searchForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        showResults();
+      });
+
+      searchInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          showResults();
+        }
+      });
+
+      function renderTipDots() {
+        tipDots.innerHTML = "";
+        for (var i = 0; i < tips.length; i++) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "tip-card__dot" + (i === tipIndex ? " is-active" : "");
+          b.setAttribute("aria-label", "Tip " + (i + 1));
+          b.setAttribute("data-index", String(i));
+          tipDots.appendChild(b);
+        }
+      }
+
+      function setTip(i) {
+        tipIndex = (i + tips.length) % tips.length;
+        tipBody.textContent = tips[tipIndex];
+        renderTipDots();
+      }
+
+      tipDots.addEventListener("click", function (e) {
+        var t = e.target;
+        if (t.getAttribute && t.getAttribute("data-index") !== null) {
+          setTip(parseInt(t.getAttribute("data-index"), 10));
+        }
+      });
+
+      tipPrev.addEventListener("click", function () {
+        setTip(tipIndex - 1);
+      });
+
+      tipNext.addEventListener("click", function () {
+        setTip(tipIndex + 1);
+      });
+
+      setTip(0);
+    })();
+  </script>
+</body>
+</html>

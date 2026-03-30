@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>User Manager -- Stage 4: Three Branches</title>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --font: "Wix Madefor Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --bg: #f0f4f7;
+  --surface: #ffffff;
+  --text: #162d3d;
+  --text-2: #576475;
+  --border: #dfe5eb;
+  --primary: #116DFF;
+  --bw-color: #576475;
+  --creative-color: #2b9a3f;
+  --directed-color: #116DFF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); }
+
+.top-bar {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 14px 32px; display: flex; align-items: center; justify-content: space-between;
+}
+.top-bar h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+.top-bar .sub { font-size: 13px; color: var(--text-2); margin-top: 2px; }
+
+.branch-bar {
+  display: flex; gap: 0; background: var(--surface);
+  border-bottom: 1px solid var(--border); padding: 0 32px;
+  position: sticky; top: 0; z-index: 200;
+}
+.branch-btn {
+  padding: 10px 24px; font-size: 14px; font-weight: 600;
+  cursor: pointer; border: none; background: none;
+  border-bottom: 3px solid transparent; transition: all 0.2s;
+  font-family: var(--font); color: var(--text-2);
+  display: flex; align-items: center; gap: 8px;
+}
+.branch-btn:hover { color: var(--text); background: rgba(0,0,0,0.02); }
+.branch-btn.active { color: var(--text); }
+.branch-btn[data-branch="bw"].active { border-bottom-color: var(--bw-color); }
+.branch-btn[data-branch="creative"].active { border-bottom-color: var(--creative-color); }
+.branch-btn[data-branch="directed"].active { border-bottom-color: var(--directed-color); }
+
+.branch-badge {
+  display: inline-flex; padding: 2px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.branch-btn[data-branch="bw"] .branch-badge { background: rgba(87,100,117,0.1); color: var(--bw-color); }
+.branch-btn[data-branch="creative"] .branch-badge { background: rgba(43,154,63,0.1); color: var(--creative-color); }
+.branch-btn[data-branch="directed"] .branch-badge { background: rgba(17,109,255,0.1); color: var(--directed-color); }
+
+.branch-panel { display: none; }
+.branch-panel.active { display: block; }
+
+.branch-intro {
+  padding: 16px 32px; background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  font-size: 13px; color: var(--text-2); line-height: 1.5;
+}
+.branch-intro strong { color: var(--text); }
+
+.concept-tabs {
+  display: flex; gap: 0; background: var(--surface);
+  border-bottom: 1px solid var(--border); padding: 0 32px;
+  position: sticky; top: 47px; z-index: 100;
+}
+.concept-tab {
+  padding: 10px 20px; font-size: 13px; font-weight: 500;
+  color: var(--text-2); cursor: pointer;
+  border-bottom: 2px solid transparent; transition: all 0.2s;
+  font-family: var(--font); background: none; border-top: none;
+  border-left: none; border-right: none;
+}
+.concept-tab:hover { color: var(--text); }
+.concept-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+.concept-tab .orig-tag {
+  display: inline-flex; padding: 1px 6px; border-radius: 4px;
+  font-size: 10px; font-weight: 600; background: rgba(0,0,0,0.06);
+  color: var(--text-2); margin-left: 4px;
+}
+
+.concept-content { display: none; }
+.concept-content.active { display: block; }
+.concept-content iframe { width: 100%; height: calc(100vh - 160px); border: none; }
+.concept-content.original-view { background: var(--surface); display: none; }
+.concept-content.original-view.active { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 160px); }
+.concept-content.original-view img { max-width: 95%; max-height: calc(100vh - 200px); border-radius: 8px; box-shadow: 0 2px 16px rgba(0,0,0,0.1); }
+
+.compare-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
+  background: var(--surface); border-top: 1px solid var(--border);
+  padding: 8px 32px; font-size: 12px; color: var(--text-2);
+  display: flex; align-items: center; gap: 20px;
+}
+.compare-bar .key { display: flex; align-items: center; gap: 6px; }
+.compare-bar .dot { width: 10px; height: 10px; border-radius: 50%; }
+.compare-bar .dot-bw { background: var(--bw-color); }
+.compare-bar .dot-creative { background: var(--creative-color); }
+.compare-bar .dot-directed { background: var(--directed-color); }
+.compare-bar strong { color: var(--text); margin-right: 12px; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <h1>User Manager -- Stage 4: UX Concepts</h1>
+    <div class="sub">Three generation modes, same feature spec. Compare B&W, Stitch Creative, and Stitch Directed.</div>
+  </div>
+</div>
+
+<div class="branch-bar">
+  <button class="branch-btn active" data-branch="bw">
+    <span class="branch-badge">A</span> B&W Wireframes
+  </button>
+  <button class="branch-btn" data-branch="creative">
+    <span class="branch-badge">B</span> Stitch Creative
+  </button>
+  <button class="branch-btn" data-branch="directed">
+    <span class="branch-badge">C</span> Stitch Directed
+  </button>
+</div>
+
+<!-- ═══ BRANCH A: B&W ═══ -->
+<div class="branch-panel active" id="panel-bw">
+  <div class="branch-intro">
+    <strong>Branch A: B&W (Original CK)</strong> -- Agent designs + codes. Strict #000/#fff wireframes with working JS. Layout-focused review, no design system.
+  </div>
+  <div class="concept-tabs" data-branch="bw">
+    <button class="concept-tab active" data-concept="bw-orig">Original<span class="orig-tag">Input</span></button>
+    <button class="concept-tab" data-concept="bw-1">1. Enhanced Search Hub</button>
+    <button class="concept-tab" data-concept="bw-2">2. Dashboard + Search</button>
+    <button class="concept-tab" data-concept="bw-3">3. Sidebar Navigation</button>
+  </div>
+  <div class="concept-content original-view active" id="content-bw-orig">
+    <img src="original-input.png" alt="Original User Manager UI"/>
+  </div>
+  <div class="concept-content" id="content-bw-1">
+    <iframe src="stage4/bw/concept-1-enhanced-search.html"></iframe>
+  </div>
+  <div class="concept-content" id="content-bw-2">
+    <iframe src="stage4/bw/concept-2-dashboard-search.html"></iframe>
+  </div>
+  <div class="concept-content" id="content-bw-3">
+    <iframe src="stage4/bw/concept-3-sidebar-nav.html"></iframe>
+  </div>
+</div>
+
+<!-- ═══ BRANCH B: STITCH CREATIVE ═══ -->
+<div class="branch-panel" id="panel-creative">
+  <div class="branch-intro">
+    <strong>Branch B: Stitch Creative</strong> -- Stitch AI designs AND renders from loose prompts. Full WDS color, Stitch's own layout ideas. The AI proposes its interpretation of the User Manager landing page.
+  </div>
+  <div class="concept-tabs" data-branch="creative">
+    <button class="concept-tab active" data-concept="creative-orig">Original<span class="orig-tag">Input</span></button>
+    <button class="concept-tab" data-concept="creative-1">1. Search Intelligence</button>
+    <button class="concept-tab" data-concept="creative-2">2. Operational Awareness</button>
+    <button class="concept-tab" data-concept="creative-3">3. Modern SaaS Navigation</button>
+  </div>
+  <div class="concept-content original-view active" id="content-creative-orig">
+    <img src="original-input.png" alt="Original User Manager UI"/>
+  </div>
+  <div class="concept-content" id="content-creative-1">
+    <iframe src="stage4/stitch-creative/concept-1-search-intelligence.html"></iframe>
+  </div>
+  <div class="concept-content" id="content-creative-2">
+    <iframe src="stage4/stitch-creative/concept-2-operational-awareness.html"></iframe>
+  </div>
+  <div class="concept-content" id="content-creative-3">
+    <iframe src="stage4/stitch-creative/concept-3-modern-saas.html"></iframe>
+  </div>
+</div>
+
+<!-- ═══ BRANCH C: STITCH DIRECTED ═══ -->
+<div class="branch-panel" id="panel-directed">
+  <div class="branch-intro">
+    <strong>Branch C: Stitch Directed</strong> -- Agent designs the same concepts as B&W. Stitch renders them with full WDS color. Same layout ideas, dramatically different visual quality.
+  </div>
+  <div class="concept-tabs" data-branch="directed">
+    <button class="concept-tab active" data-concept="directed-orig">Original<span class="orig-tag">Input</span></button>
+    <button class="concept-tab" data-concept="directed-1">1. Enhanced Search Hub</button>
+    <button class="concept-tab" data-concept="directed-2">2. Dashboard + Search</button>
+    <button class="concept-tab" data-concept="directed-3">3. Sidebar Navigation</button>
+  </div>
+  <div class="concept-content original-view active" id="content-directed-orig">
+    <img src="original-input.png" alt="Original User Manager UI"/>
+  </div>
+  <div class="concept-content" id="content-directed-1">
+    <iframe src="stage4/stitch-directed/concept-1-enhanced-search.html"></iframe>
+  </div>
+  <div class="concept-content" id="content-directed-2">
+    <iframe src="stage4/stitch-directed/concept-2-dashboard-search.html"></iframe>
+  </div>
+  <div class="concept-content" id="content-directed-3">
+    <iframe src="stage4/stitch-directed/concept-3-sidebar-nav.html"></iframe>
+  </div>
+</div>
+
+<div class="compare-bar">
+  <strong>Legend:</strong>
+  <div class="key"><div class="dot dot-bw"></div> A: B&W -- agent designs + codes</div>
+  <div class="key"><div class="dot dot-creative"></div> B: Creative -- Stitch designs + renders</div>
+  <div class="key"><div class="dot dot-directed"></div> C: Directed -- agent designs, Stitch renders</div>
+  <div style="margin-left:auto;font-size:11px">A vs C = renderer &middot; A vs B = designer &middot; B vs C = whose ideas</div>
+</div>
+
+<script>
+document.querySelectorAll('.branch-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.branch-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.branch-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + btn.dataset.branch).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.concept-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const panel = tab.closest('.branch-panel');
+    panel.querySelectorAll('.concept-tab').forEach(t => t.classList.remove('active'));
+    panel.querySelectorAll('.concept-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('content-' + tab.dataset.concept).classList.add('active');
+  });
+});
+
+const params = new URLSearchParams(window.location.search);
+const startBranch = params.get('branch');
+if (startBranch) {
+  const btn = document.querySelector('.branch-btn[data-branch="' + startBranch + '"]');
+  if (btn) btn.click();
+}
+</script>
+
+</body>
+</html>

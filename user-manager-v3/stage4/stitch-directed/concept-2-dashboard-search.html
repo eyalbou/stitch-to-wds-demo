@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard + Search — WDS Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Wix Madefor Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: #f0f4f7;
+      color: #162d3d;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .material-symbols-outlined {
+      font-family: "Material Symbols Outlined";
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      font-feature-settings: "liga";
+      -webkit-font-smoothing: antialiased;
+      vertical-align: middle;
+    }
+    .top-bar {
+      height: 48px;
+      background: #162d3d;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+    .top-bar__left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .top-bar__home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 18px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .top-bar__home:hover,
+    .top-bar__home:focus-visible {
+      background: rgba(255, 255, 255, 0.12);
+      outline: none;
+    }
+    .top-bar__brand {
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: -0.02em;
+    }
+    .top-bar__btn {
+      background: transparent;
+      color: #fff;
+      border: 1px solid #fff;
+      padding: 6px 18px;
+      font: inherit;
+      font-weight: 600;
+      font-size: 12px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .top-bar__btn:hover,
+    .top-bar__btn:focus-visible {
+      background: rgba(255, 255, 255, 0.15);
+      outline: none;
+    }
+    .shell {
+      max-width: 1248px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+      background: #f0f4f7;
+    }
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 1024px) {
+      .kpi-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
+      .kpi-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .kpi-card {
+      background: #fff;
+      border: 1px solid #dfe5eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+      padding: 24px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .kpi-card:hover {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+    .kpi-card.is-active {
+      border-color: #116dff;
+      box-shadow: 0 0 0 1px #116dff, 0 1px 6px rgba(0, 0, 0, 0.06);
+    }
+    .kpi-card__head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .kpi-card__head .material-symbols-outlined {
+      color: #116dff;
+      font-size: 24px;
+    }
+    .kpi-card__label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #576475;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .kpi-card__value {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: #162d3d;
+      margin-bottom: 12px;
+    }
+    .kpi-card__meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge--error {
+      background: #ee5951;
+      color: #fff;
+    }
+    .trend--success {
+      color: #60bc57;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .text-secondary {
+      color: #576475;
+      font-size: 14px;
+    }
+    .page-title {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 24px;
+      color: #162d3d;
+      line-height: 1.15;
+    }
+    .search-block {
+      max-width: 900px;
+      margin: 0 auto 18px;
+    }
+    .search-row {
+      display: flex;
+      align-items: stretch;
+      flex-wrap: wrap;
+      gap: 0;
+      background: #fff;
+      border: 1px solid #dfe5eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+      min-height: 48px;
+      overflow: hidden;
+    }
+    .search-row__icon-wrap {
+      display: flex;
+      align-items: center;
+      padding: 0 12px 0 18px;
+      color: #576475;
+    }
+    .search-row__input {
+      flex: 1 1 180px;
+      min-width: 0;
+      border: none;
+      font: inherit;
+      font-size: 14px;
+      color: #162d3d;
+      padding: 12px 12px 12px 0;
+      background: transparent;
+      outline: none;
+    }
+    .search-row__input::placeholder {
+      color: #576475;
+    }
+    .search-row__divider {
+      width: 1px;
+      align-self: stretch;
+      background: #dfe5eb;
+      margin: 12px 0;
+    }
+    .search-row__select-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-row__select {
+      appearance: none;
+      border: none;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: #162d3d;
+      padding: 12px 36px 12px 18px;
+      background: transparent;
+      cursor: pointer;
+      outline: none;
+    }
+    .search-row__select-chevron {
+      position: absolute;
+      right: 12px;
+      pointer-events: none;
+      color: #576475;
+      font-size: 18px;
+    }
+    .search-row__submit {
+      border: none;
+      background: #116dff;
+      color: #fff;
+      font: inherit;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 0 30px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      border-radius: 0;
+      min-height: 48px;
+    }
+    .search-row__submit:hover,
+    .search-row__submit:focus-visible {
+      background: #0e5cd7;
+      outline: none;
+    }
+    .search-row__submit:active {
+      background: #0b4eb5;
+    }
+    .filter-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+    .filter-pill {
+      border: 1px solid #dfe5eb;
+      background: #fff;
+      color: #576475;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    }
+    .filter-pill:hover,
+    .filter-pill:focus-visible {
+      border-color: #116dff;
+      color: #116dff;
+      outline: none;
+    }
+    .filter-pill.is-active {
+      background: #116dff;
+      border-color: #116dff;
+      color: #fff;
+    }
+    .search-status {
+      text-align: center;
+      font-size: 14px;
+      color: #576475;
+      min-height: 24px;
+      margin-bottom: 12px;
+    }
+    .search-status.is-busy {
+      color: #116dff;
+      font-weight: 600;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #dfe5eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+      padding: 24px;
+    }
+    .card + .card {
+      margin-top: 24px;
+    }
+    .card__title {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 0 18px;
+      color: #162d3d;
+      line-height: 1.2;
+    }
+    .links-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .links-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .useful-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      border: 1px solid #dfe5eb;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #116dff;
+      font-size: 14px;
+      font-weight: 600;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .useful-link:hover,
+    .useful-link:focus-visible {
+      border-color: #116dff;
+      background: rgba(17, 109, 255, 0.04);
+      outline: none;
+    }
+    .useful-link .material-symbols-outlined {
+      font-size: 18px;
+      color: #576475;
+      flex-shrink: 0;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .status-row .material-symbols-outlined {
+      font-size: 28px;
+      color: #60bc57;
+    }
+    .status-row__text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #162d3d;
+    }
+    .activity-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      margin: 0 -12px;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+    }
+    .activity-item:hover {
+      background: #f0f4f7;
+    }
+    .activity-item + .activity-item {
+      margin-top: 6px;
+    }
+    .activity-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 18px;
+      background: #116dff;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .activity-body {
+      flex: 1;
+      min-width: 0;
+      font-size: 14px;
+      color: #162d3d;
+    }
+    .activity-body strong {
+      font-weight: 700;
+    }
+    .activity-time {
+      font-size: 12px;
+      color: #576475;
+      margin-top: 6px;
+    }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-bar__left">
+      <button type="button" class="top-bar__home" aria-label="Home">
+        <span class="material-symbols-outlined" aria-hidden="true">home</span>
+      </button>
+      <span class="top-bar__brand">USER MANAGER</span>
+    </div>
+    <button type="button" class="top-bar__btn">Give Feedback</button>
+  </header>
+
+  <main class="shell">
+    <div class="kpi-row" id="kpiRow">
+      <article class="kpi-card" data-kpi tabindex="0" role="button" aria-pressed="false">
+        <div class="kpi-card__head">
+          <span class="material-symbols-outlined" aria-hidden="true">confirmation_number</span>
+          <span class="kpi-card__label">Open Tickets</span>
+        </div>
+        <div class="kpi-card__value">42</div>
+        <div class="kpi-card__meta">
+          <span class="badge badge--error">3 critical</span>
+        </div>
+      </article>
+      <article class="kpi-card" data-kpi tabindex="0" role="button" aria-pressed="false">
+        <div class="kpi-card__head">
+          <span class="material-symbols-outlined" aria-hidden="true">timer</span>
+          <span class="kpi-card__label">Avg Lookup Time</span>
+        </div>
+        <div class="kpi-card__value">8.2s</div>
+        <div class="kpi-card__meta">
+          <span class="trend--success">↓ 2.1s</span>
+        </div>
+      </article>
+      <article class="kpi-card" data-kpi tabindex="0" role="button" aria-pressed="false">
+        <div class="kpi-card__head">
+          <span class="material-symbols-outlined" aria-hidden="true">group</span>
+          <span class="kpi-card__label">Active Agents</span>
+        </div>
+        <div class="kpi-card__value">47</div>
+        <div class="kpi-card__meta">
+          <span class="text-secondary">of 52 online</span>
+        </div>
+      </article>
+      <article class="kpi-card" data-kpi tabindex="0" role="button" aria-pressed="false">
+        <div class="kpi-card__head">
+          <span class="material-symbols-outlined" aria-hidden="true">policy</span>
+          <span class="kpi-card__label">GDPR Queue</span>
+        </div>
+        <div class="kpi-card__value">12 pending</div>
+        <div class="kpi-card__meta">
+          <span class="badge badge--error">3 overdue</span>
+        </div>
+      </article>
+    </div>
+
+    <h1 class="page-title">Search for a user or account</h1>
+
+    <div class="search-block">
+      <div class="search-row" role="search">
+        <div class="search-row__icon-wrap">
+          <span class="material-symbols-outlined" aria-hidden="true">search</span>
+        </div>
+        <input
+          id="searchInput"
+          class="search-row__input"
+          type="search"
+          placeholder="Enter user ID, email, or account name"
+          autocomplete="off"
+        />
+        <span class="search-row__divider" aria-hidden="true"></span>
+        <div class="search-row__select-wrap">
+          <label for="searchScope" class="visually-hidden">Search scope</label>
+          <select id="searchScope" class="search-row__select" aria-label="Search by">
+            <option>By user ID</option>
+            <option>By email</option>
+            <option>By account</option>
+          </select>
+          <span class="material-symbols-outlined search-row__select-chevron" aria-hidden="true">expand_more</span>
+        </div>
+        <button type="button" class="search-row__submit" id="searchBtn">Search</button>
+      </div>
+    </div>
+
+    <p class="search-status" id="searchStatus" aria-live="polite"></p>
+
+    <div class="filter-row" role="group" aria-label="Result filters">
+      <button type="button" class="filter-pill is-active" data-filter>All</button>
+      <button type="button" class="filter-pill" data-filter>Active</button>
+      <button type="button" class="filter-pill" data-filter>Suspended</button>
+    </div>
+
+    <div class="two-col">
+      <section class="card">
+        <h2 class="card__title">Useful Links</h2>
+        <div class="links-grid">
+          <a class="useful-link" href="#" onclick="return false;">
+            Wix Help Center
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          <a class="useful-link" href="#" onclick="return false;">
+            Support QA - Known Issues
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          <a class="useful-link" href="#" onclick="return false;">
+            Wix Answers
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          <a class="useful-link" href="#" onclick="return false;">
+            Wix Status Page
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          <a class="useful-link" href="#" onclick="return false;">
+            CS Internal
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          <a class="useful-link" href="#" onclick="return false;">
+            Customer Care - Monday Updates
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          <a class="useful-link" href="#" onclick="return false;">
+            Wix Library
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+        </div>
+      </section>
+
+      <div>
+        <section class="card">
+          <h2 class="card__title">Wix Services Status</h2>
+          <div class="status-row">
+            <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+            <span class="status-row__text">Everything is working</span>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="card__title">Team Activity</h2>
+          <ul class="activity-list">
+            <li class="activity-item">
+              <div class="activity-avatar" aria-hidden="true">S</div>
+              <div class="activity-body">
+                <strong>Sarah</strong> -- reset password for john@...
+                <div class="activity-time">5m ago</div>
+              </div>
+            </li>
+            <li class="activity-item">
+              <div class="activity-avatar" aria-hidden="true">M</div>
+              <div class="activity-body">
+                <strong>Mike</strong> -- suspended account #4521
+                <div class="activity-time">12m ago</div>
+              </div>
+            </li>
+            <li class="activity-item">
+              <div class="activity-avatar" aria-hidden="true">L</div>
+              <div class="activity-body">
+                <strong>Lisa</strong> -- exported GDPR data
+                <div class="activity-time">18m ago</div>
+              </div>
+            </li>
+            <li class="activity-item">
+              <div class="activity-avatar" aria-hidden="true">T</div>
+              <div class="activity-body">
+                <strong>Tom</strong> -- unlocked account #7891
+                <div class="activity-time">25m ago</div>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var kpiCards = document.querySelectorAll("[data-kpi]");
+      kpiCards.forEach(function (card) {
+        function activate() {
+          var wasActive = card.classList.contains("is-active");
+          kpiCards.forEach(function (c) {
+            c.classList.remove("is-active");
+            c.setAttribute("aria-pressed", "false");
+          });
+          if (!wasActive) {
+            card.classList.add("is-active");
+            card.setAttribute("aria-pressed", "true");
+          }
+        }
+        card.addEventListener("click", activate);
+        card.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            activate();
+          }
+        });
+      });
+
+      var searchInput = document.getElementById("searchInput");
+      var searchBtn = document.getElementById("searchBtn");
+      var searchStatus = document.getElementById("searchStatus");
+      var filterBtns = document.querySelectorAll("[data-filter]");
+
+      function randomCount() {
+        return Math.floor(Math.random() * 48) + 3;
+      }
+
+      function runSearch() {
+        var q = (searchInput.value || "").trim();
+        searchStatus.textContent = "";
+        searchStatus.classList.add("is-busy");
+        searchStatus.textContent = "Searching...";
+        searchBtn.disabled = true;
+        window.setTimeout(function () {
+          searchStatus.classList.remove("is-busy");
+          searchBtn.disabled = false;
+          var n = randomCount();
+          var label = q ? '"' + q + '"' : "your query";
+          searchStatus.textContent =
+            "Found " + n + " result" + (n === 1 ? "" : "s") + " for " + label + " (mock).";
+        }, 900);
+      }
+
+      searchBtn.addEventListener("click", runSearch);
+      searchInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          runSearch();
+        }
+      });
+
+      filterBtns.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          filterBtns.forEach(function (b) {
+            b.classList.remove("is-active");
+          });
+          btn.classList.add("is-active");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

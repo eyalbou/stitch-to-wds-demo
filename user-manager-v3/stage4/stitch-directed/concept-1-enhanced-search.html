@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enhanced Search Hub — WDS Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Wix Madefor Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: #f0f4f7;
+      color: #162d3d;
+    }
+    .material-symbols-outlined {
+      font-family: "Material Symbols Outlined";
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      font-feature-settings: "liga";
+      -webkit-font-smoothing: antialiased;
+      vertical-align: middle;
+    }
+    .top-bar {
+      height: 48px;
+      background: #162d3d;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+    .top-bar__left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .top-bar__home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 18px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .top-bar__home:hover,
+    .top-bar__home:focus-visible {
+      background: rgba(255, 255, 255, 0.12);
+      outline: none;
+    }
+    .top-bar__brand {
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+    }
+    .top-bar__btn {
+      background: transparent;
+      color: #fff;
+      border: 1px solid #fff;
+      padding: 6px 18px;
+      font: inherit;
+      font-weight: 600;
+      font-size: 12px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .top-bar__btn:hover,
+    .top-bar__btn:focus-visible {
+      background: rgba(255, 255, 255, 0.15);
+      outline: none;
+    }
+    .shell {
+      max-width: 1248px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+      background: #f0f4f7;
+    }
+    .page-title {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 32px;
+      color: #162d3d;
+      line-height: 1.15;
+    }
+    .search-wrap {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto 40px;
+    }
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: #fff;
+      border: 1px solid #dfe5eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+      min-height: 48px;
+    }
+    .search-row__input-wrap {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px 6px 12px;
+      border-right: 1px solid #dfe5eb;
+    }
+    .search-row__input-wrap .material-symbols-outlined {
+      color: #576475;
+      font-size: 22px;
+    }
+    .search-row__input {
+      flex: 1;
+      min-width: 0;
+      border: none;
+      height: 36px;
+      padding: 0 6px;
+      font: inherit;
+      font-size: 14px;
+      color: #162d3d;
+      background: transparent;
+    }
+    .search-row__input:focus {
+      outline: none;
+    }
+    .search-row__input::placeholder {
+      color: #576475;
+    }
+    .select-wrap {
+      position: relative;
+      flex: 0 0 200px;
+      border-right: 1px solid #dfe5eb;
+    }
+    .select-trigger {
+      width: 100%;
+      height: 48px;
+      padding: 0 12px;
+      border: none;
+      background: #fff;
+      color: #162d3d;
+      font: inherit;
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: background 0.2s ease;
+    }
+    .select-trigger:hover,
+    .select-trigger:focus-visible {
+      background: #f0f4f7;
+      outline: none;
+    }
+    .select-trigger__caret {
+      color: #576475;
+      flex-shrink: 0;
+    }
+    .select-list {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      margin: 0;
+      padding: 6px 0;
+      list-style: none;
+      background: #fff;
+      border: 1px solid #dfe5eb;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(22, 45, 61, 0.12);
+      z-index: 30;
+    }
+    .select-list.is-open {
+      display: block;
+    }
+    .select-option {
+      padding: 10px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .select-option:hover,
+    .select-option.is-selected {
+      background: rgba(17, 109, 255, 0.08);
+      color: #116dff;
+    }
+    .select-option.is-selected {
+      font-weight: 600;
+    }
+    .search-row__submit {
+      flex: 0 0 auto;
+      margin: 6px;
+      border: none;
+      background: #116dff;
+      color: #fff;
+      font: inherit;
+      font-weight: 600;
+      font-size: 14px;
+      height: 36px;
+      padding: 0 24px;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .search-row__submit:hover,
+    .search-row__submit:focus-visible {
+      background: #0e5cd7;
+      outline: none;
+    }
+    .dropdown {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      background: #fff;
+      border: 1px solid #dfe5eb;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(22, 45, 61, 0.12);
+      z-index: 20;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+    .dropdown.is-visible {
+      display: block;
+    }
+    .dropdown__section-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid #dfe5eb;
+      background: #f0f4f7;
+      color: #576475;
+    }
+    .dropdown__item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border-bottom: 1px solid #dfe5eb;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .dropdown__item:last-child {
+      border-bottom: none;
+    }
+    .dropdown__item:hover,
+    .dropdown__item.is-active {
+      background: rgba(17, 109, 255, 0.06);
+    }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .dropdown__body {
+      min-width: 0;
+      flex: 1;
+    }
+    .dropdown__name {
+      font-weight: 700;
+      font-size: 14px;
+      color: #162d3d;
+    }
+    .dropdown__meta {
+      font-size: 12px;
+      margin-top: 2px;
+      color: #576475;
+    }
+    .section-heading {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 0 16px;
+      color: #162d3d;
+    }
+    .recent-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    .recent-card {
+      flex: 1 1 calc(25% - 18px);
+      min-width: 200px;
+      padding: 18px;
+      border: 1px solid #dfe5eb;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+      color: #162d3d;
+      cursor: pointer;
+      text-align: left;
+      font: inherit;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .recent-card:hover,
+    .recent-card:focus-visible {
+      box-shadow: 0 8px 24px rgba(22, 45, 61, 0.12);
+      transform: translateY(-2px);
+      outline: none;
+    }
+    .recent-card__row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .recent-card__avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .recent-card__title {
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .recent-card__email {
+      font-size: 12px;
+      margin-top: 2px;
+      color: #576475;
+    }
+    .recent-card__time {
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 12px;
+      color: #576475;
+    }
+    .bottom {
+      display: flex;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .bottom__main {
+      flex: 1;
+      min-width: 0;
+    }
+    .bottom__aside {
+      flex: 0 0 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .wds-card {
+      background: #fff;
+      border: 1px solid #dfe5eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+      padding: 24px;
+    }
+    .links-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .link-cell {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid #dfe5eb;
+      border-radius: 8px;
+      background: #fff;
+      color: #162d3d;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .link-cell:hover,
+    .link-cell:focus-visible {
+      border-color: #116dff;
+      box-shadow: 0 0 0 1px #116dff;
+      outline: none;
+    }
+    .link-cell .material-symbols-outlined {
+      font-size: 18px;
+      color: #576475;
+      flex-shrink: 0;
+    }
+    .link-cell:hover .material-symbols-outlined,
+    .link-cell:focus-visible .material-symbols-outlined {
+      color: #116dff;
+    }
+    .tip-card__head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .tip-card__head .material-symbols-outlined {
+      color: #fdb10c;
+      font-size: 22px;
+    }
+    .aside-card__title {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0;
+      color: #162d3d;
+    }
+    .tip-carousel {
+      position: relative;
+      min-height: 72px;
+    }
+    .tip-slide {
+      display: none;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #576475;
+      margin: 0;
+    }
+    .tip-slide.is-active {
+      display: block;
+    }
+    .tip-dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+    .tip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: none;
+      padding: 0;
+      background: #dfe5eb;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .tip-dot.is-active {
+      background: #116dff;
+      transform: scale(1.15);
+    }
+    .tip-dot:hover,
+    .tip-dot:focus-visible {
+      background: #116dff;
+      opacity: 0.85;
+      outline: none;
+    }
+    .tip-feedback-link {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #116dff;
+      text-decoration: none;
+    }
+    .tip-feedback-link:hover,
+    .tip-feedback-link:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #162d3d;
+    }
+    .status-row .material-symbols-outlined {
+      font-size: 24px;
+      color: #60bc57;
+    }
+    .status-text-bold {
+      font-weight: 700;
+    }
+    @media (max-width: 900px) {
+      .search-row {
+        flex-wrap: wrap;
+        padding: 6px;
+        gap: 6px;
+      }
+      .search-row__input-wrap {
+        flex: 1 1 100%;
+        border-right: none;
+        border: 1px solid #dfe5eb;
+        border-radius: 8px;
+      }
+      .select-wrap {
+        flex: 1 1 calc(50% - 6px);
+        border-right: none;
+        border: 1px solid #dfe5eb;
+        border-radius: 8px;
+      }
+      .search-row__submit {
+        flex: 1 1 calc(50% - 6px);
+      }
+      .bottom {
+        flex-direction: column;
+      }
+      .bottom__aside {
+        flex: none;
+        width: 100%;
+      }
+      .links-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-bar__left">
+      <button type="button" class="top-bar__home" aria-label="Home" data-hook="nav-home">
+        <span class="material-symbols-outlined" aria-hidden="true">home</span>
+      </button>
+      <span class="top-bar__brand">USER MANAGER</span>
+    </div>
+    <button type="button" class="top-bar__btn" data-hook="give-feedback">Give Feedback</button>
+  </header>
+
+  <main class="shell">
+    <h1 class="page-title">Search for a user or account</h1>
+
+    <div class="search-wrap" id="searchWrap">
+      <div class="search-row">
+        <div class="search-row__input-wrap">
+          <span class="material-symbols-outlined" aria-hidden="true">search</span>
+          <input
+            type="text"
+            class="search-row__input"
+            id="searchInput"
+            placeholder="Search by ID, email, name, or site URL"
+            autocomplete="off"
+            aria-expanded="false"
+            aria-controls="searchDropdown"
+            aria-autocomplete="list"
+          />
+        </div>
+        <div class="select-wrap" id="typeSelectWrap">
+          <button
+            type="button"
+            class="select-trigger"
+            id="typeSelectTrigger"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            aria-controls="typeSelectList"
+          >
+            <span id="typeSelectLabel">By user ID</span>
+            <span class="material-symbols-outlined select-trigger__caret" aria-hidden="true">expand_more</span>
+          </button>
+          <ul class="select-list" id="typeSelectList" role="listbox" aria-label="Search type">
+            <li class="select-option is-selected" role="option" data-value="id" tabindex="0">By user ID</li>
+            <li class="select-option" role="option" data-value="email" tabindex="0">By email</li>
+            <li class="select-option" role="option" data-value="account" tabindex="0">By account name</li>
+            <li class="select-option" role="option" data-value="site" tabindex="0">By site URL</li>
+          </ul>
+        </div>
+        <button type="button" class="search-row__submit" id="searchBtn">Search</button>
+      </div>
+
+      <div class="dropdown" id="searchDropdown" role="listbox" aria-label="Search suggestions"></div>
+    </div>
+
+    <h2 class="section-heading">Recent Lookups</h2>
+    <div class="recent-grid" role="list">
+      <button type="button" class="recent-card" data-hook="recent-1">
+        <div class="recent-card__row">
+          <div class="recent-card__avatar" style="background: #116dff" aria-hidden="true">AC</div>
+          <div>
+            <div class="recent-card__title">Acme Co.</div>
+            <div class="recent-card__email">billing@acme.example</div>
+          </div>
+        </div>
+        <div class="recent-card__time">2h ago</div>
+      </button>
+      <button type="button" class="recent-card" data-hook="recent-2">
+        <div class="recent-card__row">
+          <div class="recent-card__avatar" style="background: #60bc57" aria-hidden="true">JD</div>
+          <div>
+            <div class="recent-card__title">Jordan Diaz</div>
+            <div class="recent-card__email">j.diaz@example.com</div>
+          </div>
+        </div>
+        <div class="recent-card__time">2h ago</div>
+      </button>
+      <button type="button" class="recent-card" data-hook="recent-3">
+        <div class="recent-card__row">
+          <div class="recent-card__avatar" style="background: #fdb10c" aria-hidden="true">NS</div>
+          <div>
+            <div class="recent-card__title">Northwind Studio</div>
+            <div class="recent-card__email">hello@northwind.example</div>
+          </div>
+        </div>
+        <div class="recent-card__time">2h ago</div>
+      </button>
+      <button type="button" class="recent-card" data-hook="recent-4">
+        <div class="recent-card__row">
+          <div class="recent-card__avatar" style="background: #ee5951" aria-hidden="true">PL</div>
+          <div>
+            <div class="recent-card__title">Pixel Loft</div>
+            <div class="recent-card__email">team@pixelloft.example</div>
+          </div>
+        </div>
+        <div class="recent-card__time">2h ago</div>
+      </button>
+    </div>
+
+    <div class="bottom">
+      <div class="bottom__main wds-card">
+        <h2 class="section-heading" style="margin-top: 0">Useful Links</h2>
+        <nav class="links-grid" aria-label="Useful links">
+          <a class="link-cell" href="#" data-hook="link-help">
+            Wix Help Center
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          <a class="link-cell" href="#" data-hook="link-qa">
+            Support QA - Known Issues
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          <a class="link-cell" href="#" data-hook="link-answers">
+            Wix Answers
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          <a class="link-cell" href="#" data-hook="link-status">
+            Wix Status Page
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          <a class="link-cell" href="#" data-hook="link-cs">
+            CS Internal
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          <a class="link-cell" href="#" data-hook="link-monday">
+            Customer Care - Monday Updates
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          <a class="link-cell" href="#" data-hook="link-library" style="grid-column: 1 / -1">
+            Wix Library
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+        </nav>
+      </div>
+      <aside class="bottom__aside">
+        <div class="wds-card tip-card" id="tipCard">
+          <div class="tip-card__head">
+            <span class="material-symbols-outlined" aria-hidden="true">lightbulb</span>
+            <h3 class="aside-card__title">Tip</h3>
+          </div>
+          <div class="tip-carousel" id="tipCarousel">
+            <p class="tip-slide is-active" data-slide="0">
+              Paste a full site URL or user UUID to jump straight to the record. Use the type selector when you know which field you are matching.
+            </p>
+            <p class="tip-slide" data-slide="1">
+              Narrow results faster by picking the search type before you paste long identifiers. Recent lookups stay on this page for quick return visits.
+            </p>
+            <p class="tip-slide" data-slide="2">
+              Spot something confusing or missing? Tell us what would make search work better for your team.
+            </p>
+          </div>
+          <a class="tip-feedback-link" href="#" data-hook="tip-feedback">Send us your feedback</a>
+          <div class="tip-dots" role="tablist" aria-label="Tip slides">
+            <button type="button" class="tip-dot is-active" role="tab" aria-selected="true" aria-label="Tip 1" data-tip="0"></button>
+            <button type="button" class="tip-dot" role="tab" aria-selected="false" aria-label="Tip 2" data-tip="1"></button>
+            <button type="button" class="tip-dot" role="tab" aria-selected="false" aria-label="Tip 3" data-tip="2"></button>
+          </div>
+        </div>
+        <div class="wds-card">
+          <h3 class="aside-card__title" style="margin-bottom: 12px">Wix Services Status</h3>
+          <div class="status-row">
+            <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+            <span class="status-text-bold">Everything is working</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var AVATAR_COLORS = ["#116dff", "#3b6ef0", "#60bc57", "#fdb10c", "#ee5951", "#576475"];
+
+      function colorForSeed(str) {
+        var h = 0;
+        for (var i = 0; i < str.length; i++) h = (h + str.charCodeAt(i) * (i + 1)) % AVATAR_COLORS.length;
+        return AVATAR_COLORS[h];
+      }
+
+      var RECENT_SEARCHES = [
+        { initials: "MR", name: "Morgan Rivera", email: "m.rivera@example.com", id: "usr_8k2m9q" },
+        { initials: "TB", name: "Taylor Brooks", email: "t.brooks@example.com", id: "usr_3p7n1x" },
+        { initials: "SK", name: "Sam Kim", email: "sam.kim@example.com", id: "usr_9j4h2w" }
+      ];
+
+      var POOL = [
+        { initials: "MR", name: "Morgan Rivera", email: "m.rivera@example.com", id: "usr_8k2m9q" },
+        { initials: "TB", name: "Taylor Brooks", email: "t.brooks@example.com", id: "usr_3p7n1x" },
+        { initials: "SK", name: "Sam Kim", email: "sam.kim@example.com", id: "usr_9j4h2w" },
+        { initials: "LW", name: "Lee Wong", email: "lee@studio.example", id: "usr_1a2b3c" },
+        { initials: "AP", name: "Avery Park", email: "avery.park@example.com", id: "usr_4d5e6f" }
+      ];
+
+      var MOCK_SEARCH_RESULTS = [
+        { initials: "MR", name: "Morgan Rivera", email: "m.rivera@example.com", id: "usr_8k2m9q" },
+        { initials: "TB", name: "Taylor Brooks", email: "t.brooks@example.com", id: "usr_3p7n1x" },
+        { initials: "SK", name: "Sam Kim", email: "sam.kim@example.com", id: "usr_9j4h2w" }
+      ];
+
+      var searchInput = document.getElementById("searchInput");
+      var searchBtn = document.getElementById("searchBtn");
+      var searchDropdown = document.getElementById("searchDropdown");
+      var searchWrap = document.getElementById("searchWrap");
+      var typeTrigger = document.getElementById("typeSelectTrigger");
+      var typeLabel = document.getElementById("typeSelectLabel");
+      var typeList = document.getElementById("typeSelectList");
+      var typeOptions = typeList.querySelectorAll(".select-option");
+
+      function esc(s) {
+        var d = document.createElement("div");
+        d.textContent = s;
+        return d.innerHTML;
+      }
+
+      function itemHtml(row) {
+        var bg = colorForSeed(row.id + row.initials);
+        return (
+          '<div class="dropdown__item" role="option" tabindex="0">' +
+          '<div class="avatar" style="background:' +
+          esc(bg) +
+          '" aria-hidden="true">' +
+          esc(row.initials) +
+          "</div>" +
+          '<div class="dropdown__body">' +
+          '<div class="dropdown__name">' +
+          esc(row.name) +
+          "</div>" +
+          '<div class="dropdown__meta">' +
+          esc(row.email) +
+          " · " +
+          esc(row.id) +
+          "</div>" +
+          "</div></div>"
+        );
+      }
+
+      function buildSuggestHtml(query) {
+        var q = (query || "").trim().toLowerCase();
+        var matches = !q
+          ? POOL.slice(0, 2)
+          : POOL.filter(function (p) {
+              return (
+                p.name.toLowerCase().indexOf(q) !== -1 ||
+                p.email.toLowerCase().indexOf(q) !== -1 ||
+                p.id.toLowerCase().indexOf(q) !== -1
+              );
+            }).slice(0, 2);
+        var mi = 0;
+        while (matches.length < 2 && mi < POOL.length) {
+          if (matches.indexOf(POOL[mi]) === -1) matches.push(POOL[mi]);
+          mi++;
+        }
+        matches = matches.slice(0, 2);
+        var html = "";
+        html +=
+          '<div class="dropdown__section-label"><span class="material-symbols-outlined" style="font-size:16px">history</span> Recent searches</div>';
+        RECENT_SEARCHES.forEach(function (r) {
+          html += itemHtml(r);
+        });
+        html += '<div class="dropdown__section-label">Matches</div>';
+        matches.forEach(function (r) {
+          html += itemHtml(r);
+        });
+        return html;
+      }
+
+      function buildResultsHtml() {
+        var html = '<div class="dropdown__section-label">Suggestions</div>';
+        MOCK_SEARCH_RESULTS.forEach(function (r) {
+          html += itemHtml(r);
+        });
+        return html;
+      }
+
+      var suggestMode = true;
+
+      function showDropdown(mode) {
+        suggestMode = mode !== "results";
+        if (suggestMode) {
+          searchDropdown.innerHTML = buildSuggestHtml(searchInput.value);
+        } else {
+          searchDropdown.innerHTML = buildResultsHtml();
+        }
+        searchDropdown.classList.add("is-visible");
+        searchInput.setAttribute("aria-expanded", "true");
+      }
+
+      function hideDropdown() {
+        searchDropdown.classList.remove("is-visible");
+        searchInput.setAttribute("aria-expanded", "false");
+      }
+
+      function refreshSuggest() {
+        if (!suggestMode || !searchDropdown.classList.contains("is-visible")) return;
+        searchDropdown.innerHTML = buildSuggestHtml(searchInput.value);
+      }
+
+      searchInput.addEventListener("focus", function () {
+        showDropdown("suggest");
+      });
+
+      searchInput.addEventListener("input", function () {
+        if (!searchDropdown.classList.contains("is-visible")) {
+          showDropdown("suggest");
+        } else if (suggestMode) {
+          refreshSuggest();
+        }
+      });
+
+      searchBtn.addEventListener("click", function () {
+        showDropdown("results");
+      });
+
+      document.addEventListener("click", function (e) {
+        if (!searchWrap.contains(e.target)) {
+          hideDropdown();
+          closeTypeSelect();
+        }
+      });
+
+      searchDropdown.addEventListener("click", function (e) {
+        var item = e.target.closest(".dropdown__item");
+        if (item) {
+          var nameEl = item.querySelector(".dropdown__name");
+          if (nameEl) searchInput.value = nameEl.textContent;
+          hideDropdown();
+        }
+      });
+
+      function closeTypeSelect() {
+        typeList.classList.remove("is-open");
+        typeTrigger.setAttribute("aria-expanded", "false");
+      }
+
+      function openTypeSelect() {
+        typeList.classList.add("is-open");
+        typeTrigger.setAttribute("aria-expanded", "true");
+      }
+
+      typeTrigger.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (typeList.classList.contains("is-open")) closeTypeSelect();
+        else openTypeSelect();
+      });
+
+      typeOptions.forEach(function (opt) {
+        opt.addEventListener("click", function (e) {
+          e.stopPropagation();
+          typeOptions.forEach(function (o) {
+            o.classList.remove("is-selected");
+          });
+          opt.classList.add("is-selected");
+          typeLabel.textContent = opt.textContent;
+          closeTypeSelect();
+        });
+        opt.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            opt.click();
+          }
+        });
+      });
+
+      document.querySelectorAll(".recent-card").forEach(function (card) {
+        card.addEventListener("click", function () {
+          var title = card.querySelector(".recent-card__title");
+          if (title) searchInput.value = title.textContent;
+        });
+      });
+
+      document.querySelectorAll(".link-cell").forEach(function (a) {
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+        });
+      });
+
+      var tipSlides = document.querySelectorAll(".tip-slide");
+      var tipDots = document.querySelectorAll(".tip-dot");
+
+      function setTipSlide(index) {
+        tipSlides.forEach(function (s, i) {
+          s.classList.toggle("is-active", i === index);
+        });
+        tipDots.forEach(function (d, i) {
+          var on = i === index;
+          d.classList.toggle("is-active", on);
+          d.setAttribute("aria-selected", on ? "true" : "false");
+        });
+      }
+
+      tipDots.forEach(function (dot) {
+        dot.addEventListener("click", function () {
+          var idx = parseInt(dot.getAttribute("data-tip"), 10);
+          if (!isNaN(idx)) setTipSlide(idx);
+        });
+      });
+
+      document.querySelector(".tip-feedback-link").addEventListener("click", function (e) {
+        e.preventDefault();
+      });
+    })();
+  </script>
+</body>
+</html>
