@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Manager — Empty State</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+    .topbar {
+      height: 48px;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      border-bottom: 2px solid #000;
+    }
+    .topbar__brand {
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+    .topbar__link {
+      color: #fff;
+      text-decoration: underline;
+      font-size: 14px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      padding: 0;
+    }
+    .topbar__link:hover {
+      text-decoration: none;
+    }
+    .main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 24px 48px;
+    }
+    .search-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: stretch;
+      margin-bottom: 16px;
+    }
+    .search-row input[type="text"] {
+      flex: 1 1 200px;
+      min-height: 40px;
+      padding: 0 12px;
+      border: 2px solid #000;
+      background: #fff;
+      color: #000;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    .search-row select {
+      min-height: 40px;
+      padding: 0 12px;
+      border: 2px solid #000;
+      background: #fff;
+      color: #000;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .btn {
+      min-height: 40px;
+      padding: 0 20px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border: 2px solid #000;
+    }
+    .btn--primary {
+      background: #000;
+      color: #fff;
+    }
+    .btn--primary:hover {
+      background: #fff;
+      color: #000;
+    }
+    .btn--outline {
+      background: #fff;
+      color: #000;
+    }
+    .btn--outline:hover {
+      background: #000;
+      color: #fff;
+    }
+    .results-line {
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+    .empty {
+      text-align: center;
+      padding: 32px 16px 40px;
+    }
+    .empty__icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+    .empty__mag {
+      display: block;
+      width: 28px;
+      height: 28px;
+      border: 2px solid #000;
+      position: relative;
+      box-sizing: border-box;
+      margin: -6px 0 0 -6px;
+    }
+    .empty__mag::after {
+      content: "";
+      position: absolute;
+      width: 2px;
+      height: 18px;
+      background: #000;
+      left: 22px;
+      top: 22px;
+      transform: rotate(45deg);
+      transform-origin: 0 0;
+    }
+    .empty__title {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 12px;
+    }
+    .empty__sub {
+      font-size: 14px;
+      margin: 0 0 28px;
+      max-width: 360px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.45;
+    }
+    .empty__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .tips-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .tips {
+      border: 2px solid #000;
+      background: #fff;
+      padding: 0;
+      margin-top: 40px;
+    }
+    .tips__title {
+      font-size: 14px;
+      font-weight: 700;
+      padding: 12px 16px;
+      border-bottom: 2px solid #000;
+      margin: 0;
+    }
+    .tips__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .tips__item {
+      font-size: 14px;
+      padding: 12px 16px;
+      border-bottom: 2px solid #000;
+      cursor: default;
+      transition: background 0.1s ease;
+    }
+    .tips__item:last-child {
+      border-bottom: none;
+    }
+    .tips__item--on {
+      background: #000;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <span class="topbar__brand">USER MANAGER</span>
+    <button type="button" class="topbar__link" id="feedbackBtn">Give Feedback</button>
+  </header>
+
+  <main class="main">
+    <div class="search-row">
+      <input type="text" id="searchInput" value="xyz123@notfound.com" autocomplete="off" />
+      <select id="searchType" aria-label="Search type">
+        <option value="email" selected>By email</option>
+        <option value="id">By account ID</option>
+        <option value="name">By name</option>
+      </select>
+      <button type="button" class="btn btn--primary" id="searchBtn">Search</button>
+    </div>
+
+    <p class="results-line" id="resultsLine">0 results for 'xyz123@notfound.com'</p>
+
+    <section class="empty" aria-live="polite">
+      <div class="empty__icon" aria-hidden="true"><span class="empty__mag"></span></div>
+      <h1 class="empty__title">No users found</h1>
+      <p class="empty__sub">Try adjusting your search term or switching the search type.</p>
+      <div class="empty__actions">
+        <button type="button" class="btn btn--outline" id="clearBtn">Clear Search</button>
+        <button type="button" class="btn btn--primary" id="homeBtn">Back to Home</button>
+      </div>
+    </section>
+
+    <div class="tips-wrap">
+      <aside class="tips">
+        <h2 class="tips__title">Search Tips</h2>
+        <ul class="tips__list">
+          <li class="tips__item">Search by email for exact matches</li>
+          <li class="tips__item">Use account ID (ACC-XXXXX) for direct lookup</li>
+          <li class="tips__item">Try partial name with at least 3 characters</li>
+        </ul>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var input = document.getElementById("searchInput");
+      var resultsLine = document.getElementById("resultsLine");
+      var searchBtn = document.getElementById("searchBtn");
+      var clearBtn = document.getElementById("clearBtn");
+      var homeBtn = document.getElementById("homeBtn");
+      function runSearch() {
+        var q = input.value.trim();
+        resultsLine.textContent =
+          q.length === 0
+            ? "0 results for ''"
+            : "0 results for '" + q + "'";
+      }
+
+      searchBtn.addEventListener("click", runSearch);
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          runSearch();
+        }
+      });
+
+      clearBtn.addEventListener("click", function () {
+        input.value = "";
+        input.focus();
+        runSearch();
+      });
+
+      homeBtn.addEventListener("click", function () {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = "/";
+        }
+      });
+
+      document.querySelectorAll(".tips__item").forEach(function (el) {
+        el.addEventListener("mouseenter", function () {
+          el.classList.add("tips__item--on");
+        });
+        el.addEventListener("mouseleave", function () {
+          el.classList.remove("tips__item--on");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

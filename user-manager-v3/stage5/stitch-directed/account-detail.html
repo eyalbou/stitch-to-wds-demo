@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Manager — Account Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <style>
+    :root {
+      --wds-primary: #116dff;
+      --wds-primary-hover: #0e5cd7;
+      --wds-text: #162d3d;
+      --wds-secondary: #576475;
+      --wds-bg: #f0f4f7;
+      --wds-surface: #ffffff;
+      --wds-border: #dfe5eb;
+      --wds-success: #60bc57;
+      --wds-destructive: #d0453a;
+      --wds-destructive-hover: #b83b32;
+      --wds-topbar: #162d3d;
+      --card-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Wix Madefor Display", system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+      letter-spacing: -0.02em;
+      color: var(--wds-text);
+      background: var(--wds-bg);
+    }
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      font-size: 24px;
+      line-height: 1;
+      vertical-align: middle;
+    }
+    .topbar {
+      height: 48px;
+      background: var(--wds-topbar);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .topbar-home:hover { background: rgba(255, 255, 255, 0.2); }
+    .topbar-home .material-symbols-outlined { font-size: 22px; }
+    .topbar-title { font-weight: 700; font-size: 13px; letter-spacing: 0.06em; }
+    .give-feedback {
+      height: 36px;
+      padding: 0 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: transparent;
+      color: #fff;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .give-feedback:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 24px 48px;
+    }
+    .breadcrumb {
+      margin-bottom: 24px;
+      font-size: 13px;
+      color: var(--wds-secondary);
+    }
+    .breadcrumb a {
+      color: var(--wds-primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .card {
+      border: 1px solid var(--wds-border);
+      border-radius: 8px;
+      background: var(--wds-surface);
+      box-shadow: var(--card-shadow);
+      margin-bottom: 0;
+    }
+    .profile-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 24px;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .profile-left { display: flex; gap: 20px; align-items: flex-start; }
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #116dff, #5b9cff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .profile-meta .name { font-weight: 700; font-size: 18px; margin-bottom: 6px; letter-spacing: -0.025em; }
+    .profile-meta .muted { font-size: 13px; color: var(--wds-secondary); margin-bottom: 4px; }
+    .profile-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 16px;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(96, 188, 87, 0.15);
+      color: #3d8f36;
+    }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; }
+    button {
+      font: inherit;
+      cursor: pointer;
+      height: 36px;
+      padding: 0 18px;
+      border-radius: 18px;
+      font-weight: 600;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+    }
+    button:focus-visible {
+      outline: 2px solid var(--wds-primary);
+      outline-offset: 2px;
+    }
+    .btn-secondary {
+      border: 1px solid var(--wds-primary);
+      background: transparent;
+      color: var(--wds-primary);
+    }
+    .btn-secondary:hover {
+      background: rgba(17, 109, 255, 0.06);
+    }
+    .btn-destructive {
+      border: none;
+      background: var(--wds-destructive);
+      color: #fff;
+    }
+    .btn-destructive:hover { background: var(--wds-destructive-hover); }
+    .tabs-wrap {
+      background: var(--wds-surface);
+      border: 1px solid var(--wds-border);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      box-shadow: var(--card-shadow);
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      padding: 0 8px;
+      border-bottom: 1px solid var(--wds-border);
+    }
+    .tab {
+      position: relative;
+      padding: 14px 16px;
+      background: transparent;
+      color: var(--wds-secondary);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 600;
+      border: none;
+      margin: 0;
+    }
+    .tab:hover { color: var(--wds-text); }
+    .tab.active {
+      color: var(--wds-primary);
+    }
+    .tab.active::after {
+      content: "";
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 0;
+      height: 3px;
+      background: var(--wds-primary);
+      border-radius: 3px 3px 0 0;
+    }
+    .tab-panels {
+      border: 1px solid var(--wds-border);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      background: var(--wds-surface);
+      box-shadow: var(--card-shadow);
+      min-height: 320px;
+    }
+    .panel { display: none; padding: 24px; }
+    .panel.active { display: block; }
+    .two-col { display: flex; gap: 0; margin: -24px; }
+    .col-left {
+      width: 60%;
+      border-right: 1px solid var(--wds-border);
+      padding: 24px;
+    }
+    .col-right { width: 40%; padding: 24px; }
+    .section-title {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--wds-border);
+      letter-spacing: -0.02em;
+    }
+    .info-list { list-style: none; margin-bottom: 24px; }
+    .info-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--wds-border);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+    }
+    .info-label { font-weight: 600; color: var(--wds-secondary); }
+    .progress-wrap {
+      flex: 1;
+      max-width: 200px;
+      height: 8px;
+      border-radius: 4px;
+      border: 1px solid var(--wds-border);
+      background: var(--wds-bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: var(--wds-primary);
+      border-radius: 4px;
+      transition: width 1.2s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+    .progress-fill.animate { width: 54.67%; }
+    .storage-row { align-items: center; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--wds-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      border-bottom: 1px solid var(--wds-border);
+      padding: 12px 14px;
+      text-align: left;
+    }
+    th {
+      background: var(--wds-bg);
+      color: var(--wds-text);
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: rgba(240, 244, 247, 0.5); }
+    .sub-card {
+      border: 1px solid var(--wds-border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      background: var(--wds-bg);
+    }
+    .sub-card:last-of-type { margin-bottom: 0; }
+    .sub-card h4 { font-weight: 700; margin-bottom: 6px; font-size: 14px; }
+    .sub-card div { font-size: 13px; color: var(--wds-secondary); }
+    .quick-actions { list-style: none; margin: 16px 0; }
+    .quick-actions li {
+      border: 1px solid var(--wds-border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      background: var(--wds-surface);
+      color: var(--wds-text);
+      font-weight: 500;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .quick-actions li:last-child { margin-bottom: 0; }
+    .quick-actions li:hover {
+      border-color: var(--wds-primary);
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    }
+    .notes textarea {
+      width: 100%;
+      min-height: 120px;
+      border: 1px solid var(--wds-border);
+      border-radius: 8px;
+      padding: 12px;
+      font: inherit;
+      resize: vertical;
+      background: var(--wds-surface);
+      color: var(--wds-text);
+    }
+    .notes textarea:focus {
+      outline: none;
+      border-color: var(--wds-primary);
+      box-shadow: 0 0 0 2px rgba(17, 109, 255, 0.2);
+    }
+    .feedback {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--wds-border);
+      border-radius: 8px;
+      background: var(--wds-bg);
+      display: none;
+      font-size: 13px;
+      color: var(--wds-secondary);
+    }
+    .feedback.visible { display: block; }
+    .action-msg {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border: 1px dashed var(--wds-primary);
+      border-radius: 8px;
+      display: none;
+      font-size: 13px;
+      color: var(--wds-text);
+      background: rgba(17, 109, 255, 0.04);
+    }
+    .action-msg.visible { display: block; }
+    .placeholder { color: var(--wds-secondary); }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <button type="button" class="topbar-home" aria-label="Home" data-hook="topbar-home">
+        <span class="material-symbols-outlined" aria-hidden="true">home</span>
+      </button>
+      <span class="topbar-title">USER MANAGER</span>
+    </div>
+    <button type="button" class="give-feedback" id="feedback-link" data-hook="give-feedback">Give Feedback</button>
+  </header>
+
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="search-results.html">User Manager</a> &gt; John Doe
+    </nav>
+
+    <section class="card profile-header" aria-label="Profile">
+      <div class="profile-left">
+        <div class="avatar" aria-hidden="true">JD</div>
+        <div class="profile-meta">
+          <div class="name">John Doe</div>
+          <div class="muted">john@example.com</div>
+          <div class="muted">ACC-2847593</div>
+        </div>
+      </div>
+      <div class="profile-right">
+        <span class="status-badge">Active</span>
+        <div class="btn-row">
+          <button type="button" class="btn-secondary" data-action="reset" data-hook="reset-password">Reset Password</button>
+          <button type="button" class="btn-destructive" data-action="suspend" data-hook="suspend">Suspend</button>
+          <button type="button" class="btn-secondary" data-action="email" data-hook="email-user">Email User</button>
+        </div>
+        <p class="action-msg" id="action-msg" role="status"></p>
+      </div>
+    </section>
+
+    <div class="tabs-wrap">
+      <div class="tabs" role="tablist" aria-label="Account sections">
+        <button type="button" class="tab active" role="tab" aria-selected="true" data-tab="overview" data-hook="tab-overview">Overview</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-tab="sites" data-hook="tab-sites">Sites (12)</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-tab="billing" data-hook="tab-billing">Billing</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-tab="activity" data-hook="tab-activity">Activity</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-tab="security" data-hook="tab-security">Security</button>
+      </div>
+    </div>
+
+    <div class="tab-panels" style="margin-top:0;">
+      <div id="panel-overview" class="panel active" role="tabpanel" data-panel="overview">
+        <div class="two-col">
+          <div class="col-left">
+            <h2 class="section-title">Account info</h2>
+            <ul class="info-list">
+              <li><span class="info-label">Plan</span><span>Premium</span></li>
+              <li><span class="info-label">Created</span><span>Jan 2022</span></li>
+              <li><span class="info-label">Region</span><span>US-East</span></li>
+              <li><span class="info-label">Phone</span><span>+1-555-0123</span></li>
+              <li class="storage-row">
+                <span class="info-label">Storage</span>
+                <span style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                  <span>8.2 / 15 GB</span>
+                  <span class="progress-wrap" aria-hidden="true"><span class="progress-fill" id="storage-bar"></span></span>
+                </span>
+              </li>
+              <li><span class="info-label">Last Login</span><span>2h ago</span></li>
+            </ul>
+            <h2 class="section-title">Recent Sites</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Site name</th>
+                  <th scope="col">URL</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Acme Portfolio</td>
+                  <td>acme.example.com</td>
+                  <td>Published</td>
+                  <td>Mar 12, 2025</td>
+                </tr>
+                <tr>
+                  <td>John Blog</td>
+                  <td>blog.johndoe.test</td>
+                  <td>Draft</td>
+                  <td>Feb 3, 2025</td>
+                </tr>
+                <tr>
+                  <td>Store Front</td>
+                  <td>shop.acme.example</td>
+                  <td>Published</td>
+                  <td>Jan 18, 2024</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-right">
+            <h2 class="section-title">Premium Subscriptions</h2>
+            <div class="sub-card">
+              <h4>Studio Business</h4>
+              <div>Renews Mar 1, 2026</div>
+            </div>
+            <div class="sub-card">
+              <h4>Domain bundle</h4>
+              <div>3 domains included</div>
+            </div>
+            <h2 class="section-title" style="margin-top:24px;">Quick Actions</h2>
+            <ul class="quick-actions" id="quick-actions">
+              <li data-qa="transfer">Transfer Ownership</li>
+              <li data-qa="gdpr">GDPR Manager</li>
+              <li data-qa="impersonate">Impersonate</li>
+              <li data-qa="audit">Audit Log</li>
+            </ul>
+            <p class="feedback" id="qa-feedback" role="status"></p>
+            <h2 class="section-title" style="margin-top:24px;">Notes</h2>
+            <div class="notes">
+              <label for="notes-field" class="visually-hidden">Internal notes</label>
+              <textarea id="notes-field" placeholder="Add internal notes…"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="panel-sites" class="panel" role="tabpanel" data-panel="sites" hidden>
+        <p class="placeholder"><strong>Sites (12)</strong> -- Wireframe: list of 12 sites would appear here.</p>
+      </div>
+      <div id="panel-billing" class="panel" role="tabpanel" data-panel="billing" hidden>
+        <p class="placeholder"><strong>Billing</strong> -- Wireframe: invoices and payment methods would appear here.</p>
+      </div>
+      <div id="panel-activity" class="panel" role="tabpanel" data-panel="activity" hidden>
+        <p class="placeholder"><strong>Activity</strong> -- Wireframe: event timeline would appear here.</p>
+      </div>
+      <div id="panel-security" class="panel" role="tabpanel" data-panel="security" hidden>
+        <p class="placeholder"><strong>Security</strong> -- Wireframe: sessions, 2FA, and login history would appear here.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll(".tab");
+      var panels = document.querySelectorAll(".panel");
+      var actionMsg = document.getElementById("action-msg");
+      var qaFeedback = document.getElementById("qa-feedback");
+      var storageBar = document.getElementById("storage-bar");
+
+      function setActiveTab(id) {
+        tabs.forEach(function (t) {
+          var on = t.getAttribute("data-tab") === id;
+          t.classList.toggle("active", on);
+          t.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        panels.forEach(function (p) {
+          var on = p.getAttribute("data-panel") === id;
+          p.classList.toggle("active", on);
+          p.hidden = !on;
+        });
+      }
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          setActiveTab(tab.getAttribute("data-tab"));
+        });
+      });
+
+      document.querySelectorAll("[data-action]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var a = btn.getAttribute("data-action");
+          var labels = {
+            reset: "Reset Password: confirmation sent for John Doe.",
+            suspend: "Suspend: open suspend flow for ACC-2847593.",
+            email: "Email User: compose opened for john@example.com."
+          };
+          actionMsg.textContent = labels[a] || "Action recorded.";
+          actionMsg.classList.add("visible");
+        });
+      });
+
+      var qaLabels = {
+        transfer: "Transfer Ownership -- action queued.",
+        gdpr: "GDPR Manager -- opening flow.",
+        impersonate: "Impersonate -- session request logged.",
+        audit: "Audit Log -- filter panel would open."
+      };
+      document.querySelectorAll("#quick-actions li").forEach(function (li) {
+        li.addEventListener("click", function () {
+          var key = li.getAttribute("data-qa");
+          qaFeedback.textContent = qaLabels[key] || "Action noted.";
+          qaFeedback.classList.add("visible");
+        });
+      });
+
+      document.getElementById("feedback-link").addEventListener("click", function () {
+        alert("Give Feedback -- demo only.");
+      });
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          if (storageBar) storageBar.classList.add("animate");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

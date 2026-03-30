@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Manager — Account Detail (Wireframe)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #000;
+      background: #fff;
+    }
+    .topbar {
+      height: 48px;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      border-bottom: 2px solid #000;
+    }
+    .topbar a {
+      color: #fff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px 48px;
+    }
+    .breadcrumb {
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+    .breadcrumb a {
+      color: #000;
+      text-decoration: underline;
+    }
+    .card {
+      border: 2px solid #000;
+      background: #fff;
+      margin-bottom: 16px;
+    }
+    .profile-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 16px;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .profile-left {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border: 2px solid #000;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .profile-meta .name { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+    .profile-meta .muted { font-size: 13px; margin-bottom: 2px; }
+    .profile-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+    }
+    .status { font-weight: 700; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+    button {
+      font: inherit;
+      cursor: pointer;
+      padding: 8px 14px;
+      border: 2px solid #000;
+      background: #fff;
+      color: #000;
+    }
+    button.btn-solid {
+      background: #000;
+      color: #fff;
+    }
+    button.btn-solid:hover { background: #000; color: #fff; }
+    button.btn-outline:hover { background: #000; color: #fff; }
+    .tabs {
+      display: flex;
+      border: 2px solid #000;
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    .tab {
+      padding: 10px 16px;
+      border-right: 2px solid #000;
+      background: #fff;
+      color: #000;
+      cursor: pointer;
+      font: inherit;
+      border-top: none;
+      border-left: none;
+      border-bottom: none;
+      margin: 0;
+    }
+    .tab:last-child { border-right: none; }
+    .tab.active {
+      background: #000;
+      color: #fff;
+    }
+    .tab:hover:not(.active) {
+      background: #fff;
+      text-decoration: underline;
+    }
+    .tab-panels {
+      border: 2px solid #000;
+      border-top: 2px solid #000;
+      min-height: 320px;
+    }
+    .panel { display: none; padding: 16px; }
+    .panel.active { display: block; }
+    .two-col {
+      display: flex;
+      gap: 0;
+      border-top: none;
+    }
+    .col-left {
+      width: 60%;
+      border-right: 2px solid #000;
+      padding: 16px;
+      vertical-align: top;
+    }
+    .col-right {
+      width: 40%;
+      padding: 16px;
+      vertical-align: top;
+    }
+    .section-title {
+      font-weight: 700;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #000;
+    }
+    .info-list { list-style: none; margin-bottom: 24px; }
+    .info-list li {
+      padding: 8px 0;
+      border-bottom: 2px solid #000;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .info-list li:last-child { border-bottom: 2px solid #000; }
+    .info-label { font-weight: 700; }
+    .progress-wrap {
+      flex: 1;
+      max-width: 200px;
+      height: 16px;
+      border: 2px solid #000;
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: #000;
+      transition: width 1.2s ease-out;
+    }
+    .progress-fill.animate { width: 54.67%; }
+    .storage-row { align-items: center; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px solid #000;
+    }
+    th, td {
+      border: 2px solid #000;
+      padding: 8px 10px;
+      text-align: left;
+    }
+    th { background: #000; color: #fff; font-weight: 700; }
+    tr:nth-child(even) td { background: #fff; }
+    .sub-card {
+      border: 2px solid #000;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .sub-card:last-of-type { margin-bottom: 0; }
+    .sub-card h4 { font-weight: 700; margin-bottom: 4px; }
+    .quick-actions { list-style: none; margin: 16px 0; }
+    .quick-actions li {
+      border: 2px solid #000;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      background: #fff;
+      color: #000;
+    }
+    .quick-actions li:last-child { margin-bottom: 0; }
+    .quick-actions li:hover {
+      background: #000;
+      color: #fff;
+    }
+    .notes textarea {
+      width: 100%;
+      min-height: 120px;
+      border: 2px solid #000;
+      padding: 10px;
+      font: inherit;
+      resize: vertical;
+      background: #fff;
+      color: #000;
+    }
+    .feedback {
+      margin-top: 12px;
+      padding: 10px;
+      border: 2px solid #000;
+      background: #fff;
+      display: none;
+    }
+    .feedback.visible { display: block; }
+    .action-msg {
+      margin-top: 12px;
+      padding: 10px;
+      border: 2px dashed #000;
+      display: none;
+      font-size: 13px;
+    }
+    .action-msg.visible { display: block; }
+    .placeholder { color: #000; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <span>USER MANAGER</span>
+    <a href="#" id="feedback-link">Give Feedback</a>
+  </header>
+
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="#">User Manager</a> &gt; John Doe
+    </nav>
+
+    <section class="card profile-header" aria-label="Profile">
+      <div class="profile-left">
+        <div class="avatar" aria-hidden="true">JD</div>
+        <div class="profile-meta">
+          <div class="name">John Doe</div>
+          <div class="muted">john@example.com</div>
+          <div class="muted">ACC-2847593</div>
+        </div>
+      </div>
+      <div class="profile-right">
+        <span class="status">Active</span>
+        <div class="btn-row">
+          <button type="button" class="btn-outline" data-action="reset">Reset Password</button>
+          <button type="button" class="btn-solid" data-action="suspend">Suspend</button>
+          <button type="button" class="btn-outline" data-action="email">Email User</button>
+        </div>
+        <p class="action-msg" id="action-msg" role="status"></p>
+      </div>
+    </section>
+
+    <div class="tabs" role="tablist" aria-label="Account sections">
+      <button type="button" class="tab active" role="tab" aria-selected="true" data-tab="overview">Overview</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="sites">Sites (12)</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="billing">Billing</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="activity">Activity</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="security">Security</button>
+    </div>
+
+    <div class="tab-panels card" style="margin-top:0;border-top:2px solid #000;">
+      <div id="panel-overview" class="panel active" role="tabpanel" data-panel="overview">
+        <div class="two-col" style="display:flex;margin:-16px;">
+          <div class="col-left">
+            <h2 class="section-title">Account info</h2>
+            <ul class="info-list">
+              <li><span class="info-label">Plan</span><span>Premium</span></li>
+              <li><span class="info-label">Created</span><span>Jan 2022</span></li>
+              <li><span class="info-label">Region</span><span>US-East</span></li>
+              <li><span class="info-label">Phone</span><span>+1-555-0123</span></li>
+              <li class="storage-row">
+                <span class="info-label">Storage</span>
+                <span style="display:flex;align-items:center;gap:8px;">
+                  <span>8.2 / 15 GB</span>
+                  <span class="progress-wrap" aria-hidden="true"><span class="progress-fill" id="storage-bar"></span></span>
+                </span>
+              </li>
+              <li><span class="info-label">Last Login</span><span>2h ago</span></li>
+            </ul>
+            <h2 class="section-title">Recent Sites</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Site name</th>
+                  <th scope="col">URL</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Acme Portfolio</td>
+                  <td>acme.example.com</td>
+                  <td>Published</td>
+                  <td>Mar 12, 2025</td>
+                </tr>
+                <tr>
+                  <td>John Blog</td>
+                  <td>blog.johndoe.test</td>
+                  <td>Draft</td>
+                  <td>Feb 3, 2025</td>
+                </tr>
+                <tr>
+                  <td>Store Front</td>
+                  <td>shop.acme.example</td>
+                  <td>Published</td>
+                  <td>Jan 18, 2024</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-right">
+            <h2 class="section-title">Premium Subscriptions</h2>
+            <div class="sub-card">
+              <h4>Studio Business</h4>
+              <div>Renews Mar 1, 2026</div>
+            </div>
+            <div class="sub-card">
+              <h4>Domain bundle</h4>
+              <div>3 domains included</div>
+            </div>
+            <h2 class="section-title" style="margin-top:20px;">Quick Actions</h2>
+            <ul class="quick-actions" id="quick-actions">
+              <li data-qa="transfer">Transfer Ownership</li>
+              <li data-qa="gdpr">GDPR Manager</li>
+              <li data-qa="impersonate">Impersonate</li>
+              <li data-qa="audit">Audit Log</li>
+            </ul>
+            <p class="feedback" id="qa-feedback" role="status"></p>
+            <h2 class="section-title" style="margin-top:20px;">Notes</h2>
+            <div class="notes">
+              <label for="notes-field" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Internal notes</label>
+              <textarea id="notes-field" placeholder="Add internal notes…"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="panel-sites" class="panel" role="tabpanel" data-panel="sites" hidden>
+        <p class="placeholder"><strong>Sites (12)</strong> — Wireframe: list of 12 sites would appear here.</p>
+      </div>
+      <div id="panel-billing" class="panel" role="tabpanel" data-panel="billing" hidden>
+        <p class="placeholder"><strong>Billing</strong> — Wireframe: invoices and payment methods would appear here.</p>
+      </div>
+      <div id="panel-activity" class="panel" role="tabpanel" data-panel="activity" hidden>
+        <p class="placeholder"><strong>Activity</strong> — Wireframe: event timeline would appear here.</p>
+      </div>
+      <div id="panel-security" class="panel" role="tabpanel" data-panel="security" hidden>
+        <p class="placeholder"><strong>Security</strong> — Wireframe: sessions, 2FA, and login history would appear here.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.tab');
+      var panels = document.querySelectorAll('.panel');
+      var actionMsg = document.getElementById('action-msg');
+      var qaFeedback = document.getElementById('qa-feedback');
+      var storageBar = document.getElementById('storage-bar');
+
+      function setActiveTab(id) {
+        tabs.forEach(function (t) {
+          var on = t.getAttribute('data-tab') === id;
+          t.classList.toggle('active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        panels.forEach(function (p) {
+          var on = p.getAttribute('data-panel') === id;
+          p.classList.toggle('active', on);
+          p.hidden = !on;
+        });
+      }
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          setActiveTab(tab.getAttribute('data-tab'));
+        });
+      });
+
+      document.querySelectorAll('[data-action]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var a = btn.getAttribute('data-action');
+          var labels = {
+            reset: 'Confirm: Reset Password for John Doe?',
+            suspend: 'Confirm: Suspend account ACC-2847593?',
+            email: 'Confirm: Open compose email to john@example.com?'
+          };
+          actionMsg.textContent = labels[a] || 'Action confirmed (wireframe).';
+          actionMsg.classList.add('visible');
+        });
+      });
+
+      var qaLabels = {
+        transfer: 'Transfer Ownership — action queued (wireframe).',
+        gdpr: 'GDPR Manager — opening flow (wireframe).',
+        impersonate: 'Impersonate — session request logged (wireframe).',
+        audit: 'Audit Log — filter panel would open (wireframe).'
+      };
+      document.querySelectorAll('#quick-actions li').forEach(function (li) {
+        li.addEventListener('click', function () {
+          var key = li.getAttribute('data-qa');
+          qaFeedback.textContent = qaLabels[key] || 'Action noted.';
+          qaFeedback.classList.add('visible');
+        });
+      });
+
+      document.getElementById('feedback-link').addEventListener('click', function (e) {
+        e.preventDefault();
+        alert('Give Feedback — wireframe only.');
+      });
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          if (storageBar) storageBar.classList.add('animate');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

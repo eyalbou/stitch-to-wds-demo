@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Detail — User Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #116dff;
+      --primary-hover: #0e5cd7;
+      --text: #162d3d;
+      --text-secondary: #576475;
+      --bg: #f0f4f7;
+      --surface: #ffffff;
+      --border: #dfe5eb;
+      --success: #60bc57;
+      --warning: #fdb10c;
+      --error: #ee5951;
+      --topbar: #162d3d;
+      --shadow-card: 0 1px 6px rgba(0, 0, 0, 0.06);
+      --radius-card: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Wix Madefor Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      font-size: 20px;
+      line-height: 1;
+      vertical-align: middle;
+    }
+
+    .topbar {
+      height: 48px;
+      background: var(--topbar);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar-brand {
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .btn-secondary-top {
+      height: 36px;
+      padding: 0 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      background: transparent;
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-secondary-top:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #fff;
+    }
+
+    .page-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px 48px 48px;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr 300px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1100px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+      .page-inner {
+        padding: 24px;
+      }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 18px;
+      color: var(--text);
+    }
+
+    .action-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 21px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .action-btn:hover {
+      border-color: var(--primary);
+      background: rgba(17, 109, 255, 0.04);
+    }
+
+    .action-btn .material-symbols-outlined {
+      color: var(--text-secondary);
+    }
+
+    .profile-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 24px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .avatar-lg {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #116dff 0%, #3b6ef0 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .profile-text h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .profile-text p {
+      margin: 0 0 6px;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .profile-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-success {
+      background: rgba(96, 188, 87, 0.15);
+      color: var(--success);
+    }
+
+    .badge-muted {
+      background: var(--bg);
+      color: var(--text-secondary);
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+
+    .tab {
+      height: 36px;
+      padding: 0 16px;
+      border-radius: 18px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .mock-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .mock-table th,
+    .mock-table td {
+      text-align: left;
+      padding: 12px 12px 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mock-table th {
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .activity-body strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .activity-body span {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      max-width: 420px;
+      padding: 14px 24px;
+      background: var(--text);
+      color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      z-index: 200;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .kpi {
+      padding: 18px;
+      background: var(--bg);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--border);
+    }
+
+    .kpi-val {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 6px;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <span class="topbar-brand">USER MANAGER</span>
+    <button type="button" class="btn-secondary-top">Give Feedback</button>
+  </header>
+
+  <div class="page-inner">
+    <div class="main-grid">
+      <aside class="card">
+        <h2 class="section-title">Quick actions</h2>
+        <div class="action-list">
+          <button type="button" class="action-btn" data-action="Reset Password">
+            <span class="material-symbols-outlined" aria-hidden="true">key</span>
+            Reset Password
+          </button>
+          <button type="button" class="action-btn" data-action="Suspend">
+            <span class="material-symbols-outlined" aria-hidden="true">block</span>
+            Suspend
+          </button>
+          <button type="button" class="action-btn" data-action="Email">
+            <span class="material-symbols-outlined" aria-hidden="true">mail</span>
+            Email
+          </button>
+          <button type="button" class="action-btn" data-action="GDPR">
+            <span class="material-symbols-outlined" aria-hidden="true">shield</span>
+            GDPR
+          </button>
+          <button type="button" class="action-btn" data-action="Transfer">
+            <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
+            Transfer
+          </button>
+        </div>
+      </aside>
+
+      <main class="card">
+        <div class="profile-header">
+          <div class="avatar-lg" aria-hidden="true">JD</div>
+          <div class="profile-text">
+            <h1>John Doe</h1>
+            <p>john@example.com</p>
+            <p>User ID <strong style="color: var(--text)">usr_8k2m9p</strong></p>
+            <div class="profile-badges">
+              <span class="badge badge-success">Active</span>
+              <span class="badge badge-muted">Premium</span>
+              <span class="badge badge-muted">2FA enabled</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Account sections">
+          <button type="button" class="tab active" role="tab" aria-selected="true" data-tab="overview">Overview</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-tab="sites">Sites</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-tab="billing">Billing</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-tab="activity">Activity</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-tab="security">Security</button>
+        </div>
+
+        <div id="panel-overview" class="tab-panel active" role="tabpanel">
+          <div class="kpi-row">
+            <div class="kpi">
+              <p class="kpi-val">12</p>
+              <p class="kpi-label">Live sites</p>
+            </div>
+            <div class="kpi">
+              <p class="kpi-val">$49/mo</p>
+              <p class="kpi-label">Current plan</p>
+            </div>
+            <div class="kpi">
+              <p class="kpi-val">98%</p>
+              <p class="kpi-label">Health score</p>
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); margin: 0 0 12px;">
+            Account in good standing. Last billing cycle paid on Mar 1, 2026. Primary region: Americas.
+          </p>
+          <table class="mock-table">
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Locale</td>
+                <td>en-US</td>
+              </tr>
+              <tr>
+                <td>Timezone</td>
+                <td>America/New_York</td>
+              </tr>
+              <tr>
+                <td>Support tier</td>
+                <td>Standard</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="panel-sites" class="tab-panel" role="tabpanel" hidden>
+          <table class="mock-table">
+            <thead>
+              <tr>
+                <th>Site</th>
+                <th>Status</th>
+                <th>Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Acme Portfolio</td>
+                <td>Published</td>
+                <td>Mar 28, 2026</td>
+              </tr>
+              <tr>
+                <td>Studio Lab</td>
+                <td>Draft</td>
+                <td>Mar 25, 2026</td>
+              </tr>
+              <tr>
+                <td>Client Microsite</td>
+                <td>Published</td>
+                <td>Feb 10, 2026</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="panel-billing" class="tab-panel" role="tabpanel" hidden>
+          <table class="mock-table">
+            <thead>
+              <tr>
+                <th>Invoice</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#INV-24031</td>
+                <td>$49.00</td>
+                <td>Paid</td>
+              </tr>
+              <tr>
+                <td>#INV-23988</td>
+                <td>$49.00</td>
+                <td>Paid</td>
+              </tr>
+              <tr>
+                <td>#INV-23912</td>
+                <td>$49.00</td>
+                <td>Paid</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="panel-activity" class="tab-panel" role="tabpanel" hidden>
+          <p style="color: var(--text-secondary); margin-bottom: 18px;">Recent product events for this account.</p>
+          <div class="activity-item">
+            <div class="activity-icon"><span class="material-symbols-outlined">login</span></div>
+            <div class="activity-body">
+              <strong>Successful login</strong>
+              <span>Chrome · New York, US · Today, 9:14 AM</span>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon"><span class="material-symbols-outlined">edit</span></div>
+            <div class="activity-body">
+              <strong>Site settings updated</strong>
+              <span>Acme Portfolio · Yesterday</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="panel-security" class="tab-panel" role="tabpanel" hidden>
+          <table class="mock-table">
+            <thead>
+              <tr>
+                <th>Control</th>
+                <th>State</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Two-factor authentication</td>
+                <td>On (Authenticator)</td>
+              </tr>
+              <tr>
+                <td>Login alerts</td>
+                <td>Email + SMS</td>
+              </tr>
+              <tr>
+                <td>Last password change</td>
+                <td>Jan 4, 2026</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+
+      <aside class="card">
+        <h2 class="section-title">Activity stream</h2>
+        <div class="activity-item">
+          <div class="activity-icon"><span class="material-symbols-outlined">person</span></div>
+          <div class="activity-body">
+            <strong>Profile field updated</strong>
+            <span>Phone number · 2 hours ago</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon"><span class="material-symbols-outlined">credit_card</span></div>
+          <div class="activity-body">
+            <strong>Payment succeeded</strong>
+            <span>Subscription renewal · 1 day ago</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon"><span class="material-symbols-outlined">add_circle</span></div>
+          <div class="activity-body">
+            <strong>New site created</strong>
+            <span>Studio Lab · 3 days ago</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon"><span class="material-symbols-outlined">verified_user</span></div>
+          <div class="activity-body">
+            <strong>2FA enabled</strong>
+            <span>Security · 2 weeks ago</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll(".tab");
+      var panels = {
+        overview: document.getElementById("panel-overview"),
+        sites: document.getElementById("panel-sites"),
+        billing: document.getElementById("panel-billing"),
+        activity: document.getElementById("panel-activity"),
+        security: document.getElementById("panel-security")
+      };
+      var toastEl = document.getElementById("toast");
+      var toastTimer;
+
+      function showToast(message) {
+        toastEl.textContent = message;
+        toastEl.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toastEl.classList.remove("show");
+        }, 2600);
+      }
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          var name = tab.getAttribute("data-tab");
+          tabs.forEach(function (t) {
+            var on = t === tab;
+            t.classList.toggle("active", on);
+            t.setAttribute("aria-selected", on ? "true" : "false");
+          });
+          Object.keys(panels).forEach(function (key) {
+            var p = panels[key];
+            var active = key === name;
+            p.classList.toggle("active", active);
+            if (active) {
+              p.removeAttribute("hidden");
+            } else {
+              p.setAttribute("hidden", "");
+            }
+          });
+        });
+      });
+
+      document.querySelectorAll(".action-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var label = btn.getAttribute("data-action");
+          showToast(label + " — action queued (demo).");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

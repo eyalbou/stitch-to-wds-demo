@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suspend User Confirmation Modal — Wireframe</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #000;
+      background: #fff;
+    }
+    .account-page {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      min-height: 100vh;
+    }
+    .account-page.is-behind-modal {
+      pointer-events: none;
+    }
+    .account-sidebar {
+      border-right: 2px solid #000;
+      padding: 16px;
+      background: #fff;
+    }
+    .account-sidebar .nav-item {
+      padding: 8px 0;
+      border-bottom: 2px solid #000;
+    }
+    .account-main {
+      padding: 24px;
+      background: #fff;
+    }
+    .account-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #000;
+    }
+    .account-title {
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .account-meta {
+      display: grid;
+      gap: 12px;
+      max-width: 560px;
+    }
+    .meta-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 2px solid #000;
+    }
+    .meta-label {
+      font-weight: 600;
+    }
+    .open-modal-btn {
+      margin-top: 24px;
+      padding: 10px 16px;
+      border: 2px solid #000;
+      background: #fff;
+      color: #000;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .open-modal-btn:hover {
+      background: #000;
+      color: #fff;
+    }
+    .open-modal-btn:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+    }
+
+    .modal-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-layer.is-open {
+      display: flex;
+    }
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      cursor: pointer;
+    }
+    .modal-dialog {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+      background: #fff;
+      border: 2px solid #000;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 48px);
+      overflow: auto;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      border-bottom: 2px solid #000;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .modal-warning-char {
+      font-size: 20px;
+      line-height: 1;
+    }
+    .modal-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .modal-body > p {
+      margin: 0;
+    }
+    .user-info-box {
+      background: #fff;
+      border: 2px solid #000;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .user-info-box strong {
+      font-size: 15px;
+    }
+    .alert-box {
+      background: #000;
+      color: #fff;
+      border: 2px solid #000;
+      padding: 12px;
+    }
+    .field-label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .field-helper {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #000;
+    }
+    .reason-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid #000;
+      background: #fff;
+      color: #000;
+      font: inherit;
+    }
+    .reason-input:focus {
+      outline: 2px solid #000;
+      outline-offset: 0;
+    }
+    .reason-input.is-invalid {
+      border-width: 3px;
+    }
+    .field-error {
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #000;
+      display: none;
+    }
+    .field-error.is-visible {
+      display: block;
+    }
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin: 2px 0 0 0;
+      flex-shrink: 0;
+      appearance: none;
+      border: 2px solid #000;
+      background: #fff;
+      cursor: pointer;
+    }
+    .checkbox-row input[type="checkbox"]:checked {
+      background: #000;
+    }
+    .checkbox-row input[type="checkbox"]:checked::after {
+      content: "";
+      display: block;
+      width: 6px;
+      height: 10px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      margin: 1px auto 0;
+    }
+    .checkbox-row label {
+      cursor: pointer;
+      user-select: none;
+    }
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 16px;
+      border-top: 2px solid #000;
+    }
+    .btn {
+      padding: 10px 18px;
+      font: inherit;
+      font-weight: 600;
+      border: 2px solid #000;
+      cursor: pointer;
+    }
+    .btn:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+    }
+    .btn-cancel {
+      background: #fff;
+      color: #000;
+    }
+    .btn-cancel:hover {
+      background: #000;
+      color: #fff;
+    }
+    .btn-primary {
+      background: #000;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #fff;
+      color: #000;
+    }
+    .confirmation-panel {
+      display: none;
+      padding: 16px;
+      border-top: 2px solid #000;
+      text-align: center;
+      font-weight: 600;
+    }
+    .confirmation-panel.is-visible {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="account-page" id="accountPage" aria-hidden="false">
+    <aside class="account-sidebar">
+      <div class="nav-item">Users</div>
+      <div class="nav-item">Accounts</div>
+      <div class="nav-item">Audit</div>
+    </aside>
+    <main class="account-main">
+      <div class="account-header">
+        <span class="account-title">Account detail</span>
+        <span>Status: Active</span>
+      </div>
+      <div class="account-meta">
+        <div class="meta-row"><span class="meta-label">Name</span><span>John Doe</span></div>
+        <div class="meta-row"><span class="meta-label">Email</span><span>john@example.com</span></div>
+        <div class="meta-row"><span class="meta-label">Account ID</span><span>ACC-2847593</span></div>
+        <div class="meta-row"><span class="meta-label">Sites</span><span>12 active</span></div>
+      </div>
+      <button type="button" class="open-modal-btn" id="openModalBtn">
+        Suspend user (demo)
+      </button>
+    </main>
+  </div>
+
+  <div class="modal-layer" id="modalLayer" role="presentation" aria-hidden="true">
+    <div class="modal-backdrop" id="modalBackdrop" aria-label="Close modal"></div>
+    <div
+      class="modal-dialog"
+      id="modalDialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+    >
+      <div class="modal-header">
+        <span class="modal-warning-char" aria-hidden="true">&#9888;</span>
+        <span id="modalTitle">Suspend User Account</span>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <p>You are about to suspend the account for:</p>
+        <div class="user-info-box">
+          <strong>John Doe</strong>
+          <span>john@example.com</span>
+          <span>ACC-2847593</span>
+          <span>12 active sites</span>
+        </div>
+        <div class="alert-box">
+          This will immediately disable login and all API access.
+        </div>
+        <div>
+          <label class="field-label" for="reasonInput">Reason for suspension *</label>
+          <input
+            type="text"
+            id="reasonInput"
+            class="reason-input"
+            name="reason"
+            autocomplete="off"
+            aria-required="true"
+            aria-invalid="false"
+            aria-describedby="reasonHelper reasonError"
+          />
+          <p class="field-helper" id="reasonHelper">Will be logged in audit trail</p>
+          <p class="field-error" id="reasonError" role="alert">Please enter a reason for suspension.</p>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="notifyCheckbox" />
+          <label for="notifyCheckbox">Notify user via email</label>
+        </div>
+      </div>
+      <div class="confirmation-panel" id="confirmationPanel" role="status">
+        Suspension submitted. Reason recorded in audit trail.
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <button type="button" class="btn btn-cancel" id="cancelBtn">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-primary" id="suspendBtn">
+          Suspend Account
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var modalLayer = document.getElementById("modalLayer");
+      var modalBackdrop = document.getElementById("modalBackdrop");
+      var modalDialog = document.getElementById("modalDialog");
+      var accountPage = document.getElementById("accountPage");
+      var openModalBtn = document.getElementById("openModalBtn");
+      var cancelBtn = document.getElementById("cancelBtn");
+      var suspendBtn = document.getElementById("suspendBtn");
+      var reasonInput = document.getElementById("reasonInput");
+      var reasonError = document.getElementById("reasonError");
+      var confirmationPanel = document.getElementById("confirmationPanel");
+      var modalFooter = document.getElementById("modalFooter");
+      var modalBody = document.getElementById("modalBody");
+      var notifyCheckbox = document.getElementById("notifyCheckbox");
+
+      function openModal() {
+        confirmationPanel.classList.remove("is-visible");
+        modalFooter.style.display = "";
+        modalBody.style.display = "";
+        reasonInput.value = "";
+        reasonInput.classList.remove("is-invalid");
+        reasonError.classList.remove("is-visible");
+        reasonInput.setAttribute("aria-invalid", "false");
+        notifyCheckbox.checked = false;
+        modalLayer.classList.add("is-open");
+        accountPage.classList.add("is-behind-modal");
+        accountPage.setAttribute("aria-hidden", "true");
+        modalLayer.setAttribute("aria-hidden", "false");
+        reasonInput.focus();
+      }
+
+      function closeModal() {
+        confirmationPanel.classList.remove("is-visible");
+        modalFooter.style.display = "";
+        modalBody.style.display = "";
+        modalLayer.classList.remove("is-open");
+        accountPage.classList.remove("is-behind-modal");
+        accountPage.setAttribute("aria-hidden", "false");
+        modalLayer.setAttribute("aria-hidden", "true");
+        openModalBtn.focus();
+      }
+
+      function validateReason() {
+        var v = reasonInput.value.trim();
+        if (!v) {
+          reasonInput.classList.add("is-invalid");
+          reasonError.classList.add("is-visible");
+          reasonInput.setAttribute("aria-invalid", "true");
+          reasonInput.focus();
+          return false;
+        }
+        reasonInput.classList.remove("is-invalid");
+        reasonError.classList.remove("is-visible");
+        reasonInput.setAttribute("aria-invalid", "false");
+        return true;
+      }
+
+      function onSuspend() {
+        if (!validateReason()) return;
+        modalBody.style.display = "none";
+        modalFooter.style.display = "none";
+        confirmationPanel.classList.add("is-visible");
+      }
+
+      openModalBtn.addEventListener("click", openModal);
+      cancelBtn.addEventListener("click", closeModal);
+      suspendBtn.addEventListener("click", onSuspend);
+
+      modalBackdrop.addEventListener("click", function () {
+        closeModal();
+      });
+
+      modalDialog.addEventListener("click", function (e) {
+        e.stopPropagation();
+      });
+
+      reasonInput.addEventListener("input", function () {
+        if (reasonInput.value.trim()) {
+          reasonInput.classList.remove("is-invalid");
+          reasonError.classList.remove("is-visible");
+          reasonInput.setAttribute("aria-invalid", "false");
+        }
+      });
+
+      openModal();
+    })();
+  </script>
+</body>
+</html>

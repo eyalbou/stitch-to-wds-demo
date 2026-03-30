@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Manager — Search Results</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #000;
+      background: #fff;
+    }
+    button, select, input {
+      font-family: inherit;
+      font-size: inherit;
+      color: #000;
+      background: #fff;
+      border: 2px solid #000;
+    }
+    input::placeholder {
+      color: #000;
+      opacity: 1;
+    }
+    a:focus-visible,
+    button:focus-visible,
+    select:focus-visible,
+    input:focus-visible,
+    .card:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+    }
+    button {
+      cursor: pointer;
+      padding: 8px 16px;
+    }
+    button:hover {
+      background: #000;
+      color: #fff;
+    }
+    .topbar {
+      height: 48px;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 2px solid #000;
+    }
+    .topbar-title {
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .topbar .give-feedback {
+      background: #fff;
+      color: #000;
+      border: 2px solid #fff;
+      padding: 6px 12px;
+    }
+    .topbar .give-feedback:hover {
+      background: #000;
+      color: #fff;
+      border-color: #fff;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .breadcrumb-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: #000;
+      font-weight: 600;
+      border: 2px solid #000;
+      padding: 6px 10px;
+      background: #fff;
+    }
+    .breadcrumb-back:hover {
+      background: #000;
+      color: #fff;
+    }
+    .breadcrumb-sep {
+      font-weight: 700;
+    }
+    .breadcrumb-current {
+      font-weight: 600;
+    }
+    .search-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 8px;
+      margin-bottom: 12px;
+      border: 2px solid #000;
+      padding: 12px;
+      background: #fff;
+    }
+    .search-row input[type="search"] {
+      flex: 1 1 200px;
+      min-width: 0;
+      padding: 8px 10px;
+    }
+    .search-row select {
+      padding: 8px 10px;
+      min-width: 120px;
+    }
+    .search-row .search-btn {
+      font-weight: 700;
+    }
+    .results-meta {
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .pill {
+      border: 2px solid #000;
+      padding: 6px 14px;
+      font-weight: 600;
+      background: #fff;
+      color: #000;
+      cursor: pointer;
+    }
+    .pill.active {
+      background: #000;
+      color: #fff;
+    }
+    .pill:hover:not(.active) {
+      background: #000;
+      color: #fff;
+    }
+    .results-list {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .results-list.searching {
+      animation: searchShake 0.45s ease;
+    }
+    @keyframes searchShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+    .card {
+      border: 2px solid #000;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      gap: 12px;
+      align-items: start;
+      background: #fff;
+      cursor: pointer;
+    }
+    .card.selected {
+      background: #000;
+      color: #fff;
+    }
+    .card.selected .avatar {
+      border-color: #fff;
+      background: #fff;
+      color: #000;
+    }
+    .card.selected .meta-right,
+    .card.selected .name,
+    .card.selected .line,
+    .card.selected .menu-btn {
+      color: #fff;
+    }
+    .card.selected .menu-btn {
+      border-color: #fff;
+    }
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      flex-shrink: 0;
+      background: #fff;
+      color: #000;
+    }
+    .card.selected .avatar {
+      background: #fff;
+      color: #000;
+    }
+    .card-body {
+      min-width: 0;
+    }
+    .name {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .line {
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+    .meta-right {
+      text-align: right;
+      font-size: 13px;
+      line-height: 1.5;
+      padding-right: 8px;
+    }
+    .meta-right div {
+      margin-bottom: 2px;
+    }
+    .menu-wrap {
+      position: relative;
+      align-self: start;
+    }
+    .menu-btn {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      font-weight: 900;
+      line-height: 1;
+      background: #fff;
+      color: #000;
+    }
+    .card.selected .menu-btn:hover {
+      background: #fff;
+      color: #000;
+    }
+    .menu-btn:hover {
+      background: #000;
+      color: #fff;
+    }
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 4px;
+      min-width: 180px;
+      border: 2px solid #000;
+      background: #fff;
+      color: #000;
+      z-index: 20;
+    }
+    .dropdown.open {
+      display: block;
+    }
+    .dropdown button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: none;
+      border-bottom: 2px solid #000;
+      padding: 10px 12px;
+      background: #fff;
+      color: #000;
+    }
+    .dropdown button:last-child {
+      border-bottom: none;
+    }
+    .dropdown button:hover {
+      background: #000;
+      color: #fff;
+    }
+    .footer-meta {
+      font-size: 13px;
+      font-weight: 600;
+      padding-top: 8px;
+      border-top: 2px solid #000;
+    }
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <span class="topbar-title">USER MANAGER</span>
+    <button type="button" class="give-feedback" data-hook="give-feedback">Give Feedback</button>
+  </header>
+
+  <main>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="javascript:void(0)" class="breadcrumb-back" id="breadcrumbBack" data-hook="breadcrumb-back">
+        <span aria-hidden="true">←</span> Back
+      </a>
+      <span class="breadcrumb-sep" aria-hidden="true">/</span>
+      <span class="breadcrumb-current">Search results</span>
+    </nav>
+
+    <div class="search-row">
+      <input type="search" id="searchInput" value="john@example.com" aria-label="Search query" />
+      <select id="searchScope" aria-label="Search by">
+        <option selected>By email</option>
+        <option>By name</option>
+        <option>By account ID</option>
+      </select>
+      <button type="button" class="search-btn" id="searchBtn" data-hook="search">Search</button>
+    </div>
+
+    <p class="results-meta" id="resultsCount">3 results for &apos;john@example.com&apos;</p>
+
+    <div class="filters" role="tablist" aria-label="Filter results">
+      <button type="button" class="pill active" data-filter="all" role="tab" aria-selected="true">All</button>
+      <button type="button" class="pill" data-filter="active" role="tab" aria-selected="false">Active</button>
+      <button type="button" class="pill" data-filter="suspended" role="tab" aria-selected="false">Suspended</button>
+    </div>
+
+    <div class="results-list" id="resultsList">
+      <article class="card" data-status="active" data-hook="result-card" tabindex="0">
+        <div class="avatar" aria-hidden="true">JD</div>
+        <div class="card-body">
+          <div class="name">John Doe</div>
+          <div class="line">john@example.com</div>
+          <div class="line">Account ID: acc_8f2k9q1</div>
+        </div>
+        <div class="meta-right">
+          <div>Active</div>
+          <div>Business</div>
+          <div>3 sites</div>
+          <div>Last active: Mar 28, 2026</div>
+        </div>
+        <div class="menu-wrap">
+          <button type="button" class="menu-btn" aria-haspopup="true" aria-expanded="false" data-hook="row-menu">···</button>
+          <div class="dropdown" role="menu">
+            <button type="button" role="menuitem" data-action="view">View</button>
+            <button type="button" role="menuitem" data-action="suspend">Suspend</button>
+            <button type="button" role="menuitem" data-action="reset">Reset Password</button>
+            <button type="button" role="menuitem" data-action="export">Export</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-status="active" data-hook="result-card" tabindex="0">
+        <div class="avatar" aria-hidden="true">JS</div>
+        <div class="card-body">
+          <div class="name">John Smith</div>
+          <div class="line">john.smith@example.com</div>
+          <div class="line">Account ID: acc_3m7p2x8</div>
+        </div>
+        <div class="meta-right">
+          <div>Active</div>
+          <div>Premium</div>
+          <div>1 site</div>
+          <div>Last active: Mar 29, 2026</div>
+        </div>
+        <div class="menu-wrap">
+          <button type="button" class="menu-btn" aria-haspopup="true" aria-expanded="false" data-hook="row-menu">···</button>
+          <div class="dropdown" role="menu">
+            <button type="button" role="menuitem" data-action="view">View</button>
+            <button type="button" role="menuitem" data-action="suspend">Suspend</button>
+            <button type="button" role="menuitem" data-action="reset">Reset Password</button>
+            <button type="button" role="menuitem" data-action="export">Export</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-status="suspended" data-hook="result-card" tabindex="0">
+        <div class="avatar" aria-hidden="true">JA</div>
+        <div class="card-body">
+          <div class="name">John Andrews</div>
+          <div class="line">john.andrews@example.com</div>
+          <div class="line">Account ID: acc_9n4r5t2</div>
+        </div>
+        <div class="meta-right">
+          <div>Suspended</div>
+          <div>Free</div>
+          <div>0 sites</div>
+          <div>Last active: Jan 12, 2026</div>
+        </div>
+        <div class="menu-wrap">
+          <button type="button" class="menu-btn" aria-haspopup="true" aria-expanded="false" data-hook="row-menu">···</button>
+          <div class="dropdown" role="menu">
+            <button type="button" role="menuitem" data-action="view">View</button>
+            <button type="button" role="menuitem" data-action="suspend">Suspend</button>
+            <button type="button" role="menuitem" data-action="reset">Reset Password</button>
+            <button type="button" role="menuitem" data-action="export">Export</button>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <p class="footer-meta" id="footerRange">Showing 1–3 of 3 results</p>
+  </main>
+
+  <script>
+    (function () {
+      var pills = document.querySelectorAll('.pill');
+      var cards = document.querySelectorAll('.card');
+      var resultsList = document.getElementById('resultsList');
+      var resultsCountEl = document.getElementById('resultsCount');
+      var footerRangeEl = document.getElementById('footerRange');
+      var searchInput = document.getElementById('searchInput');
+      var searchBtn = document.getElementById('searchBtn');
+      var breadcrumbBack = document.getElementById('breadcrumbBack');
+      var openMenu = null;
+
+      function setPillActive(filter) {
+        pills.forEach(function (p) {
+          var on = p.getAttribute('data-filter') === filter;
+          p.classList.toggle('active', on);
+          p.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+      }
+
+      function visibleCards() {
+        return Array.prototype.filter.call(cards, function (c) {
+          return !c.classList.contains('hidden');
+        });
+      }
+
+      function applyFilter(filter) {
+        cards.forEach(function (card) {
+          var st = card.getAttribute('data-status');
+          var show = filter === 'all' || st === filter;
+          card.classList.toggle('hidden', !show);
+        });
+        var q = searchInput.value.trim() || 'john@example.com';
+        var vis = visibleCards();
+        var n = vis.length;
+        var totalAll = cards.length;
+        resultsCountEl.textContent =
+          n + " result" + (n === 1 ? '' : 's') + " for '" + q + "'" +
+          (filter !== 'all' ? " — " + filter.charAt(0).toUpperCase() + filter.slice(1) + " only" : '');
+        if (n === 0) {
+          footerRangeEl.textContent = 'Showing 0 of 0 results';
+        } else {
+          footerRangeEl.textContent = 'Showing 1–' + n + ' of ' + n + ' results';
+        }
+      }
+
+      pills.forEach(function (pill) {
+        pill.addEventListener('click', function () {
+          var f = pill.getAttribute('data-filter');
+          setPillActive(f);
+          applyFilter(f);
+        });
+      });
+
+      function closeAllMenus() {
+        document.querySelectorAll('.dropdown.open').forEach(function (d) {
+          d.classList.remove('open');
+        });
+        document.querySelectorAll('.menu-btn[aria-expanded="true"]').forEach(function (b) {
+          b.setAttribute('aria-expanded', 'false');
+        });
+        openMenu = null;
+      }
+
+      cards.forEach(function (card) {
+        card.addEventListener('click', function (e) {
+          if (e.target.closest('.menu-wrap')) return;
+          cards.forEach(function (c) { c.classList.remove('selected'); });
+          card.classList.add('selected');
+        });
+      });
+
+      document.querySelectorAll('.menu-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var wrap = btn.closest('.menu-wrap');
+          var dd = wrap.querySelector('.dropdown');
+          var isOpen = dd.classList.contains('open');
+          closeAllMenus();
+          if (!isOpen) {
+            dd.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+            openMenu = dd;
+          }
+        });
+      });
+
+      document.querySelectorAll('.dropdown button[data-action]').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var action = item.getAttribute('data-action');
+          closeAllMenus();
+          if (window.console && console.log) {
+            console.log('Menu action:', action);
+          }
+        });
+      });
+
+      document.addEventListener('click', function () {
+        closeAllMenus();
+      });
+
+      searchBtn.addEventListener('click', function () {
+        resultsList.classList.remove('searching');
+        void resultsList.offsetWidth;
+        resultsList.classList.add('searching');
+        var activePill = document.querySelector('.pill.active');
+        var f = activePill ? activePill.getAttribute('data-filter') : 'all';
+        applyFilter(f);
+        setTimeout(function () {
+          resultsList.classList.remove('searching');
+        }, 600);
+      });
+
+      breadcrumbBack.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = '../../stage4/bw/concept-1-enhanced-search.html';
+        }
+      });
+
+      applyFilter('all');
+    })();
+  </script>
+</body>
+</html>
