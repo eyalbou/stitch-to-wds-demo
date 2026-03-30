@@ -261,7 +261,7 @@ code{
   <div class="container">
     <div class="badge">Creator Kit Integration</div>
     <h1>The full CK flow with <em>Stitch AI</em></h1>
-    <p>Stitch is an opt-in generation mode inside the existing Creator Kit pipeline. Same flow, same skills, same artifacts -- higher fidelity output at the design stage.</p>
+    <p>Stitch is an opt-in generation mode for the Creator Kit, added via project-local extensions. Same flow, same skills, same artifacts -- higher fidelity output at the design stage. Zero core CK changes.</p>
     <div class="hero-buttons">
       <a href="https://eyalbou.github.io/stitch-to-wds-demo/user-manager/" target="_blank" class="btn btn-primary">See live demo</a>
       <a href="#flow" class="btn btn-outline">See the 6-phase pipeline</a>
@@ -300,8 +300,15 @@ code{
       <div class="prereq-item">
         <div class="prereq-check">&check;</div>
         <div>
-          <h4>Creator Kit with Stitch branch</h4>
-          <p>Checkout <code>eyalbou/stitch-integration</code> on <code>wix-private/creator-kit</code></p>
+          <h4>CK Stitch extensions in your project</h4>
+          <p>Copy 2 extension files into your project: <code>.agents/skills/ext-ck-flow-ux-concepts/SKILL.md</code> and <code>.agents/skills/ext-ck-ux-concepts/SKILL.md</code>. No core CK changes needed.</p>
+        </div>
+      </div>
+      <div class="prereq-item">
+        <div class="prereq-check">&check;</div>
+        <div>
+          <h4>WDS pipeline files</h4>
+          <p>Place <code>wds-convert.js</code> and <code>wds-design-system-template.json</code> in <code>.stitch/</code> at your project root.</p>
         </div>
       </div>
     </div>
@@ -393,16 +400,11 @@ code{
             <span class="stitch-badge">Stitch integration</span>
           </div>
           <div class="stage-body">
-            This is the main integration point. The flow generates 5 distinct UX concepts. After silent analysis, you're asked:<br/><br/>
-            <strong>Decision 1 -- Delivery mode:</strong> "All at once" or "One by one"<br/>
-            <strong>Decision 2 -- Generation mode:</strong><br/>
-            &nbsp;&nbsp;&bull; <strong>HTML/CSS/JS</strong> (default) -- agent writes code inline, B&W wireframes<br/>
-            &nbsp;&nbsp;&bull; <strong>Stitch AI</strong> -- generates via Google Stitch MCP, auto-converted to WDS<br/>
-            &nbsp;&nbsp;&bull; <strong>Figma</strong> -- coming soon<br/><br/>
-            <strong>Decision 3 -- Color mode</strong> (Stitch only):<br/>
-            &nbsp;&nbsp;&bull; <strong>B&W wireframes</strong> -- CK convention, grayscale, layout-focused review<br/>
-            &nbsp;&nbsp;&bull; <strong>WDS-colored</strong> -- full fidelity, production-ready WDS palette<br/><br/>
-            For each concept, Stitch generates a screen, the WDS conversion pipeline runs automatically, and the result is saved to <code>artifacts/ux/concepts/</code>. Docs and delivery follow the same CK flow.<br/><br/>
+            This is the main integration point. The flow generates ~5 distinct UX concepts. When the CK extensions are installed, a new question appears before generation:<br/><br/>
+            <strong>"How should UX concepts be generated?"</strong><br/>
+            &nbsp;&nbsp;&bull; <strong>B&W prototypes</strong> (default CK) -- agent writes HTML/CSS/JS inline, black-and-white wireframes<br/>
+            &nbsp;&nbsp;&bull; <strong>Stitch + WDS</strong> -- AI-generated via Google Stitch MCP, auto-converted to Wix Design System colors<br/><br/>
+            When Stitch + WDS is chosen, the flow automatically: creates a Stitch project, applies the WDS design system, generates each concept via Stitch MCP (<code>generate_screen_from_text</code>), runs the 7-pass <code>wds-convert.js</code> pipeline, and saves results to the standard CK folder structure. All other CK questions (model check, delivery pace) remain unchanged.<br/><br/>
             Output: <code>artifacts/ux/concepts/concept-1-*/</code> through <code>concept-5-*/</code>
           </div>
         </div>
@@ -421,11 +423,9 @@ code{
             <span class="stitch-badge">Stitch integration</span>
           </div>
           <div class="stage-body">
-            Takes the selected concept and generates ALL flows, states, and screens. Includes edge case analysis (<code>ck-ux-edge-cases</code>) and content refinement (<code>ck-ux-content</code>). You're asked to choose a design mode:<br/><br/>
-            &nbsp;&nbsp;&bull; <strong>Keep concept theme</strong> (default) -- HTML inheriting the concept's style<br/>
-            &nbsp;&nbsp;&bull; <strong>Use WDS components</strong> -- Vite + React with real @wix/design-system<br/>
-            &nbsp;&nbsp;&bull; <strong>Generate with Stitch AI</strong> -- higher fidelity, WDS-converted<br/><br/>
-            In Stitch mode, the agent builds an <strong>edge-case baton</strong>: each remaining screen gets a Stitch prompt built from the selected concept's design language + the edge case states for that specific flow. Screens are generated one by one via Stitch MCP, WDS-converted, annotated, and wired together.<br/><br/>
+            Takes the selected concept and generates ALL flows, states, and screens. Includes edge case analysis (<code>ck-ux-edge-cases</code>) and content refinement (<code>ck-ux-content</code>).<br/><br/>
+            If the selected concept was generated via Stitch + WDS, additional screens can be generated the same way -- using the same Stitch project and WDS design system for visual consistency. Each new screen goes through the same <code>wds-convert.js</code> pipeline.<br/><br/>
+            Screens to generate include: detail/profile views, empty states, error states, loading skeletons, modals, and settings pages.<br/><br/>
             Output: <code>artifacts/ux/all-screens/*.html</code> + <code>all-screens.html</code> viewer
           </div>
         </div>
@@ -445,10 +445,10 @@ code{
           </div>
           <div class="stage-body">
             Packages everything into a developer handoff doc: spec, strategy, designs, edge cases, checklist.<br/><br/>
-            <strong>When Stitch was used</strong>, the handoff doc automatically gains a "WDS Components" section with:<br/>
-            &nbsp;&nbsp;&bull; <code>.tsx</code> component files (production-ready WDS React code)<br/>
-            &nbsp;&nbsp;&bull; Conversion reports (token mapping, component mapping)<br/>
-            &nbsp;&nbsp;&bull; Comparison viewer links (original vs WDS-adjusted vs WDS-converted)<br/><br/>
+            <strong>When Stitch was used</strong>, the handoff doc is enriched with:<br/>
+            &nbsp;&nbsp;&bull; WDS-adjusted HTML files (fonts, colors, buttons, layout all converted to WDS tokens)<br/>
+            &nbsp;&nbsp;&bull; Comparison viewer links (original vs WDS-adjusted concepts)<br/>
+            &nbsp;&nbsp;&bull; WDS component mapping notes (HTML elements mapped to <code>@wix/design-system</code> React components for production)<br/><br/>
             Output: <code>artifacts/handoff/handoff-*.md</code>
           </div>
         </div>
@@ -463,7 +463,7 @@ code{
   <div class="container">
     <div class="section-label">Phase 4 detail</div>
     <h2>B&W wireframes vs WDS-colored</h2>
-    <p class="subtitle">When you pick Stitch AI in Phase 4 (UX Concepts), you choose the visual fidelity.</p>
+    <p class="subtitle">When you pick Stitch + WDS in Phase 4, concepts come with full WDS fidelity. The alternative is standard CK B&W wireframes.</p>
     <div class="compare-grid">
       <div class="compare-card">
         <div class="compare-preview bw">
@@ -519,21 +519,23 @@ code{
       &nbsp;&nbsp;&nbsp;&nbsp;<span>index.html</span> <span class="label">&larr; WDS-adjusted output</span><br/>
       &nbsp;&nbsp;&nbsp;&nbsp;<span>concept-1-dashboard-hub.md</span><br/>
       <br/>
-      <span class="dir">.stitch/{slug}/wds-output/</span> <span class="label">&larr; Stitch pipeline (for iteration)</span><br/>
-      &nbsp;&nbsp;<span>concept-1-adjusted.html</span> <span class="label">&larr; same layout, WDS tokens</span><br/>
-      &nbsp;&nbsp;<span>concept-1-converted.tsx</span> <span class="label">&larr; full WDS React code</span><br/>
-      &nbsp;&nbsp;<span>concept-1-report.md</span> <span class="label">&larr; conversion report</span><br/>
+      <span class="dir">artifacts/ux/concepts/stitch-raw/</span> <span class="label">&larr; raw Stitch output (pre-conversion)</span><br/>
+      &nbsp;&nbsp;<span>concept-1-raw.html</span> <span class="label">&larr; original Stitch generation</span><br/>
+      <br/>
+      <span class="dir">.stitch/{slug}/wds-output/</span> <span class="label">&larr; Stitch pipeline (for iteration/comparison)</span><br/>
+      &nbsp;&nbsp;<span>concept-1-adjusted.html</span> <span class="label">&larr; same layout, WDS tokens applied</span><br/>
       &nbsp;&nbsp;<span>concepts-comparison.html</span> <span class="label">&larr; tabbed side-by-side viewer</span><br/>
+      &nbsp;&nbsp;<span>original-input.png</span> <span class="label">&larr; original UI screenshot (if provided)</span><br/>
     </div>
 
     <div class="card-grid" style="margin-top:24px">
       <div class="card">
-        <h3>Output A: WDS-Adjusted</h3>
-        <p>Same layout as Stitch original. Fonts swapped to Wix Madefor Display, colors to WDS tokens, buttons pill-shaped, icons from wix-ui-icons-common. Preserves the designer's layout.</p>
+        <h3>WDS-Adjusted HTML</h3>
+        <p>Same layout as Stitch original. 7-pass pipeline applies: font swap to Wix Madefor Display, MD3 color tokens mapped to WDS hex values, buttons styled to WDS spec (rounded-lg, correct skins), input/select normalization, Tailwind shadow cleanup, and typography class alignment.</p>
       </div>
       <div class="card">
-        <h3>Output B: WDS Conversion</h3>
-        <p>Full restructure using <code>&lt;Page&gt;</code>, <code>&lt;Card&gt;</code>, <code>&lt;Table&gt;</code>, <code>&lt;Tabs&gt;</code> WDS components. React/TSX production code with SP tokens and dataHooks.</p>
+        <h3>Comparison Viewer</h3>
+        <p>Tabbed HTML page showing original UI screenshot alongside all generated concepts. Each tab renders the full-page HTML at consistent size for easy comparison. Navigate concepts with a single click.</p>
       </div>
     </div>
   </div>
@@ -548,15 +550,15 @@ code{
 
     <div class="card" style="margin-bottom:20px">
       <h3>Option A: Show existing output (2 min)</h3>
-      <p>Open the <a href="https://eyalbou.github.io/stitch-to-wds-demo/user-manager/" target="_blank">User Manager demo</a>. Walk through the tabs: original input screenshot, then 3 WDS-adjusted concepts. Show the side-by-side comparison.</p>
+      <p>Open the <a href="https://eyalbou.github.io/stitch-to-wds-demo/user-manager/" target="_blank">User Manager demo</a> or the <a href="https://eyalbou.github.io/stitch-to-wds-demo/user-manager-v2/" target="_blank">User Manager v2 demo</a>. Walk through the tabs: original input screenshot, then WDS-adjusted concepts. Show the side-by-side comparison.</p>
     </div>
     <div class="card" style="margin-bottom:20px">
       <h3>Option B: Run the CK flow live (10 min)</h3>
-      <p>In Cursor, create a test project with a simple spec. Say <strong>"generate UX concepts"</strong>. When asked for generation mode, pick <strong>"Stitch AI"</strong> and <strong>"WDS-colored"</strong>. Show concepts appearing with WDS styling. Then show the artifacts/ output matching CK expectations.</p>
+      <p>In Cursor, say <strong>/ck-flow-ux-concepts</strong>. The extension injects a new question: <strong>"How should UX concepts be generated?"</strong>. Pick <strong>"Stitch + WDS"</strong>. Concepts are generated via Stitch MCP, auto-converted to WDS, and saved to <code>artifacts/ux/concepts/</code>. All standard CK flow continues.</p>
     </div>
     <div class="card">
-      <h3>Option C: Show the branch diff (5 min)</h3>
-      <p>Open the <a href="https://github.com/wix-private/creator-kit/compare/master...eyalbou/stitch-integration" target="_blank">branch comparison</a>. Walk through the 4 changed files: <code>ck-ux-concepts</code> (mode choice), <code>ck-ux-all-screens</code> (third mode), <code>stitch-integration.md</code> (shared config), <code>ck-handoff</code> (artifact discovery).</p>
+      <h3>Option C: Show the extension files (3 min)</h3>
+      <p>Open the 2 extension files in Cursor: <code>.agents/skills/ext-ck-flow-ux-concepts/SKILL.md</code> (injects the generation mode question) and <code>.agents/skills/ext-ck-ux-concepts/SKILL.md</code> (overrides concept generation with Stitch MCP pipeline). Plus 2 pipeline files in <code>.stitch/</code>: <code>wds-convert.js</code> and <code>wds-design-system-template.json</code>. Total: 4 files, zero core CK changes.</p>
     </div>
   </div>
 </section>
@@ -569,7 +571,7 @@ code{
       <p>Same CK flow, same artifacts, same downstream skills. Just pick "Stitch AI" when asked.</p>
       <div class="hero-buttons">
         <a href="https://eyalbou.github.io/stitch-to-wds-demo/user-manager/" target="_blank" class="btn btn-primary">Live demo: User Manager</a>
-        <a href="https://github.com/wix-private/creator-kit/compare/master...eyalbou/stitch-integration" target="_blank" class="btn btn-outline">Review the branch</a>
+        <a href="https://eyalbou.github.io/stitch-to-wds-demo/user-manager-v2/" target="_blank" class="btn btn-outline">User Manager v2</a>
       </div>
     </div>
   </div>
@@ -578,7 +580,7 @@ code{
 <!-- Footer -->
 <footer class="footer">
   <div class="container">
-    Branch: <code>eyalbou/stitch-integration</code> on <code>wix-private/creator-kit</code> &middot; Ref: <code>skills/ck-shared/stitch-integration.md</code>
+    Integration: 2 CK extension files + 2 pipeline scripts &middot; Zero core CK changes &middot; Loaded via <code>load-ext.js</code>
   </div>
 </footer>
 
